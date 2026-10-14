@@ -1352,3 +1352,155 @@ div#our_sponsors_container table img {
         animation: none;
     }
 }
+
+
+/* ---------- 2027: full-screen first view ---------- */
+/* The media layer is where the scroll-driven 3D fly-in of UCL East will go. */
+
+div.hero_full {
+    position: relative;
+    height: calc(100svh - 7.5rem);
+    min-height: 34rem;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    color: white;
+    background: #0e0e33;
+    view-timeline-name: --hero;
+}
+
+div.hero_full_media {
+    position: absolute;
+    inset: 0;
+}
+
+div.hero_full_media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    animation: hero-drift linear both;
+    animation-timeline: --hero;
+    animation-range: exit 0% exit 100%;
+}
+
+div.hero_full_media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 48, .62);
+}
+
+div.hero_full_content {
+    position: relative;
+    padding: 0 5rem 5.5rem;
+    max-width: 78rem;
+    animation: hero-lift linear both;
+    animation-timeline: --hero;
+    animation-range: exit 0% exit 70%;
+}
+
+p.hero_full_eyebrow {
+    font-family: var(--display-font-family);
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: .03em;
+    color: rgba(255, 255, 255, .85);
+    margin: 0 0 1rem;
+}
+
+h1.hero_full_date {
+    font-family: var(--display-font-family);
+    font-weight: 400;
+    font-size: clamp(2.8rem, 5.4vw, 5.6rem);
+    letter-spacing: .01em;
+    line-height: 1.05;
+    margin: 0;
+}
+
+p.hero_full_venue {
+    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+    font-weight: 300;
+    letter-spacing: .02em;
+    margin: 1.2rem 0 2.4rem;
+    color: rgba(255, 255, 255, .9);
+}
+
+div.hero_full_actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+}
+
+a.hero_btn {
+    display: inline-block;
+    background: white;
+    color: #14142f;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: .95rem 1.6rem;
+    border-radius: 2px;
+}
+
+a.hero_btn:hover {
+    background: #e1e8f0;
+}
+
+a.hero_btn.hero_btn_quiet {
+    background: transparent;
+    color: white;
+    padding: .3rem 0;
+    border-radius: 0;
+    border-bottom: 1px solid currentColor;
+}
+
+a.hero_btn.hero_btn_quiet:hover {
+    opacity: .75;
+}
+
+@keyframes hero-drift {
+    from {
+        transform: translateY(0) scale(1.06);
+    }
+
+    to {
+        transform: translateY(12vh) scale(1.12);
+    }
+}
+
+@keyframes hero-lift {
+    from {
+        opacity: 1;
+        transform: none;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-4rem);
+    }
+}
+
+@media (max-width: 1000px) {
+    div.hero_full {
+        height: calc(100svh - 6rem);
+        min-height: 30rem;
+    }
+
+    div.hero_full_content {
+        padding: 0 1.5rem 3rem;
+    }
+
+    div.hero_full_actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    div.hero_full_media img,
+    div.hero_full_content {
+        animation: none;
+    }
+}
