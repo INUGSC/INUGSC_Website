@@ -182,7 +182,7 @@ header div#header_hamburger_container {
 }
 
 main {
-    margin: 0 3rem;
+    margin: 0;
 }
 
 main > div {
@@ -614,6 +614,7 @@ canvas.scrolling_image {
 
 aside#floating_socials_container {
     position: fixed;
+    z-index: 50;
     left: calc(100vw - 3rem);
     top: 25vh;
     padding: .75rem;
