@@ -1,15 +1,31 @@
 @font-face {
     font-family: "Assistant";
     src: url(/font/Assistant.ttf);
+    font-weight: 200 800;
 }
 
+/* Each photo drifts while its own section crosses the screen, at roughly
+   the same speed as before. Tying it to the section (not the whole page)
+   means adding or removing sections can no longer leave a frame empty. */
 @keyframes parallax-effect {
-    0% {
-        transform: translateY(calc(var(--scroll-basis) * -1 + var(--offset)));
+    from {
+        transform: translateY(-10vh);
     }
 
-    100% {
-        transform: translateY(calc(var(--scroll-basis) + var(--offset)));
+    to {
+        transform: translateY(10vh);
+    }
+}
+
+@keyframes reveal-on-scroll {
+    from {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
     }
 }
 
@@ -171,16 +187,19 @@ main div.image_behind_text_container div.image_container {
     overflow: hidden;
     position: relative;
     display: flex;
+    view-timeline-name: --photo;
 }
 
 main div.image_behind_text_container div.image_container img {
     position: absolute;
-    top: 0px;
+    top: -10vh;
     left: 0px;
+    width: 100%;
     min-width: 100%;
-    height: auto;
-    animation: parallax-effect linear forwards;
-    animation-timeline: scroll(root block);
+    height: calc(100% + 20vh);
+    object-fit: cover;
+    animation: parallax-effect linear both;
+    animation-timeline: --photo;
 }
 
 main hr {
@@ -811,3 +830,176 @@ img.pop_out_activate {
     }
 }
 
+
+
+/* ---------- 2027: coming soon ---------- */
+
+.reveal_on_scroll {
+    animation: reveal-on-scroll linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+}
+
+div#coming_soon_container {
+    background: #0e0e33;
+    color: white;
+    padding: 18vh 2rem 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14vh;
+    text-align: center;
+}
+
+div#coming_soon_container h2 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+}
+
+div#coming_soon_container p {
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 300;
+    color: rgba(255, 255, 255, .72);
+}
+
+div#coming_soon_container p.coming_soon_line {
+    margin: 0;
+    font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: #8fd0f5;
+}
+
+div#anchor_abstract_competition div.text_container {
+    display: flex;
+    align-items: center;
+    padding: 6rem 4rem;
+}
+
+div.coming_soon_panel h2 {
+    font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    margin: 0 0 .7rem;
+}
+
+div.coming_soon_panel p {
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 32rem;
+    margin: 0;
+}
+
+div.coming_soon_panel p.coming_soon_sub {
+    font-size: 1.4rem;
+    color: #8fd0f5;
+    margin-bottom: 1.6rem;
+}
+
+/* ---------- 2027: partner ---------- */
+
+div#anchor_partner div.text_container {
+    display: flex;
+    align-items: center;
+    padding: 5rem 4rem;
+    font-size: 1rem;
+}
+
+div.partner_panel h2 {
+    font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+    margin: 0 0 .7rem;
+}
+
+div.partner_panel p {
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 32rem;
+    margin: 0 0 1rem;
+}
+
+div.partner_panel p.panel_sub {
+    font-size: 1.4rem;
+    line-height: 1.35;
+    margin-bottom: 1.6rem;
+}
+
+a.panel_link {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+}
+
+a.panel_link:hover {
+    opacity: .7;
+}
+
+/* ---------- 2027: details ---------- */
+
+div#details_container div.text_container {
+    display: flex;
+    align-items: center;
+    padding: 4.5rem 4rem;
+}
+
+div#details_container h3 {
+    font-size: clamp(1.9rem, 2.8vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+}
+
+dl.details_list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 1rem 2.2rem;
+    margin: 1.6rem 0 0;
+}
+
+dl.details_list dt {
+    font-weight: 600;
+}
+
+dl.details_list dd {
+    margin: 0;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+    div#coming_soon_container {
+        padding: 14vh 1.5rem 16vh;
+        gap: 10vh;
+    }
+
+    div#anchor_abstract_competition div.text_container,
+    div#anchor_partner div.text_container,
+    div#details_container div.text_container {
+        padding: 3rem 2rem;
+    }
+
+    dl.details_list {
+        grid-template-columns: 1fr;
+        gap: .2rem;
+    }
+
+    dl.details_list dd {
+        margin-bottom: .9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal_on_scroll,
+    main div.image_behind_text_container div.image_container img {
+        animation: none;
+    }
+}
