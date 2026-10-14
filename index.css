@@ -1308,13 +1308,13 @@ div#our_sponsors_container {
     color: #17172f;
 }
 
-h2.sponsors_heading {
+div#our_sponsors_container h2.sponsors_heading {
     font-family: var(--display-font-family);
-    font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+    font-size: clamp(2rem, 3.3vw, 2.9rem);
     font-weight: 400;
     letter-spacing: .01em;
     text-align: center;
-    margin: 2.5rem 0 1rem;
+    margin: 4.5rem 0 1.5rem;
 }
 
 div#our_sponsors_container table img {
@@ -1503,5 +1503,35 @@ a.hero_btn.hero_btn_quiet:hover {
     div.hero_full_media img,
     div.hero_full_content {
         animation: none;
+    }
+}
+
+
+/* ---------- 2027: "Coming soon." letters rise in one after another ---------- */
+
+p.coming_soon_line.letters_ready span.coming_soon_char {
+    font-family: inherit;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(.45em);
+    filter: blur(8px);
+    transition: opacity .9s cubic-bezier(.2, .7, .2, 1),
+                transform .9s cubic-bezier(.2, .7, .2, 1),
+                filter .9s cubic-bezier(.2, .7, .2, 1);
+    transition-delay: calc(var(--i) * 60ms);
+}
+
+p.coming_soon_line.letters_in span.coming_soon_char {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    p.coming_soon_line.letters_ready span.coming_soon_char {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
     }
 }
