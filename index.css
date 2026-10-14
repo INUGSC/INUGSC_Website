@@ -4,6 +4,39 @@
     font-weight: 200 800;
 }
 
+/* Libre Baskerville: the typeface of the INUGSC lockup (SIL Open Font Licence, see font/) */
+@font-face {
+    font-family: "Libre Baskerville";
+    src: url(/font/LibreBaskerville-latin-400-normal.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libre Baskerville";
+    src: url(/font/LibreBaskerville-latin-500-normal.woff2) format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libre Baskerville";
+    src: url(/font/LibreBaskerville-latin-600-normal.woff2) format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libre Baskerville";
+    src: url(/font/LibreBaskerville-latin-400-italic.woff2) format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
 /* Each photo drifts while its own section crosses the screen, at roughly
    the same speed as before. Tying it to the section (not the whole page)
    means adding or removing sections can no longer leave a frame empty. */
@@ -38,6 +71,7 @@
     --blue-text-colour: rgb(29, 18, 178);
     --button-background: #210790;
     --sans-serif-font-family: "Assistant";
+    --display-font-family: "Libre Baskerville", Georgia, serif;
 }
 
 * {
@@ -105,9 +139,17 @@ header img#header_logo {
 }
 
 header span#header_name {
-    font-size: 3rem;
-    font-weight: normal;
-    margin-left: 1rem;
+    font-family: var(--display-font-family);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: .07em;
+    line-height: 1.45;
+    margin-left: 1.1rem;
+    white-space: nowrap;
+}
+
+div#header_logo_and_name_container a {
+    align-items: center;
 }
 
 header div#header_list_container {
@@ -495,6 +537,7 @@ div.no_background {
 iframe#google_maps_embed {
     width: 100%;
     height: 15rem;
+    border: 0;
 }
 
 div#copyright_footer {
@@ -671,7 +714,9 @@ img.pop_out_activate {
     }
 
     header span#header_name {
-        font-size: 2rem;
+        font-size: .74rem;
+        letter-spacing: .05em;
+        margin-left: .8rem;
     }
 
     header div#header_hamburger_container {
@@ -852,10 +897,11 @@ div#coming_soon_container {
 }
 
 div#coming_soon_container h2 {
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1;
+    font-family: var(--display-font-family);
+    font-size: clamp(2.6rem, 6.6vw, 5.4rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.05;
     margin: 0;
 }
 
@@ -868,9 +914,10 @@ div#coming_soon_container p {
 
 div#coming_soon_container p.coming_soon_line {
     margin: 0;
-    font-size: clamp(2.2rem, 5.5vw, 4.5rem);
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-family: var(--display-font-family);
+    font-style: italic;
+    font-size: clamp(2rem, 4.8vw, 3.8rem);
+    font-weight: 400;
     color: #8fd0f5;
 }
 
@@ -881,11 +928,12 @@ div#anchor_abstract_competition div.text_container {
 }
 
 div.coming_soon_panel h2 {
-    font-size: clamp(2.2rem, 3.6vw, 3.2rem);
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.05;
-    margin: 0 0 .7rem;
+    font-family: var(--display-font-family);
+    font-size: clamp(2rem, 3.1vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.15;
+    margin: 0 0 .8rem;
 }
 
 div.coming_soon_panel p {
@@ -911,11 +959,12 @@ div#anchor_partner div.text_container {
 }
 
 div.partner_panel h2 {
-    font-size: clamp(2.2rem, 3.6vw, 3.2rem);
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.05;
-    margin: 0 0 .7rem;
+    font-family: var(--display-font-family);
+    font-size: clamp(2rem, 3.1vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.15;
+    margin: 0 0 .8rem;
 }
 
 div.partner_panel p {
@@ -952,9 +1001,10 @@ div#details_container div.text_container {
 }
 
 div#details_container h3 {
-    font-size: clamp(1.9rem, 2.8vw, 2.6rem);
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    font-family: var(--display-font-family);
+    font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: .01em;
     margin: 0;
 }
 
@@ -1000,6 +1050,305 @@ dl.details_list dd {
 @media (prefers-reduced-motion: reduce) {
     .reveal_on_scroll,
     main div.image_behind_text_container div.image_container img {
+        animation: none;
+    }
+}
+
+
+/* ---------- 2027: header fits on one line at laptop widths ---------- */
+
+header div#header_list_container a {
+    white-space: nowrap;
+}
+
+@media (min-width: 1001px) and (max-width: 1340px) {
+    header {
+        padding: 1rem 2rem;
+    }
+
+    header ul {
+        gap: 1.4rem;
+    }
+
+    header div#header_list_container {
+        margin-right: .5rem;
+    }
+
+    header div#header_list_container a {
+        font-size: 1.02em;
+    }
+}
+
+@media (min-width: 1001px) and (max-width: 1180px) {
+    header ul {
+        gap: 1rem;
+    }
+
+    header div#header_list_container a {
+        font-size: .92em;
+    }
+
+    header span#header_name {
+        font-size: .86rem;
+        letter-spacing: .05em;
+    }
+}
+
+/* six year logos: let them shrink a little rather than push the page sideways */
+@media (min-width: 1001px) {
+    main div.full_width_container > img.circle_clip_path {
+        flex: 0 1 183px;
+        min-width: 0;
+        height: auto;
+    }
+}
+
+/* ---------- 2027: display type on the remaining headings ---------- */
+
+h1.tall_title {
+    font-family: var(--display-font-family);
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.25;
+}
+
+div#anchor_about h2 {
+    font-family: var(--display-font-family);
+    font-weight: 400;
+    letter-spacing: .01em;
+}
+
+/* ---------- 2027: hero ---------- */
+
+div.hero_panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p.hero_eyebrow {
+    font-family: var(--display-font-family);
+    font-style: italic;
+    font-size: 1.05rem;
+    margin: 0 0 1.1rem;
+    color: rgba(255, 255, 255, .85);
+}
+
+h1.hero_date {
+    font-family: var(--display-font-family);
+    font-weight: 400;
+    font-size: 1.45rem;
+    letter-spacing: .03em;
+    line-height: 1.1;
+    margin: 0 0 1.2rem;
+}
+
+h1.hero_date span {
+    display: block;
+    font-size: clamp(2.6rem, 4.4vw, 3.7rem);
+    letter-spacing: .02em;
+    margin-bottom: .35rem;
+}
+
+p.hero_venue {
+    font-weight: 300;
+    line-height: 1.55;
+    margin: 1.1rem 0 1.4rem;
+}
+
+div.hero_panel a.panel_link {
+    color: white;
+    align-self: flex-start;
+}
+
+div.text_container.narrow.hero_panel p {
+    line-height: 1.5;
+    letter-spacing: .02em;
+    font-size: 1rem;
+}
+
+div.text_container.narrow.hero_panel p.hero_eyebrow {
+    font-size: 1.05rem;
+    letter-spacing: .03em;
+}
+
+div.hero_panel hr {
+    align-self: stretch;
+    width: 100%;
+    margin: .3rem 0 0;
+}
+
+/* ---------- 2027: date and venue ---------- */
+
+div.venue_container {
+    display: flex;
+    background: #e1e8f0;
+    color: var(--blue-text-colour);
+    min-height: 30rem;
+}
+
+div.venue_text {
+    flex: 0 0 44%;
+    box-sizing: border-box;
+    padding: 4.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.venue_text h2 {
+    font-family: var(--display-font-family);
+    font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    margin: 0 0 .4rem;
+}
+
+p.venue_links {
+    margin: 1.8rem 0 0;
+}
+
+div.venue_text dl.details_list {
+    font-size: 1.05rem;
+}
+
+div.venue_map {
+    flex: 1;
+    display: flex;
+}
+
+div.venue_map iframe#google_maps_embed {
+    height: auto;
+    min-height: 30rem;
+    flex: 1;
+}
+
+/* ---------- 2027: delegate dot map ---------- */
+
+div#delegates_container {
+    background: #ffffff;
+    color: var(--blue-text-colour);
+    padding: 6rem 3rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+div#delegates_container h2 {
+    font-family: var(--display-font-family);
+    font-size: clamp(2rem, 3.3vw, 2.9rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    margin: 0 0 1rem;
+}
+
+div#delegates_container p {
+    font-weight: 300;
+    line-height: 1.65;
+    max-width: 44rem;
+    margin: 0 auto 3rem;
+}
+
+div.delegates_map {
+    width: 100%;
+    max-width: 1100px;
+    view-timeline-name: --dotmap;
+}
+
+svg.dotmap {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+svg.dotmap path {
+    fill: none;
+    stroke-linecap: round;
+}
+
+path.dotmap_base {
+    stroke: #d3d8e8;
+    stroke-width: 4.3;
+}
+
+path.dotmap_hl {
+    stroke: var(--blue-text-colour);
+    stroke-width: 4.5;
+}
+
+circle.dotmap_pin {
+    fill: var(--blue-text-colour);
+}
+
+circle.dotmap_ring {
+    fill: rgba(29, 18, 178, .16);
+}
+
+g.dotmap_country {
+    animation: dotmap-light linear both;
+    animation-timeline: --dotmap;
+}
+
+@keyframes dotmap-light {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ---------- 2027: previous sponsors in black and white ---------- */
+
+div#our_sponsors_container {
+    background: #ffffff;
+    color: #17172f;
+}
+
+h2.sponsors_heading {
+    font-family: var(--display-font-family);
+    font-size: clamp(1.9rem, 2.8vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: .01em;
+    text-align: center;
+    margin: 2.5rem 0 1rem;
+}
+
+div#our_sponsors_container table img {
+    filter: grayscale(1) contrast(1.05);
+    opacity: .78;
+}
+
+@media (max-width: 1000px) {
+    div.venue_container {
+        flex-direction: column;
+    }
+
+    div.venue_text {
+        padding: 3rem 2rem;
+    }
+
+    div.venue_map iframe#google_maps_embed {
+        min-height: 20rem;
+    }
+
+    div#delegates_container {
+        padding: 4rem 1.25rem 3.5rem;
+    }
+
+    path.dotmap_base {
+        stroke-width: 5;
+    }
+
+    path.dotmap_hl {
+        stroke-width: 5.2;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    g.dotmap_country {
         animation: none;
     }
 }
