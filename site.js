@@ -1,5 +1,4 @@
-// INUGSC site behaviour for the renovated pages. index.js stays until the
-// Widening Participation page is renovated.
+// INUGSC site behaviour, used by every page.
 
 // Phone menu: open and close it, and close it again once a link is chosen.
 (function () {
@@ -25,6 +24,94 @@
             setOpen(false);
             button.focus();
         }
+    });
+})();
+
+// Delegate map: point at a lit country to name it. The nearest lit country to the
+// pointer wins, so small neighbours (the UK and Belgium, Italy and Malta) stay easy
+// to tell apart. On a phone, tap near a country; tap anywhere else to clear the label.
+(function () {
+    let map = document.querySelector(".delegates_map");
+    let svg = map && map.querySelector("svg.dotmap");
+    if (!svg) return;
+
+    let label = document.createElement("p");
+    label.className = "map_label";
+    label.setAttribute("aria-hidden", "true");   // the paragraph above already lists every country
+    map.appendChild(label);
+
+    // every dot and pin of every lit country, in map units
+    let points = [];
+    svg.querySelectorAll("g.dotmap_country").forEach(country => {
+        let dots = country.querySelector("path.dotmap_hl");
+        if (dots) {
+            for (let m of dots.getAttribute("d").matchAll(/M([\d.]+) ([\d.]+)/g)) {
+                points.push({ x: +m[1], y: +m[2], country });
+            }
+        }
+        country.querySelectorAll("circle.dotmap_pin").forEach(pin => {
+            points.push({ x: +pin.getAttribute("cx"), y: +pin.getAttribute("cy"), country });
+        });
+    });
+
+    let active = null;
+
+    function scale() {
+        return svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+    }
+
+    // the lit country nearest to a point on screen, if one is within reach (in pixels)
+    function nearest(clientX, clientY, reach) {
+        let box = svg.getBoundingClientRect(), s = scale();
+        let x = (clientX - box.left) / s, y = (clientY - box.top) / s;
+        let best = null, bestDistance = reach / s;
+        for (let point of points) {
+            let distance = Math.hypot(point.x - x, point.y - y);
+            if (distance < bestDistance) {
+                best = point.country;
+                bestDistance = distance;
+            }
+        }
+        return best;
+    }
+
+    function show(country) {
+        if (country == active) return;
+        if (active) active.classList.remove("is_active");
+        active = country;
+        country.classList.add("is_active");
+
+        // the label sits just above the country, at a point stored on it in map units
+        let box = svg.getBoundingClientRect(), base = map.getBoundingClientRect(), s = scale();
+        label.textContent = country.dataset.name;
+        label.style.left = (box.left - base.left + country.dataset.x * s) + "px";
+        label.style.top = (box.top - base.top + country.dataset.y * s) + "px";
+        label.classList.add("is_visible");
+    }
+
+    function hide() {
+        if (active) active.classList.remove("is_active");
+        active = null;
+        label.classList.remove("is_visible");
+    }
+
+    svg.addEventListener("pointermove", event => {
+        if (event.pointerType == "touch") return;
+        let country = nearest(event.clientX, event.clientY, 14);
+        country ? show(country) : hide();
+    });
+
+    svg.addEventListener("pointerleave", event => {
+        if (event.pointerType != "touch") hide();
+    });
+
+    svg.addEventListener("click", event => {
+        let country = nearest(event.clientX, event.clientY, 24);
+        country ? show(country) : hide();
+    });
+
+    document.addEventListener("pointerdown", event => {
+        if (active && !svg.contains(event.target)) hide();
     });
 })();
 

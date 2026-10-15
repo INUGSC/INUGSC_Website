@@ -127,6 +127,11 @@ typography:
     fontSize: 0.875rem
     fontWeight: 400
     lineHeight: 1.45
+  label-sm:
+    fontFamily: Assistant
+    fontSize: 0.875rem
+    fontWeight: 600
+    lineHeight: 1.2
 
 rounded:
   none: 0px
@@ -304,6 +309,18 @@ components:
     backgroundColor: "{colors.map-base}"
   map-dot-lit:
     backgroundColor: "{colors.secondary}"
+  map-dot-active:
+    backgroundColor: "{colors.primary}"
+  map-label:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-dark}"
+    typography: "{typography.label-sm}"
+    rounded: "{rounded.sm}"
+    padding: 0.45rem 0.75rem
+  numbers-source:
+    backgroundColor: "{colors.primary-deep}"
+    textColor: "{colors.on-dark-muted}"
+    typography: "{typography.caption}"
   form-field:
     backgroundColor: "{colors.surface-white}"
     textColor: "{colors.ink}"
@@ -373,7 +390,7 @@ Navy and white do most of the work. The light blue-grey band carries practical i
 - **Text on light** is blue text for headings and short copy (up to about three paragraphs). Anything longer, such as welcome messages and past-meeting entries, is set in ink, because a page of saturated blue is tiring to read. The sponsor wall is also set in ink, so the greyscale logos sit in a neutral frame.
 - **The accent** never appears on a light surface, where it fails contrast at 1.7:1. It is never a button colour, never a background and never a border.
 - **Photographs** carry the only other colour on the page. When type sits on a photograph, the scrim goes between them, flat and even. Never use a gradient scrim.
-- **Indigo** `#210790` survives in older CSS (narrow panels, the old button, the floating socials). Do not use it in new work, and replace it with navy whenever a section is rebuilt.
+- **Indigo** `#210790` was the old site's panel and button colour. It is retired; use navy instead.
 - **No gradients**, in backgrounds, scrims, text or buttons.
 
 **Contrast (WCAG 2)**
@@ -470,7 +487,7 @@ This is the working order for the renovation. The first two positions are fixed.
 2. Date and venue, with the map
 3. Welcome: a short excerpt from the directors, linking to the full messages
 4. Numbers band
-5. About, with the endorsements
+5. About, with the endorsements, followed by Widening participation (a text band linking to `/wp/`)
 6. Delegates map
 7. Speakers and workshops
 8. Testimonials
@@ -481,7 +498,7 @@ This is the working order for the renovation. The first two positions are fixed.
 
 **Inner pages**
 
-Pages such as past meetings, the gallery, the invitation to speak, the privacy notice and ticket terms open with a shorter title band in deep navy (50 to 60svh, title in `display-xl` or `headline-lg`). After that they use the same band grammar.
+Pages such as Widening participation, past meetings, the gallery, the invitation to speak, the privacy notice and ticket terms open with a shorter first view (`.first_view_page`: 62svh, between 26rem and 40rem tall). It holds a photograph under the scrim, an italic eyebrow ("INUGSC 2027"), the title in `display-xl` and one lead line. After that they use the same band grammar, mostly text bands. `wp/index.html` is the model.
 
 ## Elevation & Depth
 
@@ -517,6 +534,10 @@ These are the building blocks of every page. Choose a band by its role in Colour
 
 A text panel takes 44% of the width and a photograph takes the rest, or the two take half each. Panels alternate sides down the page. The panel holds a `headline-md` heading, an optional subtitle in `lead`, body text up to `measure-panel`, and one action. On phones the photo stacks above the text at 40vh.
 
+**Text band** (`.text_band`)
+
+Use it when a section has no photograph. The heading and an optional subtitle sit in a left column 44% wide, and the reading column starts exactly where the photos of split sections start, so text and photographs share one vertical line down the page. The reading column holds body text, a details list and at most one action, up to about 36rem. On phones the two columns stack. The Widening participation band on the home page and every section of `wp/index.html` are text bands.
+
 **Buttons and links** (`button-on-dark`, `button-on-light`, `text-link-on-dark`, `text-link-on-light`)
 
 - Use at most one solid button per view: white with ink text on dark surfaces, navy with white text on light ones.
@@ -535,7 +556,9 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **Numbers band** (`numbers-band`, `numbers-label`, `numbers-divider`)
 
-- Three or four figures sit in a row on deep navy, each a `figure` above a one-line label in muted white, separated by vertical hairlines. On phones they form a two-by-two grid.
+- Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. On phones they form a two-by-two grid.
+- Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">13</span> <span class="numbers_label">Countries represented in 2025</span></li>…</ul>`.
+- A band can carry a visible heading (`.numbers_heading`, as "Why it matters" on the Widening participation page). Any figure from outside INUGSC needs a source line underneath (`.numbers_source`, `numbers-source`), naming the report and year and linking to it.
 - The figures arrive with the standard reveal. They never count up.
 - Every figure carries its year or source in its label, for example "countries represented in 2025".
 - Confirmed figures available now: founded in 2011, the 16th edition, 500+ delegates, and 13 countries in 2025. Add more only from the archive data.
@@ -573,7 +596,9 @@ The seals from the 10th anniversary to the current year sit in one row on light 
 
 **Delegate map** (`map-dot`, `map-dot-lit`)
 
-A dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text, with a pin and a 16% blue ring on London. Countries light up in order of distance from London as the map crosses the screen.
+- **Drawing:** a dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text. Countries too small to hold a dot (Belgium, Malta, Cyprus, Hong Kong, Singapore, and Estonia and Georgia with only one or two dots) also get a pin with a 16% blue ring. Countries light up in order of distance from London as the map crosses the screen.
+- **How it is made:** the dots sit on a fixed grid, 143 by 53, 7 units apart, in an equirectangular projection running from 78°N to 56°S across a 1000 by 372 viewBox. Each dot belongs to whichever Natural Earth 1:50m country contains it, tested on the sphere with `d3-geo`'s `geoContains`. A flat point-in-polygon test smears Russia and Fiji across the map, because both cross the 180th meridian. Each lit country is a `g.dotmap_country` carrying `data-name` (the name shown) and `data-x`/`data-y` (where its label sits, in map units).
+- **Hover labels:** pointing at the map names the nearest lit country within 14px (24px for a tap on a phone). Its dots and pin turn navy, and a `map-label` appears just above it: navy, white `label-sm` type, 2px corners and no shadow or arrow. Tapping anywhere else clears it. Unlit countries are never named, because the map shows where delegates came from. The paragraph above lists every country, so screen readers lose nothing.
 
 **Sponsor wall** (`sponsor-wall`)
 
@@ -617,23 +642,22 @@ Page grey, in `caption` type and blue text, with the copyright on the left and t
 
 ## Motion
 
-Motion is always tied to scrolling, using CSS scroll-driven animations (`animation-timeline: view()` or a named `view-timeline`). Nothing runs on a timer.
+Everything that moves on its own is tied to scrolling, using CSS scroll-driven animations (`animation-timeline: view()` or a named `view-timeline`). Nothing runs on a timer. The only other motion answers something the visitor does, such as hovering a button, pointing at a country or opening the menu, and lasts no longer than 0.3s.
 
 | Name | What moves | Timing |
 |---|---|---|
 | Header condense | The header shrinks from 7.5rem to 3.75rem, the seal from 5.5rem to 2.75rem and the lockup from 1rem to 0.74rem | The first 12rem of page scroll (`scroll(root)`, range `0 12rem`) |
-| Reveal (`.reveal`, or `.reveal_on_scroll` in the old `index.css`) | Fades in and rises 3rem | From `entry 10%` to `cover 40%` |
+| Reveal (`.reveal`) | Fades in and rises 3rem | From `entry 10%` to `cover 40%` |
 | Photo drift | The photograph moves from -10vh to +10vh inside its own section, so the frame never empties | The section's own view timeline |
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
+| Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
 - With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
-- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
-- Older sections still use `.fade_in_while_scrolling`, a JavaScript fade. Move each one to `.reveal` when its section is rebuilt.
-- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
+- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
 
 ## Imagery
 
@@ -674,7 +698,7 @@ Speakers, workshops, sponsors, the committee and tickets live in plain text file
 - `generate_sponsors.js` builds the sponsor wall from `sponsors.txt`. If the file can't be read, the whole section hides rather than showing an empty heading.
 - When `tickets.txt` says tickets are available, `check_for_tickets.js` reveals the hidden "Buy tickets" button in the first view (pointing it at the ticket link) and removes "Follow for ticket updates", so the first view still has one solid button.
 
-**Files.** Renovated pages use `site.css` and `site.js`. The old `index.css` and `index.js` remain only for the Widening Participation page (`wp/index.html`) until it is renovated, and should then be deleted.
+**Files.** Every page uses `site.css` and `site.js`. The old `index.css`, `index.js` and `handle_pop_out_menus.js` were removed once the Widening Participation page was renovated.
 
 ## Working with this file
 
