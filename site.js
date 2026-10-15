@@ -40,30 +40,27 @@
     label.setAttribute("aria-hidden", "true");   // the paragraph above already lists every country
     map.appendChild(label);
 
-    // every dot and pin of every lit country, in map units
+    // every dot of every lit country, in map units
     let points = [];
     svg.querySelectorAll("g.dotmap_country").forEach(country => {
         let dots = country.querySelector("path.dotmap_hl");
-        if (dots) {
-            for (let m of dots.getAttribute("d").matchAll(/M([\d.]+) ([\d.]+)/g)) {
-                points.push({ x: +m[1], y: +m[2], country });
-            }
+        if (!dots) return;
+        for (let m of dots.getAttribute("d").matchAll(/M([\d.]+) ([\d.]+)/g)) {
+            points.push({ x: +m[1], y: +m[2], country });
         }
-        country.querySelectorAll("circle.dotmap_pin").forEach(pin => {
-            points.push({ x: +pin.getAttribute("cx"), y: +pin.getAttribute("cy"), country });
-        });
     });
 
     let active = null;
+    let view = svg.viewBox.baseVal;            // the map's frame starts at view.x, view.y in map units
 
     function scale() {
-        return svg.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+        return svg.getBoundingClientRect().width / view.width;
     }
 
     // the lit country nearest to a point on screen, if one is within reach (in pixels)
     function nearest(clientX, clientY, reach) {
         let box = svg.getBoundingClientRect(), s = scale();
-        let x = (clientX - box.left) / s, y = (clientY - box.top) / s;
+        let x = view.x + (clientX - box.left) / s, y = view.y + (clientY - box.top) / s;
         let best = null, bestDistance = reach / s;
         for (let point of points) {
             let distance = Math.hypot(point.x - x, point.y - y);
@@ -84,8 +81,8 @@
         // the label sits just above the country, at a point stored on it in map units
         let box = svg.getBoundingClientRect(), base = map.getBoundingClientRect(), s = scale();
         label.textContent = country.dataset.name;
-        label.style.left = (box.left - base.left + country.dataset.x * s) + "px";
-        label.style.top = (box.top - base.top + country.dataset.y * s) + "px";
+        label.style.left = (box.left - base.left + (country.dataset.x - view.x) * s) + "px";
+        label.style.top = (box.top - base.top + (country.dataset.y - view.y) * s) + "px";
         label.classList.add("is_visible");
     }
 

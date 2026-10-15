@@ -241,7 +241,7 @@ a {
     align-items: center;
     gap: 2rem;
     height: var(--header-full);
-    padding: 0 3rem;
+    padding: 0 var(--gutter);           /* the seal and the last link sit on the page's gutter lines */
     background: var(--navy);
     color: var(--white);
 }
@@ -584,8 +584,10 @@ main {
 
 /* ---------- Numbers ---------- */
 
+/* a full-width band, so everything in it is centred: each figure in its column, the columns across the page */
 .numbers {
     padding: 5.5rem var(--gutter);
+    text-align: center;
 }
 
 .numbers_heading {
@@ -606,12 +608,12 @@ main {
 .numbers_list > li {
     display: flex;
     flex-direction: column;
-    padding: 0.4rem 2.5rem 0.6rem;
+    align-items: center;
+    padding: 0.4rem 1.5rem 0.6rem;
     border-left: 1px solid var(--hairline-dark);
 }
 
 .numbers_list > li:first-child {
-    padding-left: 0;
     border-left: 0;
 }
 
@@ -631,7 +633,7 @@ main {
 
 .numbers_source {
     max-width: var(--measure-centred);
-    margin-top: 3rem;
+    margin: 3rem auto 0;
     font-size: 0.875rem;
     color: var(--on-dark-muted);
 }
@@ -724,27 +726,20 @@ svg.dotmap {
     height: auto;
 }
 
+/* every dot on the map is the same size, lit or not */
 svg.dotmap path {
     fill: none;
     stroke-linecap: round;
+    stroke-width: 4.4;
 }
 
 path.dotmap_base {
     stroke: var(--map-base);
-    stroke-width: 4.3;
 }
 
 path.dotmap_hl {
     stroke: var(--blue-text);
-    stroke-width: 4.5;
-}
-
-circle.dotmap_pin {
-    fill: var(--blue-text);
-}
-
-circle.dotmap_ring {
-    fill: rgba(29, 18, 178, 0.16);
+    transition: stroke 0.2s ease;
 }
 
 g.dotmap_country {
@@ -753,22 +748,8 @@ g.dotmap_country {
 }
 
 /* Hovering (or tapping) near a lit country names it; site.js finds the nearest one. */
-path.dotmap_hl,
-circle.dotmap_pin,
-circle.dotmap_ring {
-    transition: stroke 0.2s ease, fill 0.2s ease;
-}
-
 g.dotmap_country.is_active path.dotmap_hl {
     stroke: var(--navy);
-}
-
-g.dotmap_country.is_active circle.dotmap_pin {
-    fill: var(--navy);
-}
-
-g.dotmap_country.is_active circle.dotmap_ring {
-    fill: rgba(29, 29, 95, 0.22);
 }
 
 .map_label {
@@ -892,18 +873,24 @@ g.dotmap_country.is_active circle.dotmap_ring {
     padding: 0 1.25rem;
 }
 
+/* Logos are trimmed to their edges, then sized so each covers about the same area:
+   a long wordmark comes out wide and low, a square mark small and tall. site.js sets --aspect
+   (width / height) once each logo loads. Browsers without sqrt() keep the plain max-height rule. */
 .sponsor_grid img {
-    max-width: 100%;
-    max-height: 3rem;
+    --logo-size: 4rem;
+    --logo-max-height: 3rem;
     width: auto;
+    width: min(100%, calc(var(--logo-size) * sqrt(var(--aspect, 3))), calc(var(--logo-max-height) * var(--aspect, 3)));
+    max-width: 100%;
     height: auto;
+    max-height: var(--logo-max-height);
     object-fit: contain;
     filter: grayscale(1) contrast(1.05);
     opacity: 0.78;
 }
 
 .sponsor_grid img.smaller {
-    max-height: 2.1rem;
+    --logo-size: 3.4rem;
 }
 
 /* ---------- Footer ---------- */
@@ -965,12 +952,15 @@ g.dotmap_country.is_active circle.dotmap_ring {
     }
 }
 
-/* ---------- Laptops: keep the header on one line ---------- */
+/* ---------- Laptops: a narrower gutter, and the header kept on one line ---------- */
 
 @media (min-width: 1001px) and (max-width: 1340px) {
+    :root {
+        --gutter: 3rem;
+    }
+
     .site_header {
         gap: 1.5rem;
-        padding: 0 2rem;
     }
 
     .site_nav ul {
@@ -983,6 +973,10 @@ g.dotmap_country.is_active circle.dotmap_ring {
 }
 
 @media (min-width: 1001px) and (max-width: 1180px) {
+    :root {
+        --gutter: 2.5rem;
+    }
+
     .site_nav ul {
         gap: 1rem;
     }
@@ -1008,9 +1002,10 @@ g.dotmap_country.is_active circle.dotmap_ring {
         --seal-compact: 2.25rem;
     }
 
+    /* the menu lines sit 0.6rem inside their button, so the button reaches past the gutter by that much */
     .site_header {
         gap: 1rem;
-        padding: 0 0.75rem 0 1rem;
+        padding: 0 calc(var(--gutter) - 0.6rem) 0 var(--gutter);
     }
 
     .site_brand {
@@ -1173,11 +1168,10 @@ g.dotmap_country.is_active circle.dotmap_ring {
     }
 
     .numbers_list > li {
-        padding: 1.6rem 0 1.6rem 1.25rem;
+        padding: 1.6rem 0.75rem;
     }
 
     .numbers_list > li:nth-child(odd) {
-        padding-left: 0;
         border-left: 0;
     }
 
@@ -1237,12 +1231,8 @@ g.dotmap_country.is_active circle.dotmap_ring {
         margin-top: 2.5rem;
     }
 
-    path.dotmap_base {
+    svg.dotmap path {
         stroke-width: 5;
-    }
-
-    path.dotmap_hl {
-        stroke-width: 5.2;
     }
 
     .coming_soon {
@@ -1282,11 +1272,12 @@ g.dotmap_country.is_active circle.dotmap_ring {
     }
 
     .sponsor_grid img {
-        max-height: 2.4rem;
+        --logo-size: 2.4rem;
+        --logo-max-height: 2.2rem;
     }
 
     .sponsor_grid img.smaller {
-        max-height: 1.7rem;
+        --logo-size: 2rem;
     }
 
     .site_footer {
@@ -1325,9 +1316,7 @@ g.dotmap_country.is_active circle.dotmap_ring {
     .menu_lines::after,
     .site_nav,
     .map_label,
-    path.dotmap_hl,
-    circle.dotmap_pin,
-    circle.dotmap_ring {
+    path.dotmap_hl {
         transition: none;
     }
 }

@@ -148,6 +148,8 @@ spacing:
   section: 6rem
   section-mobile: 3rem
   gutter: 4rem
+  gutter-laptop: 3rem
+  gutter-small-laptop: 2.5rem
   gutter-mobile: 1.5rem
   measure-panel: 32rem
   measure-reading: 36rem
@@ -459,16 +461,26 @@ Serif for what you look at, sans for what you read.
 - Neighbouring bands never share a background. If two light sections must sit together, make one light blue-grey and the other white or page grey.
 - When something needs emphasis, change the band before adding anything else, such as a border, a box or a second button.
 
+**Alignment**
+
+Every page hangs from two kinds of line.
+
+- **The gutter lines:** one vertical line on the left and one on the right, `gutter` in from each edge. The header's seal, the first view's text, every split panel's text, every text band's heading, the numbers band and the footer start on the left line. The header's last link (or the phone menu's lines) ends on the right line.
+- **The centre line:** full-width bands centre everything in them. That covers cinematic bands (speakers and workshops, the numbers band) and content bands (the delegate map, the year seals, the sponsor wall). Their headings, paragraphs, rows and the items inside each row all sit on the page's centre. The first view is the one exception, with its text deliberately at the bottom left, on the gutter.
+- The second column of a text band starts exactly where the photos of split sections start (44% across), so text and photos share one more vertical line.
+- Never nudge something by eye. If it looks off, check it against these lines, and against the visible edges of images (a logo with blank space inside its file will look off-centre even when its box is centred).
+
 **Spacing**
 
 - The base unit is 8px. Use the `spacing` tokens rather than new values.
-- Bands use `section` (6rem) vertically and `gutter` (4rem) horizontally on desktop, dropping to `section-mobile` (3rem) and `gutter-mobile` (1.5rem) on phones.
+- Bands use `section` (6rem) vertically and `gutter` horizontally: 4rem above 1340px, `gutter-laptop` (3rem) from 1181 to 1340px, `gutter-small-laptop` (2.5rem) from 1001 to 1180px, and `gutter-mobile` (1.5rem) at 1000px and below, where bands drop to `section-mobile` (3rem) vertically. In CSS this is one variable, `--gutter`, reset at each breakpoint, so the header and the bands always move together.
 - Cinematic bands measure in screen height instead: 18vh above, 20vh below and 14vh between items on desktop, and 14vh, 16vh and 10vh on phones.
 - Inside panels, leave 0.8rem from heading to text, 1.6rem below a subtitle, and 1rem between paragraphs.
 
 **Header**
 
 - The header is fixed to the top, solid navy and full width. On the left are the year seal and the three-line lockup "The International / Undergraduate Surgical / Conference, 2027". On the right are at most five text links in sentence case: Date and venue, About, Speakers and workshops, Abstract competition, Partner with us.
+- Its side padding is the gutter, so the seal and the last link sit on the gutter lines. On phones the right padding is the gutter minus 0.6rem, because the menu's lines sit 0.6rem inside their button.
 - At the top of the page it is 7.5rem tall with a 5.5rem seal. Over the first 12rem of scrolling it condenses to 3.75rem with a 2.75rem seal and a 0.74rem lockup, so it stays present without taking the screen. The page starts below the full-size header.
 - Nothing else goes in the header: no buttons, social icons, search or language switch.
 - Below 1000px it shows the seal, the lockup and a menu button (5rem tall, condensing to 3.5rem). The links fold down beneath it as a navy list divided by hairlines, and the button turns into a cross while the list is open.
@@ -556,7 +568,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **Numbers band** (`numbers-band`, `numbers-label`, `numbers-divider`)
 
-- Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. On phones they form a two-by-two grid.
+- Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. Each figure and label is centred in its column, and the columns divide the band evenly, so the middle hairline falls on the page's centre. On phones they form a two-by-two grid, still centred.
 - Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">13</span> <span class="numbers_label">Countries represented in 2025</span></li>…</ul>`.
 - A band can carry a visible heading (`.numbers_heading`, as "Why it matters" on the Widening participation page). Any figure from outside INUGSC needs a source line underneath (`.numbers_source`, `numbers-source`), naming the report and year and linking to it.
 - The figures arrive with the standard reveal. They never count up.
@@ -596,13 +608,22 @@ The seals from the 10th anniversary to the current year sit in one row on light 
 
 **Delegate map** (`map-dot`, `map-dot-lit`)
 
-- **Drawing:** a dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text. Countries too small to hold a dot (Belgium, Malta, Cyprus, Hong Kong, Singapore, and Estonia and Georgia with only one or two dots) also get a pin with a 16% blue ring. Countries light up in order of distance from London as the map crosses the screen.
-- **How it is made:** the dots sit on a fixed grid, 143 by 53, 7 units apart, in an equirectangular projection running from 78°N to 56°S across a 1000 by 372 viewBox. Each dot belongs to whichever Natural Earth 1:50m country contains it, tested on the sphere with `d3-geo`'s `geoContains`. A flat point-in-polygon test smears Russia and Fiji across the map, because both cross the 180th meridian. Each lit country is a `g.dotmap_country` carrying `data-name` (the name shown) and `data-x`/`data-y` (where its label sits, in map units).
-- **Hover labels:** pointing at the map names the nearest lit country within 14px (24px for a tap on a phone). Its dots and pin turn navy, and a `map-label` appears just above it: navy, white `label-sm` type, 2px corners and no shadow or arrow. Tapping anywhere else clears it. Unlit countries are never named, because the map shows where delegates came from. The paragraph above lists every country, so screen readers lose nothing.
+- **Drawing:** a dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text. Every dot is the same size, lit or not (4.4 map units, 5 on phones), with no pins, rings or markers. Countries light up in order of distance from London as the map crosses the screen.
+- **Small countries:** a country too small to own a cell of the grid (Belgium, Malta, Cyprus, Hong Kong, Singapore) gets one dot, on the grid cell nearest its centre that no other delegate country uses. That cell may be at sea, or may have belonged to a neighbour (Belgium's came from the Netherlands).
+- **How it is made:**
+  - The dots sit on a fixed grid, 143 by 53, 7 units apart, in an equirectangular projection running from 78°N to 56°S.
+  - The map is cut at the Bering Strait: its left edge is longitude 169.5°W, so Alaska starts the map and Russia ends it in one piece.
+  - Each cell is sampled 3 by 3 against Natural Earth 1:50m countries, tested on the sphere with `d3-geo`'s `geoContains`. It is land when at least 4 of its 9 samples are, and it belongs to the country holding most of them. This stops slivers such as the Northwest Angle or specks of islands from showing up as stray dots.
+  - The viewBox (7 0 987 371) is trimmed to the dots, so the margins are equal on every side and the dots' centre is the page's centre.
+  - Each lit country is a `g.dotmap_country` carrying `data-name` (the name shown) and `data-x`/`data-y` (where its label sits, in map units).
+- **Hover labels:** pointing at the map names the nearest lit country within 14px (24px for a tap on a phone). Its dots turn navy, and a `map-label` appears just above it: navy, white `label-sm` type, 2px corners and no shadow or arrow. Tapping anywhere else clears it. Unlit countries are never named, because the map shows where delegates came from. The paragraph above lists every country, so screen readers lose nothing.
 
 **Sponsor wall** (`sponsor-wall`)
 
-Logos are greyscale (`filter: grayscale(1) contrast(1.05)`) at 78% opacity on white, under a centred `headline-lg` heading in ink. They sit six to a row on desktop and three on phones, each no taller than 3rem (2.1rem for logos marked `[Smaller]` in `sponsors.txt`), and an unfinished last row is centred. They do not regain their colour on hover. Endorsing bodies (RCS England, RCSEd, the GMC and the BMA) are treated the same way.
+- **Look:** logos are greyscale (`filter: grayscale(1) contrast(1.05)`) at 78% opacity on white, under a centred `headline-lg` heading in ink. They do not regain their colour on hover. Endorsing bodies (RCS England, RCSEd, the GMC and the BMA) are treated the same way.
+- **Layout:** six to a row on desktop and three on phones, each centred in its cell, with an unfinished last row centred.
+- **Size:** every logo covers about the same area, so a long wordmark comes out wide and low and a square mark smaller and taller. Width is `--logo-size × √(aspect ratio)`, at most the cell's width and at most 3rem tall (2.2rem on phones). `--logo-size` is 4rem, 3.4rem for logos marked `[Smaller]` in `sponsors.txt`, and 2.4rem and 2rem on phones. `generate_sponsors.js` sets each logo's `--aspect` once it loads.
+- **Files:** every logo file is trimmed to its edges, with no blank or white margin, so its box and its visible mark have the same centre. Files are at most 640 by 320px, stored as palette PNGs. Trim any new logo the same way before adding it to `img/logo/`.
 
 **Forms** (`form-field`)
 
@@ -682,9 +703,9 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 
 | Width | Changes |
 |---|---|
-| Above 1340px | Full layout |
-| 1180 to 1340px | Header links step down to 1rem with tighter gaps |
-| 1001 to 1180px | Header links step down to 0.92rem and the lockup to 0.86rem |
+| Above 1340px | Full layout, 4rem gutter |
+| 1181 to 1340px | 3rem gutter. Header links step down to 1rem with tighter gaps |
+| 1001 to 1180px | 2.5rem gutter. Header links step down to 0.92rem and the lockup to 0.86rem |
 | 1000px and below | The header (5rem, condensing to 3.5rem) collapses to a menu. Split sections stack with the photo first at 40vh. Details lists fold to one column. Bands use `section-mobile` and `gutter-mobile`. The first view's actions stack. The numbers form a two-by-two grid, and year seals and sponsor logos sit three to a row |
 
 - Touch targets are at least 44px tall.
