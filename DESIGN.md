@@ -28,7 +28,7 @@ typography:
     letterSpacing: 0.01em
   display-xl:
     fontFamily: Libre Baskerville
-    fontSize: 5.4rem
+    fontSize: 4.8rem
     fontWeight: 400
     lineHeight: 1.05
     letterSpacing: 0.01em
@@ -119,7 +119,7 @@ typography:
     lineHeight: 1
   nav:
     fontFamily: Assistant
-    fontSize: 1.2rem
+    fontSize: 1.0625rem
     fontWeight: 400
     lineHeight: 1
   caption:
@@ -153,7 +153,12 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-dark}"
     typography: "{typography.nav}"
-    padding: 1rem 3rem
+    padding: 0 3rem
+    height: 7.5rem
+  site-header-condensed:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-dark}"
+    height: 3.75rem
   lockup:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-dark}"
@@ -395,7 +400,7 @@ Serif for what you look at, sans for what you read.
 | Token | Desktop size | Responsive size | Weight | Line height | Tracking | Use |
 |---|---|---|---|---|---|---|
 | `display-date` | 5.6rem | `clamp(2.8rem, 5.4vw, 5.6rem)` | 400 | 1.05 | 0.01em | The date in the first view, always the largest thing on the page |
-| `display-xl` | 5.4rem | `clamp(2.6rem, 6.6vw, 5.4rem)` | 400 | 1.05 | 0.01em | Single-word cinematic headings ("Speakers"), inner-page titles |
+| `display-xl` | 4.8rem | `clamp(2.4rem, 5.4vw, 4.8rem)` | 400 | 1.05 | 0.01em | Single-word cinematic headings ("Speakers"), inner-page titles |
 | `figure` | 4.5rem | `clamp(2.8rem, 6vw, 4.5rem)` | 400 | 1 | 0.01em | The numbers band, years on the past-meetings page |
 | `accent-italic` | 3.8rem, italic | `clamp(2rem, 4.8vw, 3.8rem)` | 400 | 1.1 | 0 | The one accent phrase, the theme line |
 | `headline-lg` | 2.9rem | `clamp(2rem, 3.3vw, 2.9rem)` | 400 | 1.15 | 0.01em | Centred band headings ("Delegates from 13 countries", "Previous sponsors") |
@@ -411,7 +416,7 @@ Serif for what you look at, sans for what you read.
 | `label` | 1rem | fixed | 600 | 1.4 | 0 | Terms in details lists, attributions |
 | `link` | 1rem | fixed | 500 | 1.4 | 0 | Text links |
 | `button` | 1rem | fixed | 600 | 1 | 0 | The solid button |
-| `nav` | 1.2rem | 1.02rem below 1340px, 0.92rem below 1180px | 400 | 1 | 0 | Header links |
+| `nav` | 1.0625rem | 1rem below 1340px, 0.92rem below 1180px, 1.1rem in the phone menu | 400 | 1 | 0 | Header links |
 | `caption` | 0.875rem | fixed | 400 | 1.45 | 0 | Photo captions, the footer, fine print |
 
 **Principles**
@@ -446,9 +451,10 @@ Serif for what you look at, sans for what you read.
 
 **Header**
 
-- The header is sticky, solid navy and full width. On the left are the year seal (10vh tall) and the three-line lockup "The International / Undergraduate Surgical / Conference, 2027". On the right are at most five text links in sentence case.
+- The header is fixed to the top, solid navy and full width. On the left are the year seal and the three-line lockup "The International / Undergraduate Surgical / Conference, 2027". On the right are at most five text links in sentence case: Date and venue, About, Speakers and workshops, Abstract competition, Partner with us.
+- At the top of the page it is 7.5rem tall with a 5.5rem seal. Over the first 12rem of scrolling it condenses to 3.75rem with a 2.75rem seal and a 0.74rem lockup, so it stays present without taking the screen. The page starts below the full-size header.
 - Nothing else goes in the header: no buttons, social icons, search or language switch.
-- Below 1000px it shows the seal, the lockup and a menu icon, and the links fold into a vertical list.
+- Below 1000px it shows the seal, the lockup and a menu button (5rem tall, condensing to 3.5rem). The links fold down beneath it as a navy list divided by hairlines, and the button turns into a cross while the list is open.
 
 **First view**
 
@@ -497,7 +503,7 @@ The system is flat. Depth comes from four things only: a change of surface colou
 
 **Header** (`site-header`, `lockup`)
 
-Navy, sticky, with the seal and lockup on the left and up to five links on the right. Links are white `nav` type; on hover they fade to 70% opacity over 0.3s. The current page's link carries a 1px underline.
+Navy, fixed, with the seal and lockup on the left and up to five links on the right. Links are white `nav` type; on hover they fade to 70% opacity over 0.2s. On inner pages, the current page's link carries a 1px underline.
 
 **First view** (`hero`, `hero-eyebrow`, `hero-venue`, `hero-scrim`)
 
@@ -521,7 +527,7 @@ A text panel takes 44% of the width and a photograph takes the rest, or the two 
 
 **Accent line and theme line** (`accent-line`, `theme-line`)
 
-The accent line is the one phrase per section set in `accent-italic` and phoenix blue on deep navy, such as "Coming soon.". The theme line is the year's theme in the same style but in white, placed in the welcome band or under the first view. It appears only once the 2027 theme is confirmed.
+The accent line is the one phrase per section set in `accent-italic` and phoenix blue on deep navy, such as "Coming soon.". Inside a navy split panel the same treatment drops to 1.5rem, as a subtitle under the heading ("Submissions open soon."). The theme line is the year's theme in the same style but in white, placed in the welcome band or under the first view. It appears only once the 2027 theme is confirmed.
 
 **Details list** (`details-term`, `details-value`)
 
@@ -549,7 +555,7 @@ These follow the IChO pattern: a 4:5 portrait beside the letter on desktop, with
 
 - Entries sit in a grid on white: three across on desktop, two on tablets and one on phones. Each has a 4:5 rectangular portrait, the name in `title` navy, the role in `body-md` ink, and the talk or workshop title in `caption`.
 - Entries are separated by space, not boxes or borders.
-- Until they are confirmed, the section shows the cinematic "coming soon" state: `display-xl` words with the accent line.
+- Until they are confirmed, the section shows the cinematic "coming soon" state on deep navy: "Speakers" and "Workshops" side by side in `display-xl`, each over a one-line description in muted white and divided by a vertical hairline, with the accent line centred below. On phones the two stack, divided by a horizontal hairline.
 
 **Past meetings** (`timeline-year`, `timeline-entry`, `divider-light`)
 
@@ -563,7 +569,7 @@ There is one row per year, newest first, with hairlines between rows. Each row g
 
 **Year seals** (`year-seal`)
 
-The seals from the 10th anniversary to the current year sit in one row on light blue-grey, clipped to circles and shown in full colour, because they are the conference's own identity. They may shrink but never wrap onto two lines on desktop.
+The seals from the 10th anniversary to the current year sit in one row on light blue-grey, clipped to circles and shown in full colour, because they are the conference's own identity. They may shrink but never wrap onto two lines on desktop. On phones they sit three to a row.
 
 **Delegate map** (`map-dot`, `map-dot-lit`)
 
@@ -571,7 +577,7 @@ A dotted world map sits on white. Unlit countries use `map-base` and lit countri
 
 **Sponsor wall** (`sponsor-wall`)
 
-Logos are greyscale (`filter: grayscale(1) contrast(1.05)`) at 78% opacity on white, under a centred `headline-lg` heading. They do not regain their colour on hover. Endorsing bodies (RCS England, RCSEd, the GMC and the BMA) are treated the same way.
+Logos are greyscale (`filter: grayscale(1) contrast(1.05)`) at 78% opacity on white, under a centred `headline-lg` heading in ink. They sit six to a row on desktop and three on phones, each no taller than 3rem (2.1rem for logos marked `[Smaller]` in `sponsors.txt`), and an unfinished last row is centred. They do not regain their colour on hover. Endorsing bodies (RCS England, RCSEd, the GMC and the BMA) are treated the same way.
 
 **Forms** (`form-field`)
 
@@ -581,7 +587,7 @@ Logos are greyscale (`filter: grayscale(1) contrast(1.05)`) at 78% opacity on wh
 
 **Footer** (`site-footer`)
 
-Page grey with a hairline above, in `caption` type and blue text. It holds "©2027 UCL Surgical Society", the email address, the Instagram link, and links to the privacy notice and ticket terms once those pages exist.
+Page grey, in `caption` type and blue text, with the copyright on the left and the links on the right (stacked on phones). It holds "©2027 UCL Surgical Society", links to Widening participation, the email address, Instagram and LinkedIn, and links to the privacy notice and ticket terms once those pages exist.
 
 ## Do's and Don'ts
 
@@ -615,7 +621,8 @@ Motion is always tied to scrolling, using CSS scroll-driven animations (`animati
 
 | Name | What moves | Timing |
 |---|---|---|
-| Reveal (`.reveal_on_scroll`) | Fades in and rises 3rem | From `entry 10%` to `cover 40%` |
+| Header condense | The header shrinks from 7.5rem to 3.75rem, the seal from 5.5rem to 2.75rem and the lockup from 1rem to 0.74rem | The first 12rem of page scroll (`scroll(root)`, range `0 12rem`) |
+| Reveal (`.reveal`, or `.reveal_on_scroll` in the old `index.css`) | Fades in and rises 3rem | From `entry 10%` to `cover 40%` |
 | Photo drift | The photograph moves from -10vh to +10vh inside its own section, so the frame never empties | The section's own view timeline |
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
@@ -624,7 +631,8 @@ Motion is always tied to scrolling, using CSS scroll-driven animations (`animati
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
 - With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
-- Older sections still use `.fade_in_while_scrolling`, a JavaScript fade. Move each one to `.reveal_on_scroll` when its section is rebuilt.
+- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
+- Older sections still use `.fade_in_while_scrolling`, a JavaScript fade. Move each one to `.reveal` when its section is rebuilt.
 - **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
 
 ## Imagery
@@ -651,9 +659,9 @@ Motion is always tied to scrolling, using CSS scroll-driven animations (`animati
 | Width | Changes |
 |---|---|
 | Above 1340px | Full layout |
-| 1180 to 1340px | Header links step down to 1.02rem with tighter gaps |
+| 1180 to 1340px | Header links step down to 1rem with tighter gaps |
 | 1001 to 1180px | Header links step down to 0.92rem and the lockup to 0.86rem |
-| 1000px and below | The header collapses to a menu. Split sections stack with the photo first at 40vh. Details lists fold to one column. Bands use `section-mobile` and `gutter-mobile`. The first view's actions stack |
+| 1000px and below | The header (5rem, condensing to 3.5rem) collapses to a menu. Split sections stack with the photo first at 40vh. Details lists fold to one column. Bands use `section-mobile` and `gutter-mobile`. The first view's actions stack. The numbers form a two-by-two grid, and year seals and sponsor logos sit three to a row |
 
 - Touch targets are at least 44px tall.
 - Display sizes scale with the `clamp()` values in Typography. Never set a fixed pixel size for display type.
@@ -662,6 +670,11 @@ Motion is always tied to scrolling, using CSS scroll-driven animations (`animati
 ## Editing content
 
 Speakers, workshops, sponsors, the committee and tickets live in plain text files (`speakers.txt`, `workshops.txt`, `sponsors.txt`, `people.txt` and `tickets.txt`), which the page reads in. See `README.md`.
+
+- `generate_sponsors.js` builds the sponsor wall from `sponsors.txt`. If the file can't be read, the whole section hides rather than showing an empty heading.
+- When `tickets.txt` says tickets are available, `check_for_tickets.js` reveals the hidden "Buy tickets" button in the first view (pointing it at the ticket link) and removes "Follow for ticket updates", so the first view still has one solid button.
+
+**Files.** Renovated pages use `site.css` and `site.js`. The old `index.css` and `index.js` remain only for the Widening Participation page (`wp/index.html`) until it is renovated, and should then be deleted.
 
 ## Working with this file
 

@@ -1,11 +1,13 @@
-let sponsorsTable = document.getElementById("sponsors_table");
+// Builds the "Previous sponsors" logos from sponsors.txt into <ul id="sponsor_list">.
+let sponsorList = document.getElementById("sponsor_list");
 
 function createSponsorContainer(sponsor) {
-    let sponsorContainer = document.createElement("td");
+    let sponsorContainer = document.createElement("li");
 
     let img = document.createElement("img");
     img.src = sponsor.imgSrc;
-    img.alt = `${sponsor.name} logo`;
+    img.alt = sponsor.name;
+    img.loading = "lazy";
     if (sponsor.smaller) img.className = "smaller";
     sponsorContainer.appendChild(img);
 
@@ -13,22 +15,16 @@ function createSponsorContainer(sponsor) {
 }
 
 function generateSponsorContainers(sponsorObjects) {
-    sponsorsTable.innerHTML = "";
-    
-    let tbody = document.createElement("tbody");
+    sponsorList.innerHTML = "";
+    sponsorObjects.forEach(sponsorObject => {
+        sponsorList.appendChild(createSponsorContainer(sponsorObject));
+    });
+}
 
-    let containers = sponsorObjects.map(sponsorObject => createSponsorContainer(sponsorObject));
-    let currentTr = document.createElement("tr");
-    for (let i = 0; i < containers.length; i++) {
-        currentTr.appendChild(containers[i]);
-        if (i % 3 == 2) {
-            tbody.appendChild(currentTr);
-            currentTr = document.createElement("tr");
-        }
-    }
-    if (currentTr.childElementCount > 0) tbody.appendChild(currentTr);
-
-    sponsorsTable.appendChild(tbody);
+// If the list can't be loaded, hide the whole section rather than show an empty heading.
+function hideSponsorsSection() {
+    let section = sponsorList.closest("section");
+    if (section) section.hidden = true;
 }
 
 function parseSponsorsList(sponsorsFileContents) {
@@ -69,17 +65,20 @@ async function fetchSponsorsList() {
     let url = "/sponsors.txt";
 
     let response = await fetch(url);
-    if (!response.ok) {
-        alert("Something went wrong while trying to fetch sponsors' details. Please try again later.");
-        return;
-    }
+    if (!response.ok) return;
 
     return await response.text();
 }
 
 async function loadSponsors() {
-    let sponsorsFileContents = await fetchSponsorsList();
-    let sponsorObjects = parseSponsorsList(sponsorsFileContents);
+    if (!sponsorList) return;
+
+    let sponsorsFileContents = await fetchSponsorsList().catch(() => undefined);
+    let sponsorObjects = sponsorsFileContents ? parseSponsorsList(sponsorsFileContents) : [];
+    if (sponsorObjects.length == 0) {
+        hideSponsorsSection();
+        return;
+    }
     generateSponsorContainers(sponsorObjects);
 }
 
