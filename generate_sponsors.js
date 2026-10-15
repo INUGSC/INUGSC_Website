@@ -5,6 +5,10 @@ function createSponsorContainer(sponsor) {
     let sponsorContainer = document.createElement("li");
 
     let img = document.createElement("img");
+    // once the logo's shape is known, site.css sizes it so every logo covers about the same area
+    img.addEventListener("load", () => {
+        if (img.naturalHeight) img.style.setProperty("--aspect", (img.naturalWidth / img.naturalHeight).toFixed(3));
+    });
     img.src = sponsor.imgSrc;
     img.alt = sponsor.name;
     img.loading = "lazy";
