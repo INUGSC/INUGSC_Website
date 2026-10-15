@@ -27,6 +27,13 @@ function handleTicketsFile(ticketsFileContents) {
         ).forEach(i => {
             i.parentElement.removeChild(i)
         });
+        // Renovated pages: reveal the hidden "Buy tickets" actions and point them at the ticket link.
+        [].slice.call(
+            document.querySelectorAll(".show_when_tickets_available")
+        ).forEach(i => {
+            i.hidden = false;
+            if (i.tagName == "A" && ticketLink) i.href = ticketLink;
+        });
     }
 }
 
