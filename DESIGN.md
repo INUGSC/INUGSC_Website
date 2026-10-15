@@ -466,7 +466,8 @@ Serif for what you look at, sans for what you read.
 Every page hangs from two kinds of line.
 
 - **The gutter lines:** one vertical line on the left and one on the right, `gutter` in from each edge. The header's seal, the first view's text, every split panel's text, every text band's heading, the numbers band and the footer start on the left line. The header's last link (or the phone menu's lines) ends on the right line.
-- **The centre line:** full-width bands centre everything in them. That covers cinematic bands (speakers and workshops, the numbers band) and content bands (the delegate map, the year seals, the sponsor wall). Their headings, paragraphs, rows and the items inside each row all sit on the page's centre. The first view is the one exception, with its text deliberately at the bottom left, on the gutter.
+- **The centre line:** only a few bands centre their content: speakers and workshops, the delegate map, the year seals and the sponsor wall. Their headings, paragraphs and rows sit on the page's centre.
+- Everything else, including the numbers band and the first view, stays on the left gutter. Don't centre a section just for symmetry; L found a fully centred page felt forced.
 - The second column of a text band starts exactly where the photos of split sections start (44% across), so text and photos share one more vertical line.
 - Never nudge something by eye. If it looks off, check it against these lines, and against the visible edges of images (a logo with blank space inside its file will look off-centre even when its box is centred).
 
@@ -568,7 +569,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **Numbers band** (`numbers-band`, `numbers-label`, `numbers-divider`)
 
-- Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. Each figure and label is centred in its column, and the columns divide the band evenly, so the middle hairline falls on the page's centre. On phones they form a two-by-two grid, still centred.
+- Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. Figures and labels sit at the left of their columns, the first starting on the gutter line. The columns divide the band evenly. On phones they form a two-by-two grid.
 - Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">13</span> <span class="numbers_label">Countries represented in 2025</span></li>…</ul>`.
 - A band can carry a visible heading (`.numbers_heading`, as "Why it matters" on the Widening participation page). Any figure from outside INUGSC needs a source line underneath (`.numbers_source`, `numbers-source`), naming the report and year and linking to it.
 - The figures arrive with the standard reveal. They never count up.
