@@ -695,6 +695,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 - Use British English.
 - Write dates as "30–31 January 2027", with an en dash between the days. Use en dashes only for ranges and never use em dashes.
 - Write the venue as "Marshgate and One Pool Street, UCL East" (Marshgate, 7 Sidings Street, London E20 2AE).
+- Widening participation runs at One Pool Street: write "One Pool Street, UCL East" (1 Pool Street, Queen Elizabeth Olympic Park, London E20 2AF).
 - Write the conference as "INUGSC 2027" and the organiser as "UCL Surgical Society".
 - Use numerals for statistics ("500+ delegates", "13 countries") and give the year of any figure that changes.
 - Copy is plain and specific. No exclamation marks, emojis or "it's not X, it's Y" constructions.
@@ -720,6 +721,11 @@ Speakers, workshops, sponsors, the committee and tickets live in plain text file
 - When `tickets.txt` says tickets are available, `check_for_tickets.js` reveals the hidden "Buy tickets" button in the first view (pointing it at the ticket link) and removes "Follow for ticket updates", so the first view still has one solid button.
 
 **Files.** Every page uses `site.css` and `site.js`. The old `index.css`, `index.js` and `handle_pop_out_menus.js` were removed once the Widening Participation page was renovated.
+
+**Versions.** GitHub Pages lets browsers keep a file for up to 10 minutes, so right after a merge a returning visitor can see the new page with the old stylesheet. To prevent that, each page links its CSS and JS with a version, such as `site.css?v=3e779b8d`.
+
+- Whenever you change `site.css`, `site.js`, `generate_sponsors.js` or `check_for_tickets.js`, change that file's `v=` in both `index.html` and `wp/index.html`.
+- Any new value works. We use the first 8 characters of `git hash-object <file>`.
 
 ## Working with this file
 
