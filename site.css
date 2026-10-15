@@ -584,10 +584,9 @@ main {
 
 /* ---------- Numbers ---------- */
 
-/* a full-width band, so everything in it is centred: each figure in its column, the columns across the page */
+/* figures sit on the left of their columns, starting on the gutter line like the rest of the page */
 .numbers {
     padding: 5.5rem var(--gutter);
-    text-align: center;
 }
 
 .numbers_heading {
@@ -608,12 +607,12 @@ main {
 .numbers_list > li {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 0.4rem 1.5rem 0.6rem;
+    padding: 0.4rem 2.5rem 0.6rem;
     border-left: 1px solid var(--hairline-dark);
 }
 
 .numbers_list > li:first-child {
+    padding-left: 0;
     border-left: 0;
 }
 
@@ -633,7 +632,7 @@ main {
 
 .numbers_source {
     max-width: var(--measure-centred);
-    margin: 3rem auto 0;
+    margin-top: 3rem;
     font-size: 0.875rem;
     color: var(--on-dark-muted);
 }
@@ -1168,10 +1167,11 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 
     .numbers_list > li {
-        padding: 1.6rem 0.75rem;
+        padding: 1.6rem 0 1.6rem 1.25rem;
     }
 
     .numbers_list > li:nth-child(odd) {
+        padding-left: 0;
         border-left: 0;
     }
 
