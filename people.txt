@@ -9,7 +9,7 @@ Each person is four lines, with a blank line between people:
 <Course and year>
 
 Adding [Important] before a name gives that person a larger photo in the first row (used for the directors).
-Photos are square, 800 by 800 pixels, cropped so the face sits in the same place in every photo.
+Photos are square, 800 by 800 pixels, cropped so the face sits in the same place in every photo. Use the same shot as the Canva "Meet the committee" post.
 
 -----
 /img/people/laith-ali.jpg
