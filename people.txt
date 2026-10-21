@@ -1,13 +1,118 @@
-This is a list of all the people which will appear on the "Committee" page.
-They'll appear in the order that they're listed here.
-Make sure to add new people below the line of dashes.
+This is the list of everyone on the "Committee" page (/committee/).
+People appear in the order they are listed here, so to change the order, move a person's block up or down.
+Add people below the line of dashes.
 
-The format must be exactly as follows:
-/img/people/<image_file_name>
+Each person is four lines, with a blank line between people:
+/img/people/<image file name>
 <Person's name>
 <Role>
-<Email address>
+<Course and year>
 
-Note: adding [Important] before the person's name ensures that they appear in their own row at the top of the page.
+Adding [Important] before a name gives that person a larger photo in the first row (used for the directors).
+Photos are square, 800 by 800 pixels, cropped so the face sits in the same place in every photo. Use the same shot as the Canva "Meet the committee" post.
 
 -----
+/img/people/laith-ali.jpg
+[Important] Laith Ali
+Co-Director
+Mathematics, Computers and Medicine iBSc (Year 3)
+
+/img/people/abigail-clegg.jpg
+[Important] Abigail Clegg
+Co-Director
+Surgical Sciences iBSc (Year 3)
+
+/img/people/kayu-ng.jpg
+Kayu Ng
+Treasurer
+Neuroscience iBSc (Year 3)
+
+/img/people/sanjana-kamineni.jpg
+Sanjana Kamineni
+Secretary
+Cardiovascular Sciences iBSc (Year 3)
+
+/img/people/ramsundar-athi.jpg
+Ramsundar Athi
+Speaker Programme Coordinator
+Year 2
+
+/img/people/samir-rahman.jpg
+Samir Rahman
+Widening Participation Co-lead
+Surgical Sciences iBSc (Year 3)
+
+/img/people/shreya-srinivas.jpg
+Shreya Srinivas
+Widening Participation Co-lead
+Paediatrics and Child Health iBSc (Year 3)
+
+/img/people/winston-tai.jpg
+Winston Tai
+Logistics Officer
+Mathematics, Computers and Medicine iBSc (Year 3)
+
+/img/people/joseph-varghese.jpg
+Joseph Varghese
+Logistics Officer
+Medical Physics and Biomedical Engineering iBSc (Year 3)
+
+/img/people/lavdhi-jain.jpg
+Lavdhi Jain
+Workshops Coordinator
+Year 4
+
+/img/people/charvi-varampati.jpg
+Charvi Varampati
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/jaffar-al-ajeeli.jpg
+Jaffar Al-Ajeeli
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/emilie-harper.jpg
+Emilie Harper
+Workshops Coordinator
+Year 4
+
+/img/people/jerome-sturridge.jpg
+Jerome Sturridge
+Workshops Coordinator
+Year 2
+
+/img/people/daniel-cheng.jpg
+Daniel Cheng
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/sayem-shezad.jpg
+Sayem Shezad
+Academic Coordinator
+Year 5
+
+/img/people/lara-turan.jpg
+Lara Turan
+International Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/maaria-abedi.jpg
+Maaria Abedi
+International Coordinator
+Women’s Health iBSc (Year 3)
+
+/img/people/gayatri-vengala.jpg
+Gayatri Vengala
+Publicity Officer
+Global Health iBSc (Year 3)
+
+/img/people/bansi-patel.jpg
+Bansi Patel
+Publicity Officer
+Surgical Sciences iBSc (Year 3)
+
+/img/people/arya-easwaran.jpg
+Arya Easwaran
+Publicity Officer
+Cardiovascular Sciences iBSc (Year 3)

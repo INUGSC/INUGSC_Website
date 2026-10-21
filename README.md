@@ -3,7 +3,7 @@ This website works through GitHub Pages.
 It's simply static HTML, CSS, and JS files. Making changes should therefore be pretty simple.
 
 ## Changing the committee
-The page with all the committee members is generated client-side, using the file *people.txt*. Therefore, if you want to change someone's details, you should do it using *people.txt* and not by editing the HTML of that page.
+The committee page (/committee/) is built in the browser from *people.txt*. To change someone's details or the order people appear in, edit *people.txt*; the instructions are at the top of that file. Photos go in *img/people/* as 800 by 800 pixel squares.
 
 ## Changing other details
 Each of these files has instructions on how to make the appropriate changes.
