@@ -1,107 +1,80 @@
-let peopleContainer = document.getElementById("people_container");
+// Committee page: builds the grid of people from people.txt, in the order they are listed there.
 
-function createPersonContainer(person) {
-    let personContainer = document.createElement("div");
-    personContainer.className = "person_container";
+(function () {
+    let grid = document.getElementById("committee_grid");
+    if (!grid) return;
 
-    let img = document.createElement("img");
-    img.src = person.imgSrc;
-    personContainer.appendChild(img);
+    function parsePeople(text) {
+        let people = [];
+        let lines = text.replace(/\r/g, "").split("\n");
+        let start = lines.indexOf("-----");
+        if (start == -1) return people;
 
-    let descriptionContainer = document.createElement("div");
-    descriptionContainer.className = "description_container";
-
-        let nameElement = document.createElement("span");
-        nameElement.className = "person_name";
-        nameElement.appendChild(document.createTextNode(person.name));
-        descriptionContainer.appendChild(nameElement);
-
-        let roleElement = document.createElement("span");
-        roleElement.className = "person_role";
-        roleElement.appendChild(document.createTextNode(person.role));
-        descriptionContainer.appendChild(roleElement);
-
-        let emailElement = document.createElement("a");
-        emailElement.className = "person_email unstyled";
-        emailElement.href = `mailto:${person.email}`;
-        emailElement.appendChild(document.createTextNode(person.email));
-        descriptionContainer.appendChild(emailElement);
-
-    personContainer.appendChild(descriptionContainer);
-
-    return personContainer;
-}
-
-function generatePeopleContainers(peopleObjects) {
-    peopleContainer.innerHTML = "";
-
-    let importantContainer = document.createElement("div");
-    importantContainer.className = "important_container";
-    let importantPeople = peopleObjects.filter(i => i.important);
-    importantPeople.forEach(person => importantContainer.appendChild(createPersonContainer(person)));
-    peopleContainer.appendChild(importantContainer);
-
-    let remainingContainer = document.createElement("div");
-    remainingContainer.className = "remaining_container";
-    let lessImportantPeople = peopleObjects.filter(i => !i.important);
-    lessImportantPeople.forEach(person => remainingContainer.appendChild(createPersonContainer(person)));
-    peopleContainer.appendChild(remainingContainer);
-}
-
-function parsePeopleList(peopleFileContents) {
-    let people = [];
-
-    let lines = peopleFileContents.split("\n");
-    if (lines[lines.length - 1] != "") lines.push("");
-    
-    let foundStart = false;
-    let currentPerson = [];
-    for (let i = 0; i < lines.length; i++) {
-        let line = lines[i];
-        if (!foundStart) {
-            if (line == "-----") foundStart = true;
-            continue;
-        }
-        if (line == "") {
-            if (currentPerson.length == 4) {
-                let imgSrc = currentPerson[0];
-                let name = currentPerson[1];
-                let important = false;
-                if (name.startsWith("[Important] ")) {
-                    important = true;
-                    name = name.substring(12);
-                }
-                let role = currentPerson[2];
-                let email = currentPerson[3];
-                people.push({
-                    imgSrc, name, important, role, email
-                });
+        let block = [];
+        for (let line of lines.slice(start + 1).concat([""])) {
+            line = line.trim();
+            if (line) {
+                block.push(line);
+                continue;
             }
-            currentPerson = [];
-        } else {
-            currentPerson.push(line);
+            if (block.length == 4) {
+                let [imgSrc, name, role, course] = block;
+                let important = name.startsWith("[Important] ");
+                if (important) name = name.substring(12);
+                people.push({ imgSrc, name, role, course, important });
+            }
+            block = [];
         }
+        return people;
     }
 
-    return people;
-}
+    function personElement(person) {
+        let item = document.createElement("li");
+        item.className = "person reveal" + (person.important ? " person_lead" : "");
 
-async function fetchPeopleList() {
-    let url = "/people.txt";
+        // a square frame holds the photo; if the photo is missing, the empty frame keeps the grid even
+        let frame = document.createElement("div");
+        frame.className = "person_photo";
+        item.appendChild(frame);
 
-    let response = await fetch(url);
-    if (!response.ok) {
-        alert("Something went wrong while trying to fetch people's details. Please try again later.");
-        return;
+        let img = document.createElement("img");
+        img.src = person.imgSrc;
+        img.alt = person.name;
+        img.width = 800;
+        img.height = 800;
+        img.loading = person.important ? "eager" : "lazy";
+        img.decoding = "async";
+        img.addEventListener("error", () => img.remove());
+        frame.appendChild(img);
+
+        let name = document.createElement("h3");
+        name.className = "person_name";
+        name.textContent = person.name;
+        item.appendChild(name);
+
+        let role = document.createElement("p");
+        role.className = "person_role";
+        role.textContent = person.role;
+        item.appendChild(role);
+
+        let course = document.createElement("p");
+        course.className = "person_course";
+        course.textContent = person.course;
+        item.appendChild(course);
+
+        return item;
     }
-    
-    return await response.text();
-}
 
-async function loadPeople() {
-    let peopleFileContents = await fetchPeopleList();
-    let peopleObjects = parsePeopleList(peopleFileContents);
-    generatePeopleContainers(peopleObjects);
-}
-
-loadPeople();
+    fetch("/people.txt", { cache: "no-cache" })
+        .then(response => {
+            if (!response.ok) throw new Error(response.status);
+            return response.text();
+        })
+        .then(text => {
+            let people = parsePeople(text);
+            grid.replaceChildren(...people.map(personElement));
+        })
+        .catch(() => {
+            grid.closest(".committee").hidden = true;
+        });
+})();

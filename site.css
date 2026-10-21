@@ -892,6 +892,71 @@ g.dotmap_country.is_active path.dotmap_hl {
     --logo-size: 3.4rem;
 }
 
+/* ---------- Committee: square portraits on the page grid, in the order of people.txt ---------- */
+
+/* an inner page that opens on navy alone, with no photograph behind the title */
+.first_view_plain {
+    height: clamp(20rem, 48svh, 30rem);
+}
+
+.committee {
+    padding: var(--section) var(--gutter);
+}
+
+.committee_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3.5rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* the directors take two columns each, so the first row is the two of them */
+.person_lead {
+    grid-column: span 2;
+}
+
+.person_photo {
+    aspect-ratio: 1;
+    background: var(--band);
+}
+
+.person_photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.person_name {
+    margin-top: 1.1rem;
+    font-size: 1.3rem;
+    line-height: 1.25;
+    color: var(--ink);
+}
+
+.person_lead .person_name {
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+}
+
+.person_role {
+    margin: 0.35rem 0 0;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.person_course {
+    margin: 0.15rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    opacity: 0.75;
+}
+
+.site_nav a[aria-current="page"] {
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+}
+
 /* ---------- Footer ---------- */
 
 .site_footer {
@@ -977,11 +1042,11 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 
     .site_nav ul {
-        gap: 1rem;
+        gap: 0.8rem;
     }
 
     .site_nav a {
-        font-size: 0.92rem;
+        font-size: 0.86rem;
     }
 
     .site_lockup {
@@ -1283,6 +1348,52 @@ g.dotmap_country.is_active path.dotmap_hl {
     .site_footer {
         flex-direction: column;
         padding: 2rem var(--gutter) 2.5rem;
+    }
+
+    .first_view_plain {
+        height: auto;
+        min-height: 0;
+        padding-top: 5rem;
+    }
+
+    .committee_grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2.5rem 1.25rem;
+    }
+
+    .person_lead {
+        grid-column: auto;
+    }
+
+    .person_lead .person_name {
+        font-size: 1.3rem;
+    }
+
+    .site_nav a[aria-current="page"] {
+        border-bottom: 0;
+        padding-bottom: 0.9rem;
+        font-weight: 500;
+    }
+}
+
+@media (max-width: 640px) {
+    .committee_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem 1rem;
+    }
+
+    .person_name,
+    .person_lead .person_name {
+        margin-top: 0.8rem;
+        font-size: 1.1rem;
+    }
+
+    .person_role {
+        font-size: 0.95rem;
+    }
+
+    .person_course {
+        font-size: 0.85rem;
     }
 }
 
