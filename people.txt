@@ -6,7 +6,7 @@ Each person is four lines, with a blank line between people:
 /img/people/<image file name>
 <Person's name>
 <Role>
-<Course and year>
+<Year, then the intercalated degree if they are on one, e.g. "Year 3, intercalating in Neuroscience">
 
 Adding [Important] before a name gives that person a larger photo in the first row (used for the directors).
 Photos are square, 800 by 800 pixels, cropped so the face sits in the same place in every photo. Use the same shot as the Canva "Meet the committee" post.
@@ -15,22 +15,22 @@ Photos are square, 800 by 800 pixels, cropped so the face sits in the same place
 /img/people/laith-ali.jpg
 [Important] Laith Ali
 Co-Director
-Mathematics, Computers and Medicine iBSc (Year 3)
+Year 3, intercalating in Mathematics, Computers and Medicine
 
 /img/people/abigail-clegg.jpg
 [Important] Abigail Clegg
 Co-Director
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/kayu-ng.jpg
 Kayu Ng
 Treasurer
-Neuroscience iBSc (Year 3)
+Year 3, intercalating in Neuroscience
 
 /img/people/sanjana-kamineni.jpg
 Sanjana Kamineni
 Secretary
-Cardiovascular Sciences iBSc (Year 3)
+Year 3, intercalating in Cardiovascular Sciences
 
 /img/people/ramsundar-athi.jpg
 Ramsundar Athi
@@ -40,22 +40,22 @@ Year 2
 /img/people/samir-rahman.jpg
 Samir Rahman
 Widening Participation Co-lead
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/shreya-srinivas.jpg
 Shreya Srinivas
 Widening Participation Co-lead
-Paediatrics and Child Health iBSc (Year 3)
+Year 3, intercalating in Paediatrics and Child Health
 
 /img/people/winston-tai.jpg
 Winston Tai
 Logistics Officer
-Mathematics, Computers and Medicine iBSc (Year 3)
+Year 3, intercalating in Mathematics, Computers and Medicine
 
 /img/people/joseph-varghese.jpg
 Joseph Varghese
 Logistics Officer
-Medical Physics and Biomedical Engineering iBSc (Year 3)
+Year 3, intercalating in Medical Physics and Biomedical Engineering
 
 /img/people/lavdhi-jain.jpg
 Lavdhi Jain
@@ -65,12 +65,12 @@ Year 4
 /img/people/charvi-varampati.jpg
 Charvi Varampati
 Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/jaffar-al-ajeeli.jpg
 Jaffar Al-Ajeeli
 Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/emilie-harper.jpg
 Emilie Harper
@@ -85,7 +85,7 @@ Year 2
 /img/people/daniel-cheng.jpg
 Daniel Cheng
 Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/sayem-shezad.jpg
 Sayem Shezad
@@ -95,24 +95,24 @@ Year 5
 /img/people/lara-turan.jpg
 Lara Turan
 International Coordinator
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/maaria-abedi.jpg
 Maaria Abedi
 International Coordinator
-Women’s Health iBSc (Year 3)
+Year 3, intercalating in Women’s Health
 
 /img/people/gayatri-vengala.jpg
 Gayatri Vengala
 Publicity Officer
-Global Health iBSc (Year 3)
+Year 3, intercalating in Global Health
 
 /img/people/bansi-patel.jpg
 Bansi Patel
 Publicity Officer
-Surgical Sciences iBSc (Year 3)
+Year 3, intercalating in Surgical Sciences
 
 /img/people/arya-easwaran.jpg
 Arya Easwaran
 Publicity Officer
-Cardiovascular Sciences iBSc (Year 3)
+Year 3, intercalating in Cardiovascular Sciences
