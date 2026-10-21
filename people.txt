@@ -32,6 +32,11 @@ Sanjana Kamineni
 Secretary
 Cardiovascular Sciences iBSc (Year 3)
 
+/img/people/ramsundar-athi.jpg
+Ramsundar Athi
+Speaker Programme Coordinator
+Year 2
+
 /img/people/samir-rahman.jpg
 Samir Rahman
 Widening Participation Co-lead
@@ -42,70 +47,50 @@ Shreya Srinivas
 Widening Participation Co-lead
 Paediatrics and Child Health iBSc (Year 3)
 
-/img/people/sayem-shezad.jpg
-Sayem Shezad
-Academic Coordinator
-Year 5
-
-/img/people/ramsundar-athi.jpg
-Ramsundar Athi
-Speaker Programme Coordinator
-Year 2
-
-/img/people/gayatri-vengala.jpg
-Gayatri Vengala
-Publicity Officer
-Global Health iBSc (Year 3)
-
-/img/people/arya-easwaran.jpg
-Arya Easwaran
-Publicity Officer
-Cardiovascular Sciences iBSc (Year 3)
-
-/img/people/bansi-patel.jpg
-Bansi Patel
-Publicity Officer
-Surgical Sciences iBSc (Year 3)
-
-/img/people/lavdhi-jain.jpg
-Lavdhi Jain
-Workshops Coordinator
-Year 4
-
-/img/people/emilie-harper.jpg
-Emilie Harper
-Workshops Coordinator
-Year 4
-
-/img/people/jaffar-al-ajeeli.jpg
-Jaffar Al-Ajeeli
-Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
-
-/img/people/charvi-varampati.jpg
-Charvi Varampati
-Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
-
-/img/people/daniel-cheng.jpg
-Daniel Cheng
-Workshops Coordinator
-Surgical Sciences iBSc (Year 3)
-
-/img/people/jerome-sturridge.jpg
-Jerome Sturridge
-Workshops Coordinator
-Year 2
+/img/people/winston-tai.jpg
+Winston Tai
+Logistics Officer
+Mathematics, Computers and Medicine iBSc (Year 3)
 
 /img/people/joseph-varghese.jpg
 Joseph Varghese
 Logistics Officer
 Medical Physics and Biomedical Engineering iBSc (Year 3)
 
-/img/people/winston-tai.jpg
-Winston Tai
-Logistics Officer
-Mathematics, Computers and Medicine iBSc (Year 3)
+/img/people/lavdhi-jain.jpg
+Lavdhi Jain
+Workshops Coordinator
+Year 4
+
+/img/people/charvi-varampati.jpg
+Charvi Varampati
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/jaffar-al-ajeeli.jpg
+Jaffar Al-Ajeeli
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/emilie-harper.jpg
+Emilie Harper
+Workshops Coordinator
+Year 4
+
+/img/people/jerome-sturridge.jpg
+Jerome Sturridge
+Workshops Coordinator
+Year 2
+
+/img/people/daniel-cheng.jpg
+Daniel Cheng
+Workshops Coordinator
+Surgical Sciences iBSc (Year 3)
+
+/img/people/sayem-shezad.jpg
+Sayem Shezad
+Academic Coordinator
+Year 5
 
 /img/people/lara-turan.jpg
 Lara Turan
@@ -116,3 +101,18 @@ Surgical Sciences iBSc (Year 3)
 Maaria Abedi
 International Coordinator
 Women’s Health iBSc (Year 3)
+
+/img/people/gayatri-vengala.jpg
+Gayatri Vengala
+Publicity Officer
+Global Health iBSc (Year 3)
+
+/img/people/bansi-patel.jpg
+Bansi Patel
+Publicity Officer
+Surgical Sciences iBSc (Year 3)
+
+/img/people/arya-easwaran.jpg
+Arya Easwaran
+Publicity Officer
+Cardiovascular Sciences iBSc (Year 3)

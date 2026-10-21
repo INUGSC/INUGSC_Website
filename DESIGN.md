@@ -720,7 +720,7 @@ Speakers, workshops, sponsors, the committee and tickets live in plain text file
 
 ### Committee page
 
-`/committee/` lists the committee from `people.txt`, in the order the file gives (move a block to reorder). Portraits are square, 800 by 800 pixels, cropped so the face sits at the same size and height in every photo; never circles. The directors, marked `[Important]`, span two columns in the first row on desktop and fall into the ordinary grid on tablets and phones. The grid is four columns on desktop, three on tablets and two on phones, and hangs from the gutters. A missing photo leaves a plain light-band square so the grid stays even.
+`/committee/` lists the committee from `people.txt`, in the order the file gives (move a block to reorder). Portraits are square, 800 by 800 pixels, cropped so the face sits at the same size and height in every photo; never circles. The directors, marked `[Important]`, span two columns in the first row on desktop and fall into the ordinary grid on tablets and phones. The grid is four columns on desktop, three on tablets and two on phones, and hangs from the gutters; a last row that isn't full sits in the centre. A missing photo leaves a plain light-band square so the grid stays even.
 
 - `generate_sponsors.js` builds the sponsor wall from `sponsors.txt`. If the file can't be read, the whole section hides rather than showing an empty heading.
 - When `tickets.txt` says tickets are available, `check_for_tickets.js` reveals the hidden "Buy tickets" button in the first view (pointing it at the ticket link) and removes "Follow for ticket updates", so the first view still has one solid button.
