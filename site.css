@@ -869,9 +869,10 @@ g.dotmap_country.is_active path.dotmap_hl {
 }
 
 .quote_prompt {
-    margin: 0 0 1.1rem;
-    font-size: 1.125rem;
-    line-height: 1.5;
+    margin: 0 0 1rem;
+    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+    line-height: 1.45;
+    letter-spacing: 0.02em;
 }
 
 .quote blockquote {

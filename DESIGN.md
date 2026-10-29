@@ -579,7 +579,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
 - Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, which stays in view on desktop while the answers rise past it.
-- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light`. Each shows the form's own question in `body-lg`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
+- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light`. Each shows the form's own question in `lead`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
 - Attributions are anonymous: the delegate's stage of training only ("Clinical medical student"), with the year given once in the heading column. Use only answers from delegates who ticked the form's quote consent box.
 - Every quote is real and verbatim, typos and all. Cuts are marked with an ellipsis.
 - Do not add oversized decorative quotation marks, star ratings, carousels or cards.
