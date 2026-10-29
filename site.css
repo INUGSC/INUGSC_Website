@@ -785,6 +785,109 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 }
 
+/* ---------- University belt: two rows of names under the map, slid sideways by scrolling ---------- */
+
+/* the belt runs edge to edge, past the band's side padding */
+.belt {
+    margin: 4.5rem calc(-1 * var(--gutter)) 0;
+    overflow: hidden;
+    view-timeline-name: --belt;
+}
+
+.belt_intro {
+    margin: 0 0 1.75rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-style: italic;
+}
+
+.belt_row {
+    display: flex;
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: belt-left linear both;
+    animation-timeline: --belt;
+    animation-range: cover 0% cover 100%;
+}
+
+.belt_row + .belt_row {
+    margin-top: 1.1rem;
+}
+
+.belt_row li {
+    padding: 0.2rem 2.25rem;
+    border-left: 1px solid var(--hairline-light);
+    font-family: var(--display);
+    font-size: clamp(1.15rem, 1.9vw, 1.6rem);
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.belt_row_reverse {
+    animation-name: belt-right;
+}
+
+@keyframes belt-left {
+    from {
+        transform: translateX(-4rem);
+    }
+
+    to {
+        transform: translateX(-36rem);
+    }
+}
+
+@keyframes belt-right {
+    from {
+        transform: translateX(-36rem);
+    }
+
+    to {
+        transform: translateX(-4rem);
+    }
+}
+
+/* ---------- Testimonials: real answers from the feedback form, each under the question it answers ---------- */
+
+/* on desktop the heading stays in view while the answers rise past it */
+.voices .text_band_head {
+    position: sticky;
+    top: calc(var(--header-compact) + 3rem);
+    align-self: start;
+}
+
+.quote {
+    margin: 0;
+}
+
+.quote + .quote {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--hairline-light);
+}
+
+.quote_prompt {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+}
+
+.quote blockquote {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-style: italic;
+    line-height: 1.35;
+}
+
+.quote figcaption {
+    margin-top: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
 /* ---------- Speakers and workshops, coming soon ---------- */
 
 .coming_soon {
@@ -1304,6 +1407,27 @@ g.dotmap_country.is_active path.dotmap_hl {
         margin-top: 2.5rem;
     }
 
+    .voices .text_band_head {
+        position: static;
+    }
+
+    .belt {
+        margin: 3rem -1.25rem 0;
+    }
+
+    .belt_intro {
+        margin-bottom: 1.25rem;
+    }
+
+    .belt_row li {
+        padding: 0.15rem 1.4rem;
+    }
+
+    .quote + .quote {
+        margin-top: 2.25rem;
+        padding-top: 2.25rem;
+    }
+
     svg.dotmap path {
         stroke-width: 5;
     }
@@ -1421,8 +1545,20 @@ g.dotmap_country.is_active path.dotmap_hl {
     .first_view_content,
     .split_photo img,
     g.dotmap_country,
-    .reveal {
+    .reveal,
+    .belt_row {
         animation: none;
+    }
+
+    .belt_row {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: auto;
+        padding: 0 var(--gutter);
+    }
+
+    .belt_row + .belt_row {
+        margin-top: 0.6rem;
     }
 
     .coming_soon_line.letters_ready .coming_soon_char {

@@ -501,7 +501,7 @@ This is the working order for the renovation. The first two positions are fixed.
 3. Welcome: a short excerpt from the directors, linking to the full messages
 4. Numbers band
 5. About, with the endorsements, followed by Widening participation (a text band linking to `/wp/`)
-6. Delegates map
+6. Delegates map, with the university belt
 7. Speakers and workshops
 8. Testimonials
 9. Abstract competition
@@ -578,10 +578,18 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
-- Show one quote per band, or two side by side at most, on light blue-grey. The quote is in `quote-italic` blue text, up to `measure-centred`.
-- Below it comes the attribution: the name in `label`, then the university and year attended in `caption`. A 4:5 portrait is optional and needs consent.
-- Every quote is real, verbatim and used with written permission. Cuts are marked with an ellipsis.
+- Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, which stays in view on desktop while the answers rise past it.
+- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light`. Each shows the form's own question in `caption`, the answer in `quote-italic` blue text, and the attribution in `label`.
+- Attributions are anonymous: the delegate's stage of training only ("Clinical medical student"), with the year given once in the heading column. Use only answers from delegates who ticked the form's quote consent box.
+- Every quote is real and verbatim, typos and all. Cuts are marked with an ellipsis.
 - Do not add decorative quotation marks, star ratings, carousels or cards.
+
+**University belt** (`belt`)
+
+- Under the delegate map, an italic `eyebrow-italic` line ("In 2025 and 2026, delegates came from") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
+- The names are set in type, not logos: crests need each university's permission and read as endorsement.
+- Scrolling slides the rows in opposite directions by 32rem across the belt's own view timeline. Nothing moves on a timer. With reduced motion the rows stand still and wrap, centred, so every name shows.
+- Names come from the feedback forms and research presenters of the years named in the intro line.
 
 **Welcome messages** (`welcome-letter`, `welcome-signature`)
 
@@ -674,6 +682,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
+| University belt | The two rows of names slide 32rem in opposite directions | The belt's own view timeline, `cover 0%` to `cover 100%` |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
