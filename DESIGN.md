@@ -588,7 +588,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 - Under the delegate map, an italic `eyebrow-italic` line ("Their universities included") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
 - The names are set in type, not logos: crests need each university's permission and read as endorsement.
-- Scrolling slides the rows in opposite directions by 32rem across the belt's own view timeline. Nothing moves on a timer. With reduced motion the rows stand still and wrap, centred, so every name shows.
+- The rows drift slowly and without stopping, in opposite directions (120s and 135s per loop), and pause while the pointer is over the belt. Each row holds its names twice, the copy hidden from screen readers, so moving it by half its width loops without a seam. This is the one exception to scroll-only motion, chosen by the committee. With reduced motion the rows stand still and wrap, centred, so every name shows once.
 - Names come from the feedback forms and research presenters of the years the map covers, and every university's country is lit on the map.
 
 **Welcome messages** (`welcome-letter`, `welcome-signature`)
@@ -665,14 +665,14 @@ Page grey, in `caption` type and blue text, with the copyright on the left and t
 - Don't use stock or AI-generated photographs, or any photograph without consent from the people in it.
 - Don't crowd the header.
 - Don't show sponsor logos in colour.
-- Don't autoplay video, run carousels, make numbers tick up, or start any motion without a scroll.
+- Don't autoplay video, run carousels, make numbers tick up, or start any motion without a scroll (the university belt is the one agreed exception).
 - Don't use the accent on a light surface or on more than one phrase per section.
 - Don't put two bands of the same colour next to each other.
 - Don't use the legacy indigo `#210790` in new work.
 
 ## Motion
 
-Everything that moves on its own is tied to scrolling, using CSS scroll-driven animations (`animation-timeline: view()` or a named `view-timeline`). Nothing runs on a timer. The only other motion answers something the visitor does, such as hovering a button, pointing at a country or opening the menu, and lasts no longer than 0.3s.
+Everything that moves on its own is tied to scrolling, using CSS scroll-driven animations (`animation-timeline: view()` or a named `view-timeline`). Nothing else runs on a timer, except the university belt, which drifts continuously. The only other motion answers something the visitor does, such as hovering a button, pointing at a country or opening the menu, and lasts no longer than 0.3s.
 
 | Name | What moves | Timing |
 |---|---|---|
@@ -682,7 +682,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
-| University belt | The two rows of names slide 32rem in opposite directions | The belt's own view timeline, `cover 0%` to `cover 100%` |
+| University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; paused on hover. The only motion not tied to scrolling |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
