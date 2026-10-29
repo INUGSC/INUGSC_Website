@@ -785,13 +785,12 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 }
 
-/* ---------- University belt: two rows of names under the map, slid sideways by scrolling ---------- */
+/* ---------- University belt: two rows of names under the map, drifting slowly in opposite directions ---------- */
 
 /* the belt runs edge to edge, past the band's side padding */
 .belt {
     margin: 4.5rem calc(-1 * var(--gutter)) 0;
     overflow: hidden;
-    view-timeline-name: --belt;
 }
 
 .belt_intro {
@@ -807,9 +806,13 @@ g.dotmap_country.is_active path.dotmap_hl {
     margin: 0;
     padding: 0;
     list-style: none;
-    animation: belt-left linear both;
-    animation-timeline: --belt;
-    animation-range: cover 0% cover 100%;
+    /* each row holds its names twice, so moving it by half its width loops without a seam */
+    animation: belt-drift 120s linear infinite;
+}
+
+/* pointing at the belt holds it still, so a name can be read */
+.belt:hover .belt_row {
+    animation-play-state: paused;
 }
 
 .belt_row + .belt_row {
@@ -826,26 +829,17 @@ g.dotmap_country.is_active path.dotmap_hl {
 }
 
 .belt_row_reverse {
-    animation-name: belt-right;
+    animation-direction: reverse;
+    animation-duration: 135s;
 }
 
-@keyframes belt-left {
+@keyframes belt-drift {
     from {
-        transform: translateX(-4rem);
+        transform: translateX(0);
     }
 
     to {
-        transform: translateX(-36rem);
-    }
-}
-
-@keyframes belt-right {
-    from {
-        transform: translateX(-36rem);
-    }
-
-    to {
-        transform: translateX(-4rem);
+        transform: translateX(-50%);
     }
 }
 
@@ -1574,6 +1568,10 @@ g.dotmap_country.is_active path.dotmap_hl {
 
     .belt_row + .belt_row {
         margin-top: 0.6rem;
+    }
+
+    .belt_row [aria-hidden="true"] {
+        display: none;
     }
 
     .coming_soon_line.letters_ready .coming_soon_char {
