@@ -422,7 +422,7 @@ Serif for what you look at, sans for what you read.
 | `display-xl` | 4.8rem | `clamp(2.4rem, 5.4vw, 4.8rem)` | 400 | 1.05 | 0.01em | Single-word cinematic headings ("Speakers"), inner-page titles |
 | `figure` | 4.5rem | `clamp(2.8rem, 6vw, 4.5rem)` | 400 | 1 | 0.01em | The numbers band, years on the past-meetings page |
 | `accent-italic` | 3.8rem, italic | `clamp(2rem, 4.8vw, 3.8rem)` | 400 | 1.1 | 0 | The one accent phrase, the theme line |
-| `headline-lg` | 2.9rem | `clamp(2rem, 3.3vw, 2.9rem)` | 400 | 1.15 | 0.01em | Centred band headings ("Delegates from 13 countries", "Previous sponsors") |
+| `headline-lg` | 2.9rem | `clamp(2rem, 3.3vw, 2.9rem)` | 400 | 1.15 | 0.01em | Centred band headings ("Delegates from 16 countries", "Previous sponsors") |
 | `headline-md` | 2.75rem | `clamp(2rem, 3.1vw, 2.75rem)` | 400 | 1.15 | 0.01em | Split-panel headings ("Partner with us") |
 | `headline-sm` | 2.4rem | `clamp(1.8rem, 2.6vw, 2.4rem)` | 400 | 1.2 | 0.01em | Sub-section headings ("Contact") |
 | `quote-italic` | 2rem, italic | `clamp(1.5rem, 2.6vw, 2rem)` | 400 | 1.35 | 0 | Testimonials and pull quotes |
@@ -501,7 +501,7 @@ This is the working order for the renovation. The first two positions are fixed.
 3. Welcome: a short excerpt from the directors, linking to the full messages
 4. Numbers band
 5. About, with the endorsements, followed by Widening participation (a text band linking to `/wp/`)
-6. Delegates map
+6. Delegates map, with the university belt
 7. Speakers and workshops
 8. Testimonials
 9. Abstract competition
@@ -570,18 +570,26 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 **Numbers band** (`numbers-band`, `numbers-label`, `numbers-divider`)
 
 - Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. Figures and labels sit at the left of their columns, the first starting on the gutter line. The columns divide the band evenly. On phones they form a two-by-two grid.
-- Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">13</span> <span class="numbers_label">Countries represented in 2025</span></li>…</ul>`.
+- Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">16</span> <span class="numbers_label">Countries represented in 2025–26</span></li>…</ul>`.
 - A band can carry a visible heading (`.numbers_heading`, as "Why it matters" on the Widening participation page). Any figure from outside INUGSC needs a source line underneath (`.numbers_source`, `numbers-source`), naming the report and year and linking to it.
 - The figures arrive with the standard reveal. They never count up.
 - Every figure carries its year or source in its label, for example "countries represented in 2025".
-- Confirmed figures available now: founded in 2011, the 16th edition, 500+ delegates, and 13 countries in 2025. Add more only from the archive data.
+- Confirmed figures available now: founded in 2011, the 16th edition, 500+ delegates, and 16 countries across 2025 and 2026 (the 13 of 2025, plus Ireland, Germany and Bulgaria from the 2026 feedback form). Add more only from the archive data.
 
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
-- Show one quote per band, or two side by side at most, on light blue-grey. The quote is in `quote-italic` blue text, up to `measure-centred`.
-- Below it comes the attribution: the name in `label`, then the university and year attended in `caption`. A 4:5 portrait is optional and needs consent.
-- Every quote is real, verbatim and used with written permission. Cuts are marked with an ellipsis.
-- Do not add decorative quotation marks, star ratings, carousels or cards.
+- Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, which stays in view on desktop while the answers rise past it.
+- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light`. Each shows the form's own question in `lead`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
+- Attributions are anonymous: the delegate's stage of training only ("Clinical medical student"), with the year given once in the heading column. Use only answers from delegates who ticked the form's quote consent box.
+- Every quote is real and verbatim, typos and all. A quote may be one or more whole sentences from a longer answer; a cut inside a sentence is marked with an ellipsis.
+- Do not add oversized decorative quotation marks, star ratings, carousels or cards.
+
+**University belt** (`belt`)
+
+- Under the delegate map, an italic `eyebrow-italic` line ("Their universities included") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
+- The names are set in type, not logos: crests need each university's permission and read as endorsement.
+- Scrolling slides the rows in opposite directions by 32rem across the belt's own view timeline. Nothing moves on a timer. With reduced motion the rows stand still and wrap, centred, so every name shows.
+- Names come from the feedback forms and research presenters of the years the map covers, and every university's country is lit on the map.
 
 **Welcome messages** (`welcome-letter`, `welcome-signature`)
 
@@ -612,10 +620,10 @@ The seals from the 10th anniversary to the current year sit in one row on light 
 - **Drawing:** a dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text. Every dot is the same size, lit or not (4.4 map units, 5 on phones), with no pins, rings or markers. Countries light up in order of distance from London as the map crosses the screen.
 - **Small countries:** a country too small to own a cell of the grid (Belgium, Malta, Cyprus, Hong Kong, Singapore) gets one dot, on the grid cell nearest its centre that no other delegate country uses. That cell may be at sea, or may have belonged to a neighbour (Belgium's came from the Netherlands).
 - **How it is made:**
-  - The dots sit on a fixed grid, 143 by 53, 7 units apart, in an equirectangular projection running from 78°N to 56°S.
+  - The dots sit on a fixed grid, 143 by 55, 7 units apart, in an equirectangular projection running from about 83°N to 56°S. The two rows north of 78°N (y = -3.5 and -10.5) were added so Greenland and the Arctic islands end at their real coastline rather than a flat cut.
   - The map is cut at the Bering Strait: its left edge is longitude 169.5°W, so Alaska starts the map and Russia ends it in one piece.
   - Each cell is sampled 3 by 3 against Natural Earth 1:50m countries, tested on the sphere with `d3-geo`'s `geoContains`. It is land when at least 4 of its 9 samples are, and it belongs to the country holding most of them. This stops slivers such as the Northwest Angle or specks of islands from showing up as stray dots.
-  - The viewBox (7 0 987 371) is trimmed to the dots, so the margins are equal on every side and the dots' centre is the page's centre.
+  - The viewBox (7 -14 987 385) is trimmed to the dots, so the margins are equal on every side and the dots' centre is the page's centre.
   - Each lit country is a `g.dotmap_country` carrying `data-name` (the name shown) and `data-x`/`data-y` (where its label sits, in map units).
 - **Hover labels:** pointing at the map names the nearest lit country within 14px (24px for a tap on a phone). Its dots turn navy, and a `map-label` appears just above it: navy, white `label-sm` type, 2px corners and no shadow or arrow. Tapping anywhere else clears it. Unlit countries are never named, because the map shows where delegates came from. The paragraph above lists every country, so screen readers lose nothing.
 
@@ -674,6 +682,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
+| University belt | The two rows of names slide 32rem in opposite directions | The belt's own view timeline, `cover 0%` to `cover 100%` |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
@@ -698,7 +707,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 - Write the venue as "Marshgate and One Pool Street, UCL East" (Marshgate, 7 Sidings Street, London E20 2AE).
 - Widening participation runs at One Pool Street: write "One Pool Street, UCL East" (1 Pool Street, Queen Elizabeth Olympic Park, London E20 2AF).
 - Write the conference as "INUGSC 2027" and the organiser as "UCL Surgical Society".
-- Use numerals for statistics ("500+ delegates", "13 countries") and give the year of any figure that changes.
+- Use numerals for statistics ("500+ delegates", "16 countries") and give the year of any figure that changes.
 - Copy is plain and specific. No exclamation marks, emojis or "it's not X, it's Y" constructions.
 
 ## Responsive behaviour
