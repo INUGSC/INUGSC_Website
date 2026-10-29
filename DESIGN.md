@@ -620,10 +620,10 @@ The seals from the 10th anniversary to the current year sit in one row on light 
 - **Drawing:** a dotted world map sits on white. Unlit countries use `map-base` and lit countries use blue text. Every dot is the same size, lit or not (4.4 map units, 5 on phones), with no pins, rings or markers. Countries light up in order of distance from London as the map crosses the screen.
 - **Small countries:** a country too small to own a cell of the grid (Belgium, Malta, Cyprus, Hong Kong, Singapore) gets one dot, on the grid cell nearest its centre that no other delegate country uses. That cell may be at sea, or may have belonged to a neighbour (Belgium's came from the Netherlands).
 - **How it is made:**
-  - The dots sit on a fixed grid, 143 by 53, 7 units apart, in an equirectangular projection running from 78°N to 56°S.
+  - The dots sit on a fixed grid, 143 by 55, 7 units apart, in an equirectangular projection running from about 83°N to 56°S. The two rows north of 78°N (y = -3.5 and -10.5) were added so Greenland and the Arctic islands end at their real coastline rather than a flat cut.
   - The map is cut at the Bering Strait: its left edge is longitude 169.5°W, so Alaska starts the map and Russia ends it in one piece.
   - Each cell is sampled 3 by 3 against Natural Earth 1:50m countries, tested on the sphere with `d3-geo`'s `geoContains`. It is land when at least 4 of its 9 samples are, and it belongs to the country holding most of them. This stops slivers such as the Northwest Angle or specks of islands from showing up as stray dots.
-  - The viewBox (7 0 987 371) is trimmed to the dots, so the margins are equal on every side and the dots' centre is the page's centre.
+  - The viewBox (7 -14 987 385) is trimmed to the dots, so the margins are equal on every side and the dots' centre is the page's centre.
   - Each lit country is a `g.dotmap_country` carrying `data-name` (the name shown) and `data-x`/`data-y` (where its label sits, in map units).
 - **Hover labels:** pointing at the map names the nearest lit country within 14px (24px for a tap on a phone). Its dots turn navy, and a `map-label` appears just above it: navy, white `label-sm` type, 2px corners and no shadow or arrow. Tapping anywhere else clears it. Unlit countries are never named, because the map shows where delegates came from. The paragraph above lists every country, so screen readers lose nothing.
 
