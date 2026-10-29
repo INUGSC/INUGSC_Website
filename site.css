@@ -869,9 +869,9 @@ g.dotmap_country.is_active path.dotmap_hl {
 }
 
 .quote_prompt {
-    margin: 0 0 1rem;
-    font-size: 0.875rem;
-    line-height: 1.45;
+    margin: 0 0 1.1rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
 }
 
 .quote blockquote {
@@ -880,6 +880,20 @@ g.dotmap_country.is_active path.dotmap_hl {
     font-size: clamp(1.5rem, 2.6vw, 2rem);
     font-style: italic;
     line-height: 1.35;
+    quotes: "\201C" "\201D";
+}
+
+/* the opening mark hangs outside the column, so the words line up with the question above */
+.quote blockquote p {
+    text-indent: -0.44em;
+}
+
+.quote blockquote p::before {
+    content: open-quote;
+}
+
+.quote blockquote p::after {
+    content: close-quote;
 }
 
 .quote figcaption {
