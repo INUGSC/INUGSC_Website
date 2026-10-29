@@ -422,7 +422,7 @@ Serif for what you look at, sans for what you read.
 | `display-xl` | 4.8rem | `clamp(2.4rem, 5.4vw, 4.8rem)` | 400 | 1.05 | 0.01em | Single-word cinematic headings ("Speakers"), inner-page titles |
 | `figure` | 4.5rem | `clamp(2.8rem, 6vw, 4.5rem)` | 400 | 1 | 0.01em | The numbers band, years on the past-meetings page |
 | `accent-italic` | 3.8rem, italic | `clamp(2rem, 4.8vw, 3.8rem)` | 400 | 1.1 | 0 | The one accent phrase, the theme line |
-| `headline-lg` | 2.9rem | `clamp(2rem, 3.3vw, 2.9rem)` | 400 | 1.15 | 0.01em | Centred band headings ("Delegates from 13 countries", "Previous sponsors") |
+| `headline-lg` | 2.9rem | `clamp(2rem, 3.3vw, 2.9rem)` | 400 | 1.15 | 0.01em | Centred band headings ("Delegates from 16 countries", "Previous sponsors") |
 | `headline-md` | 2.75rem | `clamp(2rem, 3.1vw, 2.75rem)` | 400 | 1.15 | 0.01em | Split-panel headings ("Partner with us") |
 | `headline-sm` | 2.4rem | `clamp(1.8rem, 2.6vw, 2.4rem)` | 400 | 1.2 | 0.01em | Sub-section headings ("Contact") |
 | `quote-italic` | 2rem, italic | `clamp(1.5rem, 2.6vw, 2rem)` | 400 | 1.35 | 0 | Testimonials and pull quotes |
@@ -570,11 +570,11 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 **Numbers band** (`numbers-band`, `numbers-label`, `numbers-divider`)
 
 - Three or four figures sit in a row on deep navy, each a `figure` above a short label in muted white, separated by vertical hairlines. Figures and labels sit at the left of their columns, the first starting on the gutter line. The columns divide the band evenly. On phones they form a two-by-two grid.
-- Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">13</span> <span class="numbers_label">Countries represented in 2025</span></li>…</ul>`.
+- Markup is a list, figure first, so it reads naturally aloud: `<ul class="numbers_list"><li><span class="numbers_figure">16</span> <span class="numbers_label">Countries represented in 2025–26</span></li>…</ul>`.
 - A band can carry a visible heading (`.numbers_heading`, as "Why it matters" on the Widening participation page). Any figure from outside INUGSC needs a source line underneath (`.numbers_source`, `numbers-source`), naming the report and year and linking to it.
 - The figures arrive with the standard reveal. They never count up.
 - Every figure carries its year or source in its label, for example "countries represented in 2025".
-- Confirmed figures available now: founded in 2011, the 16th edition, 500+ delegates, and 13 countries in 2025. Add more only from the archive data.
+- Confirmed figures available now: founded in 2011, the 16th edition, 500+ delegates, and 16 countries across 2025 and 2026 (the 13 of 2025, plus Ireland, Germany and Bulgaria from the 2026 feedback form). Add more only from the archive data.
 
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
@@ -586,10 +586,10 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **University belt** (`belt`)
 
-- Under the delegate map, an italic `eyebrow-italic` line ("In 2025 and 2026, delegates came from") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
+- Under the delegate map, an italic `eyebrow-italic` line ("Their universities included") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
 - The names are set in type, not logos: crests need each university's permission and read as endorsement.
 - Scrolling slides the rows in opposite directions by 32rem across the belt's own view timeline. Nothing moves on a timer. With reduced motion the rows stand still and wrap, centred, so every name shows.
-- Names come from the feedback forms and research presenters of the years named in the intro line.
+- Names come from the feedback forms and research presenters of the years the map covers, and every university's country is lit on the map.
 
 **Welcome messages** (`welcome-letter`, `welcome-signature`)
 
@@ -707,7 +707,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 - Write the venue as "Marshgate and One Pool Street, UCL East" (Marshgate, 7 Sidings Street, London E20 2AE).
 - Widening participation runs at One Pool Street: write "One Pool Street, UCL East" (1 Pool Street, Queen Elizabeth Olympic Park, London E20 2AF).
 - Write the conference as "INUGSC 2027" and the organiser as "UCL Surgical Society".
-- Use numerals for statistics ("500+ delegates", "13 countries") and give the year of any figure that changes.
+- Use numerals for statistics ("500+ delegates", "16 countries") and give the year of any figure that changes.
 - Copy is plain and specific. No exclamation marks, emojis or "it's not X, it's Y" constructions.
 
 ## Responsive behaviour
