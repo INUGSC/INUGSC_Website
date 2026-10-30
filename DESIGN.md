@@ -364,7 +364,7 @@ The look draws on three sources.
 - One solid button per view. Every other action is an underlined text link.
 - Square corners: 2px on buttons and fields, none anywhere else. No shadows, gradients, glows or frosted glass.
 - Real INUGSC photographs only, one per band, drifting gently as you scroll.
-- Every movement is driven by scrolling and has a still version for visitors who reduce motion.
+- Every movement is set off or driven by scrolling, starts gently and lands softly, and has a still version for visitors who reduce motion.
 
 ## Colours
 
@@ -579,7 +579,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
 - Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, beside the reading column.
-- On a wide screen (over 1000px, at least 34rem tall) that can run scroll timelines and has no reduced-motion setting, the band is a scene of its own. It pins to the window and the answers take turns, one at a time, each one clear before the next begins, all starting on the same line. At the end the heading and the last answer fade, so nothing from the band is on screen when the next photograph arrives; a quote never shares the window with a photo. It is scrubbed by scroll, with no timer, arrows or dots, so it is not a carousel. Everywhere else the answers stay stacked and all visible.
+- On a wide screen (over 1000px, at least 34rem tall) that can run scroll timelines and has no reduced-motion setting, the band is a scene of its own. It pins to the window and the answers take turns, one at a time, all starting on the same line. Scrolling chooses the answer and the change then plays out in time: the old answer lifts away and softens while the next rises into focus a beat later, so it glides the same way however fast the page is scrolled and the window is never empty. At the end the whole stage fades and lifts with the scroll, so nothing from the band is on screen when the next photograph arrives, even if the page is flicked; a quote never shares the window with a photo. There are no timers, arrows or dots, so it is not a carousel. Everywhere else the answers stay stacked and all visible.
 - The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light` when they are stacked. Each shows the form's own question in `lead`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
 - Attributions are anonymous: the delegate's stage of training only ("Clinical medical student"), with the year given once in the heading column. Use only answers from delegates who ticked the form's quote consent box.
 - Every quote is real and verbatim, typos and all. A quote may be one or more whole sentences from a longer answer; a cut inside a sentence is marked with an ellipsis.
@@ -667,31 +667,44 @@ Page grey, in `caption` type and blue text, with the copyright on the left and t
 - Don't crowd the header.
 - Don't show sponsor logos in colour.
 - Don't autoplay video, run carousels, make numbers tick up, or start any motion without a scroll (the university belt is the one agreed exception).
+- Don't make anything start or stop abruptly. Use the easing curves under Motion; only the photograph drift and the belt are linear.
 - Don't use the accent on a light surface or on more than one phrase per section.
 - Don't put two bands of the same colour next to each other.
 - Don't use the legacy indigo `#210790` in new work.
 
 ## Motion
 
-Everything that moves on its own is tied to scrolling, using CSS scroll-driven animations (`animation-timeline: view()` or a named `view-timeline`). Nothing else runs on a timer, except the university belt, which drifts continuously. The only other motion answers something the visitor does, such as hovering a button, pointing at a country or opening the menu, and lasts no longer than 0.3s.
+Motion here is soft: every move starts gently and lands slowly, and nothing starts or stops with a jolt. Apple's Human Interface Guidelines are the model. They ask for motion that supports the experience without overshadowing it, that never makes people wait for it to finish, and (on watchOS) they build easing into the start and end of every animation.
+
+There are two kinds of movement. **Scroll sets it off, time plays it:** a block arrives, or the testimonials move to the next answer, and the change then plays out over about a second, so it glides at the same pace however fast the page is scrolled. **Scroll drives it directly** only where the point is to follow the page: the photographs drifting, the header shrinking, the first view letting go, the map lighting up and the end of the testimonial scene. Nothing else runs on a timer, except the university belt, which drifts continuously. The only other motion answers something the visitor does, such as hovering a button, pointing at a country or opening the menu, and lasts no longer than 0.3s.
+
+**Easing.** Three curves, set as tokens in the style sheet. Never use `linear` for something that arrives, leaves or follows the scroll, apart from the photograph drift and the belt, where a steady rate is the point.
+
+| Token | Curve | Used for |
+|---|---|---|
+| `--ease-arrive` | `cubic-bezier(0.28, 0.11, 0.32, 1)` | Things coming in: a gentle start and a long, soft landing |
+| `--ease-leave` | `cubic-bezier(0.4, 0, 0.6, 1)` | Things going out |
+| `--ease-scrub` | `cubic-bezier(0.45, 0, 0.55, 1)` | Moves tied to the scroll position, soft at both ends so they never start or stop abruptly |
 
 | Name | What moves | Timing |
 |---|---|---|
-| Header condense | The header shrinks from 7.5rem to 3.75rem, the seal from 5.5rem to 2.75rem and the lockup from 1rem to 0.74rem | The first 12rem of page scroll (`scroll(root)`, range `0 12rem`) |
-| Reveal (`.reveal`) | Fades in and rises 3rem | From `entry 10%` to `cover 40%` |
-| Photo drift | The photograph moves from -10vh to +10vh inside its own section, so the frame never empties | The section's own view timeline |
-| First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
-| Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
-| Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
-| University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; held while a mouse moves over it and released by any scroll. The only motion not tied to scrolling |
-| Testimonial scene | The band pins to the window. Each answer fades out and rises 1.5rem, then the next rises in from 1.5rem below. The heading and the last answer fade out together at the end | The band's own view timeline (`--voices`) over a track 3.4 windows tall, in `contain` terms: first answer out 24% to 32%, second in 32% to 40% and out 58% to 66%, third in 66% to 74% and out with the heading 90% to 98%. The heading and answers reveal on `entry 45%` to `entry 100%` as the band rises in |
+| Reveal (`.reveal`) | A block waits 2rem low and invisible, then fades in and rises into place, once, when its top is 12% of the way up the window. Blocks arriving in the same moment come 0.12s apart (up to four steps), so a heading comes before its text. A block scrolled past without being seen is simply there | Opacity 1s and position 1.2s, `--ease-arrive`. Set off by `site.js` and played by the style sheet; it does not replay |
+| Header condense | The header shrinks from 7.5rem to 3.75rem, the seal from 5.5rem to 2.75rem and the lockup from 1rem to 0.74rem | The first 12rem of page scroll (`scroll(root)`, range `0 12rem`), `--ease-scrub` |
+| Photo drift | The photograph moves from -10vh to +10vh inside its own section, so the frame never empties | The section's own view timeline, linear |
+| First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`, linear. Content: `exit 0%` to `exit 80%`, `--ease-scrub` |
+| Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)` (a quicker curve of its own), starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
+| Delegate map | Countries fade in, in order of distance from London | The map's own view timeline, `--ease-scrub` |
+| University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; held while a mouse moves over it and released by any scroll. The only motion not set off by scrolling |
+| Testimonial scene | The band pins to the window. The answer going out lifts 1.75rem, softens (6px blur) and fades; a beat later the next rises from 1.75rem below, sharpens and fades in. The heading arrives as an ordinary reveal. At the end the whole stage fades and lifts 2rem | Scrolling only chooses the current answer, a quarter and then a half of the way along the pinned stretch (`site.js`). Out: 0.5s, `--ease-leave`. In: 1s, `--ease-arrive`, after a 0.25s beat, so the window is never empty and never holds two answers at once. The end follows the band's own view timeline (`--voices`) over a track 3.4 windows tall, `contain 74%` to `contain 97%`, `--ease-scrub`, so it is finished before the band lets go even if the page is flicked |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
-- Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
-- With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
+- Never make a visitor wait. Everything stays readable and clickable while it moves, a transition that is interrupted reverses smoothly from wherever it has got to, and a block that has arrived stays arrived.
+- Animate only opacity, position and blur, which the browser can draw without redoing the layout.
+- With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state. The same holds with no script, and in print. If `site.js` fails to load, blocks that were waiting out of sight appear after four seconds.
+- Browsers without scroll timelines must show everything in its final state, for the effects that need them (the photograph drift, the map). A zero-length animation with `both` fill does this, so test in such a browser. The reveals need no timelines, so they work in every browser that runs script.
 - The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
-- The testimonial scene sits inside the same `@supports`, and inside a media query for wide screens, short windows and reduced motion, because a pinned band whose answers fade in and out would be wrong anywhere it can't run. There the answers stay stacked, each with the standard reveal.
+- The testimonial scene sits inside the same `@supports`, inside a media query for wide screens, short windows and reduced motion, and behind the `motion` class that `site.js` puts on the page, because a pinned band whose answers fade in and out would be wrong anywhere it can't run. There the answers stay stacked, each with the standard reveal.
 - **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
 
 ## Imagery

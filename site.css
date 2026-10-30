@@ -65,6 +65,13 @@
     --seal-full: 5.5rem;
     --seal-compact: 2.75rem;
 
+    /* Easing: every move starts gently and lands softly, never abruptly.
+       arrive: things coming in (a long, soft landing). leave: things going out.
+       scrub: moves tied directly to the scroll position, soft at both ends. */
+    --ease-arrive: cubic-bezier(0.28, 0.11, 0.32, 1);
+    --ease-leave: cubic-bezier(0.4, 0, 0.6, 1);
+    --ease-scrub: cubic-bezier(0.45, 0, 0.55, 1);
+
     color-scheme: light;
 }
 
@@ -307,7 +314,7 @@ main {
     .site_header,
     .site_seal,
     .site_lockup {
-        animation-timing-function: linear;
+        animation-timing-function: var(--ease-scrub);
         animation-fill-mode: both;
         animation-timeline: scroll(root block);
         animation-range: 0 12rem;
@@ -379,10 +386,11 @@ main {
         animation-range: exit 0% exit 100%;
     }
 
+    /* the words let go gently: slow to start leaving, slow to finish (the photograph drifts at a steady rate) */
     .first_view_content {
-        animation: first-view-lift linear both;
+        animation: first-view-lift var(--ease-scrub) both;
         animation-timeline: --first-view;
-        animation-range: exit 0% exit 70%;
+        animation-range: exit 0% exit 80%;
     }
 }
 
@@ -742,7 +750,7 @@ path.dotmap_hl {
 }
 
 g.dotmap_country {
-    animation: dotmap-light linear both;
+    animation: dotmap-light var(--ease-scrub) both;
     animation-timeline: --dotmap;
 }
 
@@ -900,96 +908,79 @@ g.dotmap_country.is_active path.dotmap_hl {
 }
 
 /* The testimonials are a scene of their own. On a wide screen that can run scroll timelines, the band
-   pins to the window and the answers take turns as the page scrolls: one fades out and rises away,
-   then the next rises in. At the end the heading and the last answer fade too, so nothing from this
-   band is on screen when the photograph after it arrives. The sequence is scrubbed by scroll, with no
-   timer and no controls. Everywhere else (phones, reduced motion, browsers without scroll timelines)
-   the answers stay stacked and all visible. */
+   pins to the window and the answers take turns as the page scrolls. Scrolling only chooses which
+   answer is current (site.js); the change itself plays out in time, so it glides however fast the page
+   is scrolled and never stops half way: the answer going out lifts away and softens while the next
+   one rises in a moment later, so the window is never empty and never holds two at once. At the end the
+   whole stage fades and lifts with the scroll, so nothing from this band is on screen when the
+   photograph after it arrives, even if the page is flicked. Everywhere else (phones, reduced motion,
+   browsers without scroll timelines, no script) the answers stay stacked and all visible. */
 @supports (animation-timeline: view()) {
     @media (min-width: 1001px) and (min-height: 34rem) and (prefers-reduced-motion: no-preference) {
-        /* the band is a track 3.4 windows tall: one for the stage, and 2.4 of scrolling while it is pinned */
-        .voices {
+        /* the band is a track 3.4 windows tall: one for the stage, and 2.4 of scrolling while it is pinned.
+           site.js changes answer a quarter and a half of the way along that 2.4, so keep the two in step */
+        .motion .voices {
             height: 340svh;
             view-timeline: --voices block;
         }
 
-        .voices_stage {
+        .motion .voices_stage {
             position: sticky;
             top: 0;
             box-sizing: border-box;
             height: 100svh;
             padding: var(--header-compact) 0 0;
             align-content: center;
+            animation: voices-exit var(--ease-scrub) both;
+            animation-timeline: --voices;
+            animation-range: contain 74% contain 97%;
         }
 
-        .voices .text_band_head {
+        .motion .voices .text_band_head {
             position: static;
             align-self: start;
         }
 
         /* the answers share one cell, so the tallest sets the height and every answer starts on the same line */
-        .voices .text_band_body {
+        .motion .voices .text_band_body {
             display: grid;
             align-content: start;
         }
 
-        .voices .quote {
+        .motion .voices .quote {
             grid-area: 1 / 1;
         }
 
-        .voices .quote + .quote {
+        .motion .voices .quote + .quote {
             margin-top: 0;
             padding-top: 0;
             border-top: 0;
         }
 
-        /* the heading and the answers arrive as the band rises into the window ... */
-        .voices .text_band_head {
-            animation: reveal linear backwards, voices-out linear forwards;
-            animation-timeline: --voices, --voices;
-            animation-range: entry 45% entry 100%, contain 90% contain 98%;
+        /* an answer waiting its turn sits low and soft; once it has had its turn it rests high and soft */
+        .motion .voices .quote.reveal {
+            opacity: 0;
+            transform: translateY(1.75rem);
+            filter: blur(6px);
+            transition: opacity 0.5s var(--ease-leave), transform 0.5s var(--ease-leave), filter 0.5s var(--ease-leave);
+            will-change: opacity, transform, filter;
         }
 
-        .voices .text_band_body {
-            animation: reveal linear backwards;
-            animation-timeline: --voices;
-            animation-range: entry 45% entry 100%;
+        .motion .voices .quote.reveal.is_past {
+            transform: translateY(-1.75rem);
         }
 
-        /* ... then the answers take turns while the band is pinned, each one clear before the next begins */
-        .voices .quote:nth-child(1) {
-            animation: voices-out linear forwards;
-            animation-timeline: --voices;
-            animation-range: contain 24% contain 32%;
-        }
-
-        .voices .quote:nth-child(2) {
-            animation: voices-in linear backwards, voices-out linear forwards;
-            animation-timeline: --voices, --voices;
-            animation-range: contain 32% contain 40%, contain 58% contain 66%;
-        }
-
-        .voices .quote:nth-child(3) {
-            animation: voices-in linear backwards, voices-out linear forwards;
-            animation-timeline: --voices, --voices;
-            animation-range: contain 66% contain 74%, contain 90% contain 98%;
+        /* the current answer comes in a beat after the old one starts to go, and lands slowly */
+        .motion .voices .quote.reveal.is_current {
+            opacity: 1;
+            transform: none;
+            filter: none;
+            transition: opacity 1s var(--ease-arrive) 0.25s, transform 1.1s var(--ease-arrive) 0.25s, filter 1s var(--ease-arrive) 0.25s;
         }
     }
 }
 
-@keyframes voices-in {
-    from {
-        opacity: 0;
-        transform: translateY(1.5rem);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-@keyframes voices-out {
+@keyframes voices-exit {
     from {
         opacity: 1;
         transform: none;
@@ -997,7 +988,7 @@ g.dotmap_country.is_active path.dotmap_hl {
 
     to {
         opacity: 0;
-        transform: translateY(-1.5rem);
+        transform: translateY(-2rem);
     }
 }
 
@@ -1222,21 +1213,43 @@ g.dotmap_country.is_active path.dotmap_hl {
 
 /* ---------- Reveal on scroll ---------- */
 
-.reveal {
-    animation: reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 10% cover 40%;
-}
-
-@keyframes reveal {
-    from {
-        opacity: 0;
-        transform: translateY(3rem);
+/* A block marked .reveal waits just out of sight, then glides in once, shortly after it comes into view
+   (site.js adds .is_in and spaces out blocks that arrive together). Scrolling decides when; time and an
+   eased curve decide how, so it looks the same at any scroll speed and on any device, and stops cleanly if
+   the visitor stops. Only where script runs and motion is welcome: everywhere else the content is simply there. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .reveal {
+        transition: opacity 1s var(--ease-arrive), transform 1.2s var(--ease-arrive);
+        transition-delay: var(--delay, 0s);
     }
 
+    .reveal:not(.is_in) {
+        opacity: 0;
+        transform: translateY(2rem);
+    }
+
+    /* blocks that were scrolled past without being seen appear at once rather than playing to nobody */
+    .reveal.is_seen {
+        transition: none;
+    }
+
+    /* if site.js never runs, show everything after a few seconds rather than leave it hidden */
+    html:not(.motion) .reveal:not(.is_in) {
+        animation: reveal-failsafe 0.6s ease 4s forwards;
+    }
+}
+
+@keyframes reveal-failsafe {
     to {
         opacity: 1;
         transform: none;
+    }
+}
+
+@media print {
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
     }
 }
 
@@ -1658,7 +1671,6 @@ g.dotmap_country.is_active path.dotmap_hl {
     .first_view_content,
     .split_photo img,
     g.dotmap_country,
-    .reveal,
     .belt_row {
         animation: none;
     }

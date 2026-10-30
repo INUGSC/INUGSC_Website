@@ -1,5 +1,90 @@
 // INUGSC site behaviour, used by every page.
 
+// Motion is on unless the visitor asked for less. The style sheet keys its soft arrivals and its pinned
+// testimonial scene on this class, so with reduced motion, or with no script at all, the page just sits still.
+if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    document.documentElement.classList.add("motion");
+}
+
+// Soft arrivals: a block marked .reveal glides in once, shortly after it comes into view. Scrolling only
+// decides when; the style sheet's eased transition decides how, so it looks the same at any scroll speed.
+(function () {
+    if (!document.documentElement.classList.contains("motion")) return;
+
+    let line = 0.88;    // a block arrives once its top is this far down the window
+    let queued = false;
+
+    function sweep() {
+        queued = false;
+        let height = window.innerHeight;
+        let order = 0;
+        document.querySelectorAll(".reveal:not(.is_in)").forEach(block => {
+            let box = block.getBoundingClientRect();
+            if (box.top >= height * line) return;
+            if (box.bottom < 0) {
+                // scrolled past without ever being seen: it is simply there
+                block.classList.add("is_seen");
+            } else {
+                // blocks that arrive in the same moment come a beat apart, not all at once
+                block.style.setProperty("--delay", Math.min(order++, 4) * 0.12 + "s");
+            }
+            block.classList.add("is_in");
+        });
+    }
+
+    function ask() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(sweep);
+    }
+
+    window.addEventListener("scroll", ask, { passive: true });
+    window.addEventListener("resize", ask);
+    window.addEventListener("load", ask);
+    // some blocks (the committee grid, for one) are built by other scripts after this one has run
+    new MutationObserver(ask).observe(document.body, { childList: true, subtree: true });
+    ask();
+})();
+
+// The testimonials are a pinned scene (see the style sheet). Scrolling only chooses which answer is
+// current; the change itself plays out in time. The answers change a quarter and a half of the way
+// along the pinned stretch, and the first is current from a little before the band pins.
+(function () {
+    let band = document.querySelector(".voices");
+    let stage = band && band.querySelector(".voices_stage");
+    let quotes = band ? [...band.querySelectorAll(".quote")] : [];
+    if (!stage || !quotes.length || !document.documentElement.classList.contains("motion")) return;
+
+    let current = -1;
+    let queued = false;
+
+    function update() {
+        queued = false;
+        if (getComputedStyle(stage).position != "sticky") return;
+        let travel = band.offsetHeight - window.innerHeight;
+        if (travel <= 0) return;
+        let progress = -band.getBoundingClientRect().top / travel;    // 0 as the band pins, 1 as it lets go
+        let step = progress < -0.25 ? 0 : progress < 0.25 ? 1 : progress < 0.5 ? 2 : 3;
+        if (step == current) return;
+        current = step;
+        quotes.forEach((quote, i) => {
+            quote.classList.toggle("is_current", i == step - 1);
+            quote.classList.toggle("is_past", i < step - 1);
+        });
+    }
+
+    function ask() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(update);
+    }
+
+    window.addEventListener("scroll", ask, { passive: true });
+    window.addEventListener("resize", ask);
+    window.addEventListener("load", ask);
+    ask();
+})();
+
 // Phone menu: open and close it, and close it again once a link is chosen.
 (function () {
     let header = document.querySelector(".site_header");
