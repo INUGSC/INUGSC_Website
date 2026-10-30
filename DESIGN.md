@@ -578,8 +578,9 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 **Quotes and testimonials** (`quote`, `quote-attribution`)
 
-- Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, which stays in view on desktop while the answers rise past it.
-- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light`. Each shows the form's own question in `lead`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
+- Testimonials sit in a text band on light blue-grey, after Speakers and workshops: "In their words" and a one-line source in the heading column, beside the reading column.
+- On a wide screen (over 1000px, at least 34rem tall) that can run scroll timelines and has no reduced-motion setting, the band is a scene of its own. It pins to the window and the answers take turns, one at a time, each one clear before the next begins, all starting on the same line. At the end the heading and the last answer fade, so nothing from the band is on screen when the next photograph arrives; a quote never shares the window with a photo. It is scrubbed by scroll, with no timer, arrows or dots, so it is not a carousel. Everywhere else the answers stay stacked and all visible.
+- The reading column holds up to three answers from the delegate feedback form, divided by `hairline-light` when they are stacked. Each shows the form's own question in `lead`, the answer in `quote-italic` blue text inside curly quotation marks, and the attribution in `label`. The opening mark hangs outside the column, so the words line up with the question above.
 - Attributions are anonymous: the delegate's stage of training only ("Clinical medical student"), with the year given once in the heading column. Use only answers from delegates who ticked the form's quote consent box.
 - Every quote is real and verbatim, typos and all. A quote may be one or more whole sentences from a longer answer; a cut inside a sentence is marked with an ellipsis.
 - Do not add oversized decorative quotation marks, star ratings, carousels or cards.
@@ -683,12 +684,15 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
 | University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; held while a mouse moves over it and released by any scroll. The only motion not tied to scrolling |
+| Testimonial scene | The band pins to the window. Each answer fades out and rises 1.5rem, then the next rises in from 1.5rem below. The heading and the last answer fade out together at the end | The band's own view timeline (`--voices`) over a track 3.4 windows tall, in `contain` terms: first answer out 24% to 32%, second in 32% to 40% and out 58% to 66%, third in 66% to 74% and out with the heading 90% to 98%. The heading and answers reveal on `entry 45%` to `entry 100%` as the band rises in |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
 - With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
-- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
+- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
+- The testimonial scene sits inside the same `@supports`, and inside a media query for wide screens, short windows and reduced motion, because a pinned band whose answers fade in and out would be wrong anywhere it can't run. There the answers stay stacked, each with the standard reveal.
+- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
 
 ## Imagery
 

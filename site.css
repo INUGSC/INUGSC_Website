@@ -899,6 +899,108 @@ g.dotmap_country.is_active path.dotmap_hl {
     line-height: 1.4;
 }
 
+/* The testimonials are a scene of their own. On a wide screen that can run scroll timelines, the band
+   pins to the window and the answers take turns as the page scrolls: one fades out and rises away,
+   then the next rises in. At the end the heading and the last answer fade too, so nothing from this
+   band is on screen when the photograph after it arrives. The sequence is scrubbed by scroll, with no
+   timer and no controls. Everywhere else (phones, reduced motion, browsers without scroll timelines)
+   the answers stay stacked and all visible. */
+@supports (animation-timeline: view()) {
+    @media (min-width: 1001px) and (min-height: 34rem) and (prefers-reduced-motion: no-preference) {
+        /* the band is a track 3.4 windows tall: one for the stage, and 2.4 of scrolling while it is pinned */
+        .voices {
+            height: 340svh;
+            view-timeline: --voices block;
+        }
+
+        .voices_stage {
+            position: sticky;
+            top: 0;
+            box-sizing: border-box;
+            height: 100svh;
+            padding: var(--header-compact) 0 0;
+            align-content: center;
+        }
+
+        .voices .text_band_head {
+            position: static;
+            align-self: start;
+        }
+
+        /* the answers share one cell, so the tallest sets the height and every answer starts on the same line */
+        .voices .text_band_body {
+            display: grid;
+            align-content: start;
+        }
+
+        .voices .quote {
+            grid-area: 1 / 1;
+        }
+
+        .voices .quote + .quote {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+
+        /* the heading and the answers arrive as the band rises into the window ... */
+        .voices .text_band_head {
+            animation: reveal linear backwards, voices-out linear forwards;
+            animation-timeline: --voices, --voices;
+            animation-range: entry 45% entry 100%, contain 90% contain 98%;
+        }
+
+        .voices .text_band_body {
+            animation: reveal linear backwards;
+            animation-timeline: --voices;
+            animation-range: entry 45% entry 100%;
+        }
+
+        /* ... then the answers take turns while the band is pinned, each one clear before the next begins */
+        .voices .quote:nth-child(1) {
+            animation: voices-out linear forwards;
+            animation-timeline: --voices;
+            animation-range: contain 24% contain 32%;
+        }
+
+        .voices .quote:nth-child(2) {
+            animation: voices-in linear backwards, voices-out linear forwards;
+            animation-timeline: --voices, --voices;
+            animation-range: contain 32% contain 40%, contain 58% contain 66%;
+        }
+
+        .voices .quote:nth-child(3) {
+            animation: voices-in linear backwards, voices-out linear forwards;
+            animation-timeline: --voices, --voices;
+            animation-range: contain 66% contain 74%, contain 90% contain 98%;
+        }
+    }
+}
+
+@keyframes voices-in {
+    from {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes voices-out {
+    from {
+        opacity: 1;
+        transform: none;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-1.5rem);
+    }
+}
+
 /* ---------- Speakers and workshops, coming soon ---------- */
 
 .coming_soon {
