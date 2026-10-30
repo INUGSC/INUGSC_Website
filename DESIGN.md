@@ -588,7 +588,7 @@ Facts such as dates, venue, travel and contact are set as a definition list (`dl
 
 - Under the delegate map, an italic `eyebrow-italic` line ("Their universities included") over two edge-to-edge rows of university names in Libre Baskerville blue text, divided by `hairline-light`.
 - The names are set in type, not logos: crests need each university's permission and read as endorsement.
-- The rows drift slowly and without stopping, in opposite directions (120s and 135s per loop), and pause while the pointer is over the belt. Each row holds its names twice, the copy hidden from screen readers, so moving it by half its width loops without a seam. This is the one exception to scroll-only motion, chosen by the committee. With reduced motion the rows stand still and wrap, centred, so every name shows once.
+- The rows drift slowly and without stopping, in opposite directions (120s and 135s per loop). A mouse moving over the belt holds them still so a name can be read, and any scroll, or the pointer leaving, lets them go. The hold is set by pointer movement in `site.js`, never by `:hover`: browsers keep a stale `:hover` while the page scrolls under a resting pointer, which froze the belt for as long as the visitor kept scrolling. Touch screens never hold it. Each row holds its names twice, the copy hidden from screen readers, so moving it by half its width loops without a seam. This is the one exception to scroll-only motion, chosen by the committee. With reduced motion the rows stand still and wrap, centred, so every name shows once.
 - Names come from the feedback forms and research presenters of the years the map covers, and every university's country is lit on the map.
 
 **Welcome messages** (`welcome-letter`, `welcome-signature`)
@@ -682,7 +682,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | First view | The image drifts down 12vh and scales from 1.06 to 1.12; the content lifts 4rem and fades | Image: `exit 0%` to `exit 100%`. Content: `exit 0%` to `exit 70%` |
 | Letter rise | The accent phrase's letters rise 0.45em and sharpen from an 8px blur, one after another | 0.9s each, 60ms stagger, `cubic-bezier(.2, .7, .2, 1)`, starting when the line is 60% visible and replaying when it re-enters from below. One phrase per page |
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
-| University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; paused on hover. The only motion not tied to scrolling |
+| University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; held while a mouse moves over it and released by any scroll. The only motion not tied to scrolling |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.

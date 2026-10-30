@@ -810,8 +810,10 @@ g.dotmap_country.is_active path.dotmap_hl {
     animation: belt-drift 120s linear infinite;
 }
 
-/* pointing at the belt holds it still, so a name can be read */
-.belt:hover .belt_row {
+/* a mouse moving over the belt holds it still, so a name can be read; site.js sets and clears
+   is_held. Not :hover, because browsers keep a stale :hover while the page scrolls under a resting
+   pointer, which left the belt frozen for as long as the visitor kept scrolling */
+.belt.is_held .belt_row {
     animation-play-state: paused;
 }
 

@@ -112,6 +112,37 @@
     });
 })();
 
+// University belt: a mouse moving over the belt holds it still, so a name can be read.
+// :hover is not trusted for this. While the page scrolls, browsers keep the old hover state
+// until the scroll ends, so a belt that had been under a resting pointer stayed frozen the
+// whole time it scrolled away. Here only real pointer movement holds the belt, and any scroll,
+// or the pointer leaving, lets it go again. Touch screens never hold it.
+(function () {
+    let belt = document.querySelector(".belt");
+    if (!belt || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    let lastScroll = -Infinity;
+
+    function release() {
+        belt.classList.remove("is_held");
+    }
+
+    function scrolled() {
+        lastScroll = performance.now();
+        release();
+    }
+
+    belt.addEventListener("pointermove", event => {
+        if (event.pointerType == "touch") return;
+        // a mouse that twitches while the page is still scrolling does not hold it
+        if (performance.now() - lastScroll > 300) belt.classList.add("is_held");
+    });
+    belt.addEventListener("pointerleave", release);
+    window.addEventListener("scroll", scrolled, { passive: true });
+    window.addEventListener("wheel", scrolled, { passive: true });
+    window.addEventListener("blur", release);
+})();
+
 // "Coming soon." letters rise in one after another as the line arrives,
 // and replay if the visitor scrolls back up and down again.
 (function () {
