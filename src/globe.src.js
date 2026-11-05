@@ -105,7 +105,8 @@ function start() {
     root.classList.add("flyin_on");
     if (window.scrollY > 0) window.scrollBy(0, section.offsetHeight - before);
 
-    const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+    // preserveDrawingBuffer keeps the last frame whole while the pinned stage scrolls away
+    const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
     renderer.setClearColor(DEEP_NAVY, 1);
 
     const scene = new Scene();
@@ -245,7 +246,9 @@ totalEmissiveRadiance += uAccent * globeLit * globeNight * 0.12;`);
 
     function progress() {
         const rect = section.getBoundingClientRect();
-        const travel = section.offsetHeight - stage.offsetHeight;
+        // The section holds the flight plus one more screen, during which the next section
+        // slides up over the still-pinned stage (see site.css)
+        const travel = section.offsetHeight - 2 * stage.offsetHeight;
         if (travel <= 0) return 0;
         const top = parseFloat(getComputedStyle(stage).top) || 0;
         return MathUtils.clamp((top - rect.top) / travel, 0, 1);
@@ -341,6 +344,7 @@ totalEmissiveRadiance += uAccent * globeLit * globeNight * 0.12;`);
             draw(current);
             request();
         });
+        window.flyinProgress = progress;
         window.flyinPreview = p => {
             current = target = p;
             draw(p);
