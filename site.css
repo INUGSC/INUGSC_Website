@@ -1540,6 +1540,94 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 }
 
+/* A note under a numbers band, naming the source of the figures */
+.numbers_note {
+    margin: 2.4rem 0 0;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- Past conferences (/past/): one entry per year, most recent first ---------- */
+
+.past {
+    padding: var(--section) var(--gutter);
+}
+
+.past_list {
+    max-width: 62rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.past_entry {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr) 5.5rem;
+    gap: 0 2.5rem;
+    align-items: start;
+    padding: 2.4rem 0;
+    border-top: 1px solid rgba(29, 29, 95, 0.16);
+}
+
+.past_entry:last-child {
+    border-bottom: 1px solid rgba(29, 29, 95, 0.16);
+}
+
+.past_year {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+    color: var(--navy);
+}
+
+.past_edition {
+    margin: 0.2rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--blue-text, rgb(29, 18, 178));
+}
+
+.past_theme {
+    margin: 0.7rem 0 0;
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    line-height: 1.25;
+    color: var(--navy);
+}
+
+.past_body {
+    max-width: 40rem;
+    margin: 0.8rem 0 0;
+    font-size: 1.1rem;
+    line-height: 1.55;
+}
+
+.past_seal {
+    width: 5.5rem;
+    height: auto;
+    clip-path: circle(48.5%);
+}
+
+@media (max-width: 640px) {
+    .past_entry {
+        grid-template-columns: minmax(0, 1fr) 3.6rem;
+        gap: 0.8rem 1.2rem;
+    }
+
+    .past_year {
+        grid-column: 1 / -1;
+    }
+
+    .past_seal {
+        grid-column: 2;
+        grid-row: 2;
+        width: 3.6rem;
+    }
+}
+
 /* ---------- Reduced motion: everything sits still in its final place ---------- */
 
 @media (prefers-reduced-motion: reduce) {

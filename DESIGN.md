@@ -727,6 +727,14 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 
 Speakers, workshops, sponsors, the committee and tickets live in plain text files (`speakers.txt`, `workshops.txt`, `sponsors.txt`, `people.txt` and `tickets.txt`), which the page reads in. See `README.md`.
 
+### Past conferences page
+
+`/past/` lists every conference, most recent first, one `li.past_entry` per year: the year, the edition, the theme if there was one, a line on speakers or what happened, and the seal if there is one. Add a year by copying an entry. Years still missing from the archive (2012 to 2019) are invited by email at the foot of the page.
+
+### INUGSC 2026, in figures
+
+The figures band on the home page comes from the in-person feedback form (147 responses, "[In-Person] NEW INUGSC 2026 Post-Conference Feedback Form"). The 2027 sponsorship booklet quotes 206 responses and 4.23 out of 5. The difference is not yet explained (the online form's responses are not in the Drive), so settle which set to use before publishing.
+
 ### Committee page
 
 `/committee/` lists the committee from `people.txt`, in the order the file gives (move a block to reorder). Portraits are square, 800 by 800 pixels, cropped so the face sits at the same size and height in every photo; never circles. The directors, marked `[Important]`, span two columns in the first row on desktop and fall into the ordinary grid on tablets and phones. The grid is four columns on desktop, three on tablets and two on phones, and hangs from the gutters; a last row that isn't full sits in the centre. A missing photo leaves a plain light-band square so the grid stays even.
