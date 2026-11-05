@@ -445,6 +445,154 @@ main {
     gap: 1rem 2rem;
 }
 
+/* ---------- Seal medal (home page first view; see seal.js) ---------- */
+
+/* Without the fly-in (no WebGL, reduced motion, before the script runs), the stage is an
+   ordinary first view showing the poster, which is the model's first frame. */
+.first_view_stage {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.first_view_stage .first_view_media::after {
+    display: none;                      /* the model is drawn dark enough for type; no scrim */
+}
+
+.first_view_stage .first_view_media picture {
+    display: contents;
+}
+
+.first_view_stage .first_view_media img {
+    object-position: 68% 50%;
+}
+
+@media (max-aspect-ratio: 9/10) {
+    .first_view_stage .first_view_media img {
+        object-position: 50% 0;
+    }
+}
+
+.flyin_canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+.flyin_labels {
+    display: none;
+}
+
+/* With the fly-in: the section grows by 140svh of scrolling, and the stage stays pinned
+   under the condensed header while the camera flies in. */
+.flyin_on .first_view:has(.first_view_stage) {
+    display: block;
+    height: calc(100svh - var(--header-compact) + 140svh);
+    min-height: 0;
+    overflow: clip;
+}
+
+.flyin_on .first_view_stage {
+    position: sticky;
+    top: var(--header-compact);
+    height: calc(100svh - var(--header-compact));
+    min-height: 30rem;
+    overflow: hidden;
+}
+
+.flyin_on .first_view_stage .first_view_media img,
+.flyin_on .first_view_stage .first_view_content {
+    animation: none;
+}
+
+/* Until the stage is pinned it starts lower down, under the full header */
+.flyin_on .first_view_stage .first_view_content {
+    padding-bottom: calc(5.5rem + var(--header-full) - var(--header-compact));
+    will-change: opacity, transform;
+}
+
+.flyin_drawn .flyin_canvas {
+    visibility: visible;
+}
+
+.flyin_on .flyin_labels {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.flyin_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    opacity: 0;
+    white-space: nowrap;
+    color: var(--white);
+    translate: -50% calc(-100% - 0.75rem);
+}
+
+/* A hairline from the name down to the roof it names */
+.flyin_label::after {
+    content: "";
+    width: 1px;
+    height: 2.75rem;
+    margin-top: 0.6rem;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.flyin_label_name {
+    font-family: var(--display);
+    font-size: 1.25rem;
+}
+
+.flyin_label_use {
+    margin-top: 0.3rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+/* The line under the medal once it has turned face-on */
+.seal_caption {
+    display: none;
+}
+
+.flyin_on .seal_caption {
+    position: absolute;
+    left: 50%;
+    bottom: calc(3.2rem + var(--header-full) - var(--header-compact));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: min(40rem, calc(100% - 2 * var(--gutter)));
+    margin: 0;
+    opacity: 0;
+    text-align: center;
+    color: var(--white);
+    pointer-events: none;
+}
+
+.seal_caption_name {
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    line-height: 1.25;
+}
+
+.seal_caption_use {
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.85);
+}
+
 @keyframes first-view-drift {
     from {
         transform: translateY(0) scale(1.06);
