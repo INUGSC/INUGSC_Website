@@ -167,7 +167,7 @@ function start() {
 
     function frameView(p) {
         const m = MathUtils.smoothstep(p, 0.12, 0.55);
-        const fx = MathUtils.lerp(narrow ? 0.5 : 0.74, 0.5, m);
+        const fx = MathUtils.lerp(narrow ? 0.5 : 0.77, 0.5, m);
         const fy = MathUtils.lerp(narrow ? 0.25 : 0.44, narrow ? 0.36 : 0.4, m);
         const fullW = 2 * Math.max(fx, 1 - fx) * width;
         const fullH = 2 * Math.max(fy, 1 - fy) * height;
@@ -193,7 +193,7 @@ function start() {
         medal.rotation.y = MathUtils.lerp(-0.62, Math.PI * 2, t);
         medal.rotation.x = MathUtils.lerp(-0.2, 0, t) + Math.sin(t * Math.PI) * 0.12;
         medal.rotation.z = MathUtils.lerp(0.06, 0, t);
-        const distance = MathUtils.lerp(narrow ? 8 : 6.5, narrow ? 7 : 7.2, t);
+        const distance = MathUtils.lerp(narrow ? 8 : 7, narrow ? 7 : 7.2, t);
         camera.position.set(0, 0, distance);
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
