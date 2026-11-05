@@ -684,6 +684,7 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
 | University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; paused on hover. The only motion not tied to scrolling |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
+| Story (`story.js`) | "INUGSC, 2011 to 2027": the section is pinned for 55svh of scrolling per edition. Each edition's year, line and seal rise 5rem into place and lift away; the photographs on the right cross-fade where the edition changes and drift 4% across the whole story; the year rail's hairline fills | Scrubbed by the section's own scroll position. Without the script or with reduced motion it is a plain list of editions |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
