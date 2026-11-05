@@ -232,7 +232,7 @@ totalEmissiveRadiance += uAccent * globeLit * globeNight * 0.12;`);
         // The globe sits right of the text on wide screens and above it on narrow ones, then
         // moves to the middle once the text has gone
         const m = narrow ? MathUtils.smoothstep(p, 0.6, 0.82) : MathUtils.smoothstep(p, 0.15, 0.6);
-        const fx = MathUtils.lerp(narrow ? 0.5 : 0.68, 0.5, m);
+        const fx = MathUtils.lerp(narrow ? 0.5 : 0.8, 0.5, m);
         const fy = MathUtils.lerp(narrow ? 0.27 : 0.48, 0.5, m);
         const fullW = 2 * Math.max(fx, 1 - fx) * width;
         const fullH = 2 * Math.max(fy, 1 - fy) * height;
@@ -256,8 +256,11 @@ totalEmissiveRadiance += uAccent * globeLit * globeNight * 0.12;`);
     function draw(p) {
         frameView(p);
         const c = camAt(p);
-        // On narrow screens the globe stands further off, so it clears the text beneath it
-        const off = narrow ? MathUtils.lerp(1.55, 1.18, MathUtils.smoothstep(p, 0.55, 1)) : 1;
+        // The globe starts further off, clear of the opening text (beside it on wide screens,
+        // above it on narrow ones), and comes closer as you scroll
+        const off = narrow
+            ? MathUtils.lerp(1.55, 1.18, MathUtils.smoothstep(p, 0.55, 1))
+            : MathUtils.lerp(1.24, 1, MathUtils.smoothstep(p, 0.02, 0.5));
         onGlobe(c.lat, c.lon, c.d * off, camera.position);
         camera.up.set(0, 1, 0);
         camera.lookAt(0, 0, 0);
