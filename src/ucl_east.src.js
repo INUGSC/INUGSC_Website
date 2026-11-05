@@ -294,7 +294,8 @@ function start() {
     // Keep the visitor's place if the page opened part-way down, at an anchor
     if (window.scrollY > 0) window.scrollBy(0, section.offsetHeight - before);
 
-    const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+    // preserveDrawingBuffer keeps the last frame whole while the pinned stage scrolls away
+    const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
     renderer.setClearColor(DEEP_NAVY, 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFShadowMap;
@@ -364,7 +365,9 @@ function start() {
 
     function progress() {
         const rect = section.getBoundingClientRect();
-        const travel = section.offsetHeight - stage.offsetHeight;
+        // The section holds the flight plus one more screen, during which the next section
+        // slides up over the still-pinned stage (see site.css)
+        const travel = section.offsetHeight - 2 * stage.offsetHeight;
         if (travel <= 0) return 0;
         const top = parseFloat(getComputedStyle(stage).top) || 0;
         return MathUtils.clamp((top - rect.top) / travel, 0, 1);
@@ -431,6 +434,7 @@ function start() {
     });
 
     // For previews: window.flyinPreview(0.5) draws that point of the flight
+    window.flyinProgress = progress;
     window.flyinPreview = p => {
         current = target = p;
         draw(p);
