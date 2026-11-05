@@ -489,12 +489,23 @@ main {
 }
 
 /* With the fly-in: the section grows by 140svh of scrolling, and the stage stays pinned
-   under the condensed header while the camera flies in. */
+   under the condensed header while the camera flies in. It then stays pinned for one more
+   screen while the next section slides up over it, so the stage never scrolls away. */
 .flyin_on .first_view:has(.first_view_stage) {
     display: block;
-    height: calc(100svh - var(--header-compact) + 140svh);
+    height: calc(2 * (100svh - var(--header-compact)) + 140svh);
     min-height: 0;
     overflow: clip;
+}
+
+/* Everything after the first view passes over the pinned stage */
+.flyin_on .first_view:has(.first_view_stage) ~ section {
+    position: relative;
+    z-index: 1;
+}
+
+.flyin_on .first_view:has(.first_view_stage) + section {
+    margin-top: calc(var(--header-compact) - 100svh);
 }
 
 .flyin_on .first_view_stage {
@@ -518,6 +529,10 @@ main {
 
 .flyin_drawn .flyin_canvas {
     visibility: visible;
+}
+
+.flyin_drawn .flyin_poster {
+    visibility: hidden;                 /* the canvas has taken over */
 }
 
 .flyin_on .flyin_labels {
