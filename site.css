@@ -413,6 +413,19 @@ main {
     line-height: 1.05;
 }
 
+/* On the home page the heading holds the conference's name (as the eyebrow) and the date */
+.first_view_title {
+    font-weight: inherit;
+}
+
+.first_view_title > span {
+    display: block;
+}
+
+.first_view_venue {
+    max-width: 40rem;
+}
+
 .first_view_venue,
 .first_view_lead {
     margin: 1.2rem 0 2.4rem;
@@ -443,6 +456,212 @@ main {
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 2rem;
+}
+
+/* ---------- The venue: a fly-in from space to UCL East (home page; see flyin.js) ---------- */
+
+/* The media is Google Earth Studio footage. Google's attribution is part of every frame and
+   must stay on screen, so the posters crop towards it and flyin.js never draws it away.
+   Without the fly-in (no script, reduced motion, Save-Data, no AVIF) the section is one
+   screen showing the flight's last frame. */
+.flyin {
+    position: relative;
+    height: calc(100svh - var(--header-compact));
+    min-height: 30rem;
+    overflow: hidden;
+    background: #000;
+    color: var(--white);
+}
+
+.flyin_stage {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.flyin_media {
+    position: absolute;
+    inset: 0;
+    background: #000;
+}
+
+.flyin_media picture {
+    display: contents;
+}
+
+.flyin_media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 80% 85%;           /* flyin.js aligns its frames the same way */
+}
+
+/* From 4:3 the frame can sit further right, clear of the text, and still show the attribution */
+@media (min-aspect-ratio: 4/3) {
+    .flyin_media img {
+        object-position: 55% 85%;
+    }
+}
+
+/* A shade behind the text, in the scrim's colour over the still of UCL East. Once the flight
+   is drawn it is a softer black that fades with the text (flyin.js sets --flyin-shown). It
+   stops short of the attribution in the bottom right. */
+.flyin_media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10, 12, 48, 0.86), rgba(10, 12, 48, 0.62) 30%, rgba(10, 12, 48, 0) 62%);
+}
+
+.flyin_drawn .flyin_media::after {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0) min(36rem, 52%));
+    opacity: var(--flyin-shown, 1);
+}
+
+/* On wide screens the text is a column at the left, beside the globe */
+.flyin_content {
+    position: relative;
+    align-self: center;
+    width: calc(var(--gutter) + 24vw);
+    min-width: calc(var(--gutter) + 17rem);
+    padding: 0 0 0 var(--gutter);
+}
+
+.flyin_heading {
+    font-size: clamp(2.6rem, 4.4vw, 4.6rem);
+    line-height: 1.05;
+}
+
+/* On tall screens the text sits at the top, above the globe */
+@media (max-aspect-ratio: 9/10) {
+    .flyin_media img {
+        object-position: 50% 75%;
+    }
+
+    .flyin_media::after {
+        background: linear-gradient(180deg, rgba(10, 12, 48, 0.86), rgba(10, 12, 48, 0.6) 26%, rgba(10, 12, 48, 0) 50%);
+    }
+
+    .flyin_drawn .flyin_media::after {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0) 46%);
+    }
+
+    .flyin_content {
+        align-self: flex-start;
+        width: 100%;
+        min-width: 0;
+        padding: 1.5rem var(--gutter);
+    }
+
+    .flyin_heading {
+        font-size: clamp(2.2rem, 9vw, 3.4rem);
+    }
+}
+
+.flyin_canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+.flyin_labels {
+    display: none;
+}
+
+/* With the fly-in, the stage is pinned under the condensed header from the moment it comes
+   into view, and the page moves past it: About slides up off it, the camera comes down over
+   195svh of scrolling, and Date and venue slides up over it. The section starts a screen
+   early, under About, so the stage never moves, and neither do Google's attribution or the
+   heading, which therefore never cross each other. */
+.flyin_on .flyin {
+    height: calc(3 * (100svh - var(--header-compact)) + 195svh);
+    min-height: 0;
+    margin-top: calc(var(--header-compact) - 100svh);
+    overflow: clip;
+}
+
+/* Every other section passes over the pinned stage */
+.flyin_on main > section:not(.flyin) {
+    position: relative;
+    z-index: 1;
+}
+
+.flyin_on .flyin + section {
+    margin-top: calc(var(--header-compact) - 100svh);
+}
+
+.flyin_on .flyin_stage {
+    position: sticky;
+    top: var(--header-compact);
+    height: calc(100svh - var(--header-compact));
+    min-height: 30rem;
+    overflow: hidden;
+}
+
+.flyin_on .flyin_content {
+    will-change: opacity, transform;
+}
+
+.flyin_drawn .flyin_canvas {
+    visibility: visible;
+}
+
+.flyin_drawn .flyin_poster {
+    visibility: hidden;                 /* the canvas has taken over */
+}
+
+.flyin_on .flyin_labels {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.flyin_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    opacity: 0;
+    white-space: nowrap;
+    color: var(--white);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.55), 0 1px 14px rgba(0, 0, 0, 0.6);
+    translate: -50% calc(-100% - 0.5rem);
+}
+
+/* A label near the right edge reads leftwards from its line */
+.flyin_label_end {
+    align-items: flex-end;
+    text-align: right;
+    translate: calc(-100% + 0.5px) calc(-100% - 0.5rem);
+}
+
+/* A hairline from the name down to the roof it names */
+.flyin_label::after {
+    content: "";
+    width: 1px;
+    height: 2.75rem;
+    margin-top: 0.6rem;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+}
+
+.flyin_label_name {
+    font-family: var(--display);
+    font-size: 1.25rem;
+}
+
+.flyin_label_use {
+    margin-top: 0.3rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 @keyframes first-view-drift {
@@ -1537,6 +1756,344 @@ g.dotmap_country.is_active path.dotmap_hl {
 
     .person_course {
         font-size: 0.85rem;
+    }
+}
+
+/* ---------- INUGSC, 2011 to 2027: editions told as you scroll (story.js) ---------- */
+
+/* Without story.js, or with reduced motion: a plain list of editions */
+.story {
+    padding: var(--section) var(--gutter);
+}
+
+.story_heading {
+    margin: 0 0 2.5rem;
+    font-size: clamp(2rem, 3.1vw, 2.75rem);
+    line-height: 1.15;
+}
+
+.story_steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem 4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.story_year {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+}
+
+.story_edition {
+    margin: 0.8rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_body {
+    max-width: 30rem;
+    margin: 0.9rem 0 0;
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.story_seal {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    margin-top: 1.4rem;
+    clip-path: circle(48.5%);           /* some seals come on a white square */
+}
+
+.story_numbers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_figure {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+    line-height: 1;
+    color: var(--white);
+}
+
+.story_rail {
+    display: none;
+}
+
+/* With story.js: pinned, one screen of scrolling per edition */
+.story_on .story {
+    height: calc(100svh - var(--header-compact) + var(--story-steps, 9) * 55svh);
+    padding: 0;
+}
+
+.story_on .story_stage {
+    position: sticky;
+    top: var(--header-compact);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    height: calc(100svh - var(--header-compact));
+    min-height: 32rem;
+    overflow: hidden;
+}
+
+.story_on .story_text {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 4rem var(--gutter) 2.6rem;
+}
+
+.story_on .story_heading {
+    margin: 0;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_on .story_steps {
+    position: relative;
+    flex: 1;
+    display: block;
+}
+
+.story_on .story_step {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.story_on .story_year {
+    font-size: clamp(5.5rem, 11vw, 11rem);
+    letter-spacing: -0.01em;
+}
+
+.story_on .story_edition {
+    margin-top: 1.2rem;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+}
+
+.story_on .story_seal {
+    width: 5.5rem;
+}
+
+.story_on .story_rail {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 1rem 0 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    font-size: 0.95rem;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* The line fills as the story goes on */
+.story_on .story_rail::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: calc(var(--story-progress, 0) * 100%);
+    height: 1px;
+    background: var(--white);
+}
+
+.story_on .story_rail .story_rail_active {
+    color: var(--white);
+}
+
+/* The right half: one panel per edition, each wiping up over the last as you scroll */
+.story_on .story_panels {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: var(--deep-navy);
+}
+
+.story_on .story_panel {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(100% 0 0 0);
+    will-change: clip-path;
+}
+
+.story_on .story_panel:first-child {
+    clip-path: none;
+}
+
+/* A photograph from that year's conference, drifting up within its frame */
+.story_panel_photo img {
+    position: absolute;
+    top: -6%;
+    left: 0;
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    will-change: transform;
+}
+
+.story_panel figcaption {
+    position: absolute;
+    left: 1.4rem;
+    bottom: 1.4rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--white);
+    background: var(--deep-navy);
+}
+
+/* Years without photographs in the archive: the theme and that year's seal */
+.story_panel_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem clamp(2rem, 5vw, 5.5rem);
+    color: var(--navy);
+    background: var(--band);
+}
+
+.story_card_title {
+    max-width: 13ch;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 5vw, 5.2rem);
+    line-height: 1.08;
+}
+
+.story_card_line {
+    margin: 1.3rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    color: var(--blue-text);
+}
+
+.story_card_seal {
+    width: 8rem;
+    height: auto;
+    margin-top: 2.8rem;
+    clip-path: circle(48.5%);
+}
+
+/* 2027: the committee who are organising it */
+.story_mosaic {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2px;
+}
+
+.story_mosaic img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+}
+
+.story_mosaic .story_mosaic_seal {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    padding: 14%;
+    object-fit: contain;
+    background: var(--deep-navy);
+}
+
+.story_panels {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .story_steps {
+        grid-template-columns: 1fr;
+    }
+
+    .story_on .story_stage {
+        grid-template-columns: 1fr;
+        grid-template-rows: 32% minmax(0, 1fr);
+    }
+
+    .story_on .story_heading,
+    .story_on .story_numbers {
+        display: none;
+    }
+
+    .story_on .story_panels {
+        grid-row: 1;
+    }
+
+    .story_on .story_panel_card {
+        padding: 1.4rem var(--gutter);
+    }
+
+    .story_on .story_card_title {
+        max-width: none;
+        font-size: clamp(1.6rem, 7vw, 2.4rem);
+    }
+
+    .story_on .story_card_line {
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .story_on .story_card_seal {
+        display: none;
+    }
+
+    .story_panel figcaption {
+        left: 0.75rem;
+        bottom: 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .story_on .story_text {
+        grid-row: 2;
+        padding: 1.6rem var(--gutter) 1.6rem;
+    }
+
+    .story_on .story_year {
+        font-size: clamp(4.2rem, 19vw, 6rem);
+    }
+
+    .story_on .story_seal {
+        width: 3.2rem;
+        margin-top: 0.9rem;
+    }
+
+    .story_on .story_rail {
+        gap: 0.3rem;
+        font-size: 0.72rem;
+    }
+
+    .story_on .story_numbers {
+        margin-top: 1rem;
+        gap: 0.6rem 2rem;
     }
 }
 

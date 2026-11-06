@@ -488,26 +488,27 @@ Every page hangs from two kinds of line.
 
 **First view**
 
-- It fills the screen (`100svh` minus the header). The date is the largest thing on the page, then the venue, then at most two actions: one solid button and one text link.
+- It fills the screen (`100svh` minus the header). The date is the largest thing on the page, then the line under it, then at most two actions: one solid button and one text link.
 - The content sits at the bottom left, on the gutter.
-- The background layer (`.hero_full_media`) is reserved for the scroll-driven fly-in of UCL East. Until that exists it holds a single photograph under the scrim.
+- The background layer holds a single photograph under the scrim. On the home page it is a lecture at the conference, so the first screen shows what INUGSC is before anything else.
+- On the home page the heading names the conference: "The 16th International Undergraduate Surgical Conference" sits above the date inside the `h1`, and the line under it says what the two days are, for whom and where. A first-time visitor must not need to know INUGSC to understand the opening.
 
 **Home page order**
 
-This is the working order for the renovation. The first two positions are fixed.
-
-1. First view
-2. Date and venue, with the map
-3. Welcome: a short excerpt from the directors, linking to the full messages
-4. Numbers band
-5. About, with the endorsements, followed by Widening participation (a text band linking to `/wp/`)
-6. Delegates map, with the university belt
-7. Speakers and workshops
-8. Testimonials
-9. Abstract competition
-10. A strip of the gallery, linking to past meetings
+1. First view: what INUGSC is, the date and the actions, over a lecture at the conference
+2. About: what happens over the two days (talks, workshops, research, who it's for) and the endorsements, beside a workshop photo
+3. The venue: the fly-in from space to Marshgate (see Motion), which Date and venue then slides up over
+4. Date and venue, with the map
+5. Story: the editions from 2011 to 2027
+6. Widening participation (a text band linking to `/wp/`)
+7. Delegates map, with the university belt
+8. Speakers and workshops
+9. Testimonials
+10. Abstract competition
 11. Partner with us, followed by previous sponsors
 12. Contact and footer
+
+The menu follows this order: About, Date and venue, Speakers and workshops, Abstract competition, Committee, Partner with us. Explain before impressing: the first two screens say what the conference is, and the set pieces come after.
 
 **Inner pages**
 
@@ -537,7 +538,7 @@ Navy, fixed, with the seal and lockup on the left and up to five links on the ri
 
 **First view** (`hero`, `hero-eyebrow`, `hero-venue`, `hero-scrim`)
 
-The stack is the eyebrow ("16th Anniversary" in `eyebrow-italic`), then the date in `display-date` ("30–31 January 2027"), then the venue in `lead` ("Marshgate and One Pool Street, UCL East, London"), then the actions. The photograph or fly-in sits underneath, covered by `hero-scrim`. As the visitor scrolls away, the content lifts and fades (see Motion).
+The stack is the eyebrow in `eyebrow-italic`, then the date in `display-date` ("30–31 January 2027"), then a line in `lead`, then the actions. On the home page the eyebrow is the conference's full name and sits inside the `h1` with the date, and the lead says what INUGSC is ("Two days of talks from leading surgeons, hands-on workshops and research, for medical students from around the world, at UCL East in London."); inner pages use the eyebrow "INUGSC 2027". The photograph sits underneath, covered by `hero-scrim`. As the visitor scrolls away, the content lifts and fades (see Motion).
 
 **Bands** (`band-deep`, `band-navy`, `band-light`, `band-white`, `band-page`)
 
@@ -684,11 +685,13 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 | Delegate map | Countries fade in, in order of distance from London | The map's own view timeline |
 | University belt | The two rows of names drift in opposite directions and loop | 120s and 135s per loop, linear, always running; paused on hover. The only motion not tied to scrolling |
 | Map label | The label fades in above the country and the country turns navy | 0.15s for the label and 0.2s for the colour, on pointing or tapping |
+| Story (`story.js`) | "INUGSC, 2011 to 2027": the section is pinned for 55svh of scrolling per edition. Each edition's year and lines rise 5rem into place and lift away. On the right, each edition has its own panel, which wipes up over the previous one (clip-path from the bottom, eased) as the edition changes (from 76% through the previous edition to 20% into its own): a photograph from that year's conference where the archive has one (`img/story/`, drifting 6% upward within its frame, captioned with the year), otherwise the year's theme and seal on the light band; 2027 is a mosaic of the committee's portraits with the seal. The year rail's hairline fills | Scrubbed by the section's own scroll position. Without the script or with reduced motion it is a plain list of editions |
 
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
 - With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
-- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
+- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
+- **Fly-in from space (Google Earth Studio):** the home page's venue section (`#where`, after About) is a flight from space down to Marshgate, drawn from Google Earth Studio frames by `flyin.js`. The footage comes from two Earth Studio projects on the INUGSC Google account, "INUGSC 2027 fly-in" (1920 by 1080) and "INUGSC 2027 fly-in portrait v2" (1080 by 1920), rendered as cloud videos and cut into AVIF stills by `src/flyin/encode.py`: `img/flyin/d/` for wide screens (146 frames at 1600 by 900) and `img/flyin/m/` for tall ones (89 frames at 810 by 1440), with more frames where the camera moves fast. The stage is pinned under the condensed header from the moment it comes into view, and the page moves past it: the section starts a screen early, under About, so About slides up off the stage, the flight takes 195svh of scrolling (the first 30svh a pause on the globe, so the heading can be read once About has gone), and then Date and venue slides up over it. The stage itself never moves, so Google's attribution and the heading never cross. Scrolling plays the descent quickly, passes over the still moment above Marshgate, and gives the swing down and the slow drift most of the room. Its heading ("The venue", "UCL East, London") lifts away as the descent begins, and two labels name Marshgate and One Pool Street during the drift. The playhead eases towards the scroll position and always comes to rest on a whole frame; between frames the later one fades in. Nothing loads until the section is a screen and a half away; then the first frames come first, and only frames near the playhead are kept decoded. Google's attribution is part of every frame and must stay legible while the footage shows: the posters crop towards it, and the script never draws it off the stage. With reduced motion, Save-Data, no AVIF or before the script runs, the section is one screen showing the flight's last frame (`img/flyin/d_end`, `m_end`) under a deeper shade in the scrim's colour, which stops short of the attribution.
 
 ## Imagery
 
