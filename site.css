@@ -1793,6 +1793,344 @@ g.dotmap_country.is_active path.dotmap_hl {
     }
 }
 
+/* ---------- INUGSC, 2011 to 2027: editions told as you scroll (story.js) ---------- */
+
+/* Without story.js, or with reduced motion: a plain list of editions */
+.story {
+    padding: var(--section) var(--gutter);
+}
+
+.story_heading {
+    margin: 0 0 2.5rem;
+    font-size: clamp(2rem, 3.1vw, 2.75rem);
+    line-height: 1.15;
+}
+
+.story_steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3rem 4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.story_year {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    line-height: 1;
+    font-variant-numeric: lining-nums;
+}
+
+.story_edition {
+    margin: 0.8rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_body {
+    max-width: 30rem;
+    margin: 0.9rem 0 0;
+    font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.story_seal {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    margin-top: 1.4rem;
+    clip-path: circle(48.5%);           /* some seals come on a white square */
+}
+
+.story_numbers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin: 1.8rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_figure {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+    line-height: 1;
+    color: var(--white);
+}
+
+.story_rail {
+    display: none;
+}
+
+/* With story.js: pinned, one screen of scrolling per edition */
+.story_on .story {
+    height: calc(100svh - var(--header-compact) + var(--story-steps, 9) * 55svh);
+    padding: 0;
+}
+
+.story_on .story_stage {
+    position: sticky;
+    top: var(--header-compact);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    height: calc(100svh - var(--header-compact));
+    min-height: 32rem;
+    overflow: hidden;
+}
+
+.story_on .story_text {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 4rem var(--gutter) 2.6rem;
+}
+
+.story_on .story_heading {
+    margin: 0;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.story_on .story_steps {
+    position: relative;
+    flex: 1;
+    display: block;
+}
+
+.story_on .story_step {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.story_on .story_year {
+    font-size: clamp(5.5rem, 11vw, 11rem);
+    letter-spacing: -0.01em;
+}
+
+.story_on .story_edition {
+    margin-top: 1.2rem;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+}
+
+.story_on .story_seal {
+    width: 5.5rem;
+}
+
+.story_on .story_rail {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 1rem 0 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    font-size: 0.95rem;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* The line fills as the story goes on */
+.story_on .story_rail::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: calc(var(--story-progress, 0) * 100%);
+    height: 1px;
+    background: var(--white);
+}
+
+.story_on .story_rail .story_rail_active {
+    color: var(--white);
+}
+
+/* The right half: one panel per edition, each wiping up over the last as you scroll */
+.story_on .story_panels {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: var(--deep-navy);
+}
+
+.story_on .story_panel {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(100% 0 0 0);
+    will-change: clip-path;
+}
+
+.story_on .story_panel:first-child {
+    clip-path: none;
+}
+
+/* A photograph from that year's conference, drifting up within its frame */
+.story_panel_photo img {
+    position: absolute;
+    top: -6%;
+    left: 0;
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    will-change: transform;
+}
+
+.story_panel figcaption {
+    position: absolute;
+    left: 1.4rem;
+    bottom: 1.4rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--white);
+    background: var(--deep-navy);
+}
+
+/* Years without photographs in the archive: the theme and that year's seal */
+.story_panel_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem clamp(2rem, 5vw, 5.5rem);
+    color: var(--navy);
+    background: var(--band);
+}
+
+.story_card_title {
+    max-width: 13ch;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 5vw, 5.2rem);
+    line-height: 1.08;
+}
+
+.story_card_line {
+    margin: 1.3rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    color: var(--blue-text);
+}
+
+.story_card_seal {
+    width: 8rem;
+    height: auto;
+    margin-top: 2.8rem;
+    clip-path: circle(48.5%);
+}
+
+/* 2027: the committee who are organising it */
+.story_mosaic {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2px;
+}
+
+.story_mosaic img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+}
+
+.story_mosaic .story_mosaic_seal {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    padding: 14%;
+    object-fit: contain;
+    background: var(--deep-navy);
+}
+
+.story_panels {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .story_steps {
+        grid-template-columns: 1fr;
+    }
+
+    .story_on .story_stage {
+        grid-template-columns: 1fr;
+        grid-template-rows: 32% minmax(0, 1fr);
+    }
+
+    .story_on .story_heading,
+    .story_on .story_numbers {
+        display: none;
+    }
+
+    .story_on .story_panels {
+        grid-row: 1;
+    }
+
+    .story_on .story_panel_card {
+        padding: 1.4rem var(--gutter);
+    }
+
+    .story_on .story_card_title {
+        max-width: none;
+        font-size: clamp(1.6rem, 7vw, 2.4rem);
+    }
+
+    .story_on .story_card_line {
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .story_on .story_card_seal {
+        display: none;
+    }
+
+    .story_panel figcaption {
+        left: 0.75rem;
+        bottom: 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .story_on .story_text {
+        grid-row: 2;
+        padding: 1.6rem var(--gutter) 1.6rem;
+    }
+
+    .story_on .story_year {
+        font-size: clamp(4.2rem, 19vw, 6rem);
+    }
+
+    .story_on .story_seal {
+        width: 3.2rem;
+        margin-top: 0.9rem;
+    }
+
+    .story_on .story_rail {
+        gap: 0.3rem;
+        font-size: 0.72rem;
+    }
+
+    .story_on .story_numbers {
+        margin-top: 1rem;
+        gap: 0.6rem 2rem;
+    }
+}
+
 /* ---------- Reduced motion: everything sits still in its final place ---------- */
 
 @media (prefers-reduced-motion: reduce) {
