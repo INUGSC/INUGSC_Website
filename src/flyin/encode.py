@@ -1,57 +1,52 @@
-"""Cut the Google Earth Studio fly-in into the stills that flyin.js plays.
+"""Make the fly-in's videos and stills from the Google Earth Studio renders.
 
 1. Render the two Earth Studio projects on the INUGSC Google account ("INUGSC 2027 fly-in" and
    "INUGSC 2027 fly-in portrait v2") as cloud videos and download them.
-2. Extract every frame:
-       ffmpeg -i "INUGSC 2027 fly-in v3.mp4" -q:v 1 land/f%03d.jpg
-       ffmpeg -i "INUGSC 2027 fly-in portrait v2.mp4" -q:v 1 port/f%03d.jpg
-3. python3 src/flyin/encode.py land port img/flyin
+2. python3 src/flyin/encode.py "INUGSC 2027 fly-in v3.mp4" "INUGSC 2027 fly-in portrait v2.mp4" img/flyin
 
-Frame files are f001.jpg to f251.jpg (f001 is frame 0). The frame lists must match SETS in
-flyin.js. Needs Pillow with AVIF support.
+This writes wide.mp4 (1600 by 900) and tall.mp4 (810 by 1440), which flyin.js plays, and the
+stills: d_start and m_start (the first frame, shown until the video can play) and d_end and
+m_end (the last frame, the section's picture without the script). Needs ffmpeg, and Pillow with
+AVIF support.
 """
-import sys, os
-from multiprocessing import Pool
+import os
+import subprocess
+import sys
+import tempfile
+
 from PIL import Image
 
-land_dir, port_dir, out = sys.argv[1:4]
+land, port, out = sys.argv[1:4]
 
-DESKTOP = sorted(set(range(0, 97, 2)) | set(range(99, 121, 3)) | set(range(122, 191)) | set(range(193, 251, 3)) | {250})
-MOBILE = sorted(set(range(0, 97, 3)) | set(range(100, 121, 4)) | set(range(122, 191, 2)) | set(range(194, 251, 4)) | {250})
+SETS = [
+    ("wide", "d", land, (1600, 900)),
+    ("tall", "m", port, (810, 1440)),
+]
 
-def src(d, i):
-    return os.path.join(d, f"f{i + 1:03d}.jpg")
 
-def frame_job(args):
-    kind, i = args
-    d, size, sub = (land_dir, (1600, 900), "d") if kind == "d" else (port_dir, (810, 1440), "m")
-    im = Image.open(src(d, i)).convert("RGB").resize(size, Image.LANCZOS)
-    path = os.path.join(out, sub, f"{i:03d}.avif")
-    im.save(path, "AVIF", quality=35, speed=5, subsampling="4:2:0")
-    return path, os.path.getsize(path)
+def run(*args):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", *args], check=True)
 
-def poster_job(args):
-    name, d, i, size, q = args
-    im = Image.open(src(d, i)).convert("RGB").resize(size, Image.LANCZOS)
-    a = os.path.join(out, f"{name}.avif")
-    j = os.path.join(out, f"{name}.jpg")
-    im.save(a, "AVIF", quality=q, speed=4, subsampling="4:2:0")
-    im.save(j, "JPEG", quality=80, optimize=True, progressive=True)
-    return a, os.path.getsize(a) + os.path.getsize(j)
 
-if __name__ == "__main__":
-    os.makedirs(os.path.join(out, "d"), exist_ok=True)
-    os.makedirs(os.path.join(out, "m"), exist_ok=True)
-    jobs = [("d", i) for i in DESKTOP] + [("m", i) for i in MOBILE]
-    # The posters are the last frame: the section's still without the script
-    posters = [
-        ("d_end", land_dir, 250, (1920, 1080), 50),
-        ("m_end", port_dir, 250, (1080, 1920), 50),
-    ]
-    with Pool(2) as pool:
-        sizes = pool.map(frame_job, jobs, chunksize=4)
-        psizes = pool.map(poster_job, posters)
-    dtot = sum(s for p, s in sizes if "/d/" in p)
-    mtot = sum(s for p, s in sizes if "/m/" in p)
-    print(f"desktop {len(DESKTOP)} frames {dtot/1e6:.2f} MB, mobile {len(MOBILE)} frames {mtot/1e6:.2f} MB")
-    print("posters", [(os.path.basename(p), round(s / 1024)) for p, s in psizes])
+for name, prefix, source, (w, h) in SETS:
+    video = os.path.join(out, f"{name}.mp4")
+    # A keyframe every second, so the video can start again quickly when it replays
+    run("-i", source, "-an", "-vf", f"scale={w}:{h}:flags=lanczos,format=yuv420p",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "29", "-profile:v", "high",
+        "-g", "30", "-movflags", "+faststart", video)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        first = os.path.join(tmp, "first.png")
+        last = os.path.join(tmp, "last.png")
+        run("-i", source, "-vf", f"scale={w}:{h}:flags=lanczos", "-frames:v", "1", first)
+        # Earth Studio renders 251 frames, 0 to 250
+        run("-i", source, "-vf", f"select=eq(n\\,250),scale={w}:{h}:flags=lanczos", "-frames:v", "1", last)
+
+        im = Image.open(first).convert("RGB")
+        im.save(os.path.join(out, f"{prefix}_start.jpg"), "JPEG", quality=78, optimize=True, progressive=True)
+
+        im = Image.open(last).convert("RGB")
+        im.save(os.path.join(out, f"{prefix}_end.avif"), "AVIF", quality=55, speed=4, subsampling="4:2:0")
+        im.save(os.path.join(out, f"{prefix}_end.jpg"), "JPEG", quality=80, optimize=True, progressive=True)
+
+    print(name, os.path.getsize(video))
