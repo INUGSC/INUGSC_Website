@@ -504,8 +504,8 @@ main {
     }
 }
 
-/* A shade behind the text, in the scrim's colour over the still of UCL East. Once the flight
-   is drawn it is a softer black that fades with the text (flyin.js sets --flyin-shown). It
+/* A shade behind the text, in the scrim's colour over the still of UCL East. Once the video
+   has taken over it is a softer black, which fades with the text when the flight begins. It
    stops short of the attribution in the bottom right. */
 .flyin_media::after {
     content: "";
@@ -516,7 +516,7 @@ main {
 
 .flyin_drawn .flyin_media::after {
     background: linear-gradient(90deg, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0) min(36rem, 52%));
-    opacity: var(--flyin-shown, 1);
+    transition: opacity 0.9s ease;
 }
 
 /* On wide screens the text is a column at the left, beside the globe */
@@ -559,12 +559,14 @@ main {
     }
 }
 
-.flyin_canvas {
+/* flyin.js sizes and places the video like the poster, keeping the attribution on the stage */
+.flyin_video {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     display: block;
-    width: 100%;
-    height: 100%;
+    max-width: none;
+    background: #000;
     visibility: hidden;
 }
 
@@ -573,12 +575,12 @@ main {
 }
 
 /* With the fly-in, the stage is pinned under the condensed header from the moment it comes
-   into view, and the page moves past it: About slides up off it, the camera comes down over
-   195svh of scrolling, and Date and venue slides up over it. The section starts a screen
-   early, under About, so the stage never moves, and neither do Google's attribution or the
-   heading, which therefore never cross each other. */
+   into view, and the page moves past it: About slides up off it, the flight plays while the
+   stage stays for another 100svh of scrolling, and Date and venue slides up over it. The
+   section starts a screen early, under About, so the stage never moves, and neither do
+   Google's attribution or the heading, which therefore never cross each other. */
 .flyin_on .flyin {
-    height: calc(3 * (100svh - var(--header-compact)) + 195svh);
+    height: calc(3 * (100svh - var(--header-compact)) + 100svh);
     min-height: 0;
     margin-top: calc(var(--header-compact) - 100svh);
     overflow: clip;
@@ -602,16 +604,32 @@ main {
     overflow: hidden;
 }
 
+/* As the flight begins, the heading lifts away and the shade goes with it */
 .flyin_on .flyin_content {
-    will-change: opacity, transform;
+    transition: opacity 0.9s ease, transform 0.9s ease, visibility 0s;
 }
 
-.flyin_drawn .flyin_canvas {
+.flyin_playing .flyin_content {
+    opacity: 0;
+    transform: translateY(-3rem);
+    visibility: hidden;
+    transition: opacity 0.9s ease, transform 0.9s ease, visibility 0s linear 0.9s;
+}
+
+.flyin_playing .flyin_media::after {
+    opacity: 0;
+}
+
+.flyin_drawn .flyin_video {
     visibility: visible;
 }
 
 .flyin_drawn .flyin_poster {
-    visibility: hidden;                 /* the canvas has taken over */
+    visibility: hidden;                 /* the video has taken over */
+}
+
+.flyin_label {
+    transition: opacity 0.6s ease;
 }
 
 .flyin_on .flyin_labels {
