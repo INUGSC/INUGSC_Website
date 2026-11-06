@@ -43,9 +43,8 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(out, "d"), exist_ok=True)
     os.makedirs(os.path.join(out, "m"), exist_ok=True)
     jobs = [("d", i) for i in DESKTOP] + [("m", i) for i in MOBILE]
+    # The posters are the last frame: the section's still without the script
     posters = [
-        ("d_start", land_dir, 0, (1920, 1080), 45),
-        ("m_start", port_dir, 0, (1080, 1920), 45),
         ("d_end", land_dir, 250, (1920, 1080), 50),
         ("m_end", port_dir, 250, (1080, 1920), 50),
     ]

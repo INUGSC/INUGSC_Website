@@ -1,18 +1,18 @@
-/* INUGSC 2027 home page: a scroll-driven flight from space down to UCL East.
+/* INUGSC 2027 home page, the venue: a scroll-driven flight from space down to UCL East.
 
    The frames come from two Google Earth Studio projects on the INUGSC Google account, "INUGSC 2027
    fly-in" (1920 by 1080) and "INUGSC 2027 fly-in portrait v2" (1080 by 1920), rendered as
    videos and cut into stills by src/flyin/encode.py. Google requires its attribution, which
    is part of every frame, to stay legible while the footage shows, so the drawing below never
-   lets it leave the stage or sit under the opening actions.
+   lets it leave the stage or sit under any actions.
 
-   Without this script (or with reduced motion, Save-Data or no AVIF) the first view is a
-   still: the poster in index.html. */
+   Without this script (or with reduced motion, Save-Data or no AVIF) the section is a still
+   of the flight's last frame: the poster in index.html. */
 (function () {
     "use strict";
 
-    const section = document.querySelector(".first_view");
-    const stage = section && section.querySelector(".first_view_stage");
+    const section = document.querySelector(".flyin");
+    const stage = section && section.querySelector(".flyin_stage");
     const canvas = stage && stage.querySelector(".flyin_canvas");
     if (!canvas || !window.fetch || !window.createImageBitmap) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -83,7 +83,7 @@
 
     const root = document.documentElement;
     const ctx = canvas.getContext("2d", { alpha: false });
-    const content = stage.querySelector(".first_view_content");
+    const content = stage.querySelector(".flyin_content");
     const actions = stage.querySelector(".first_view_actions");
     const labels = [...stage.querySelectorAll(".flyin_label")];
 
@@ -96,6 +96,7 @@
     let loading = 0;
     let requested = 0;
     let eager = false;
+    let near = false;
     let drawn = false;
     let cw = 0, ch = 0, W = 0, H = 0, ratio = 1, rem = 16, actionsOffset = 0, alignX = 0.8;
     let pTarget = 0, pCurrent = 0, fTarget = 0, fCurrent = 0;
@@ -133,9 +134,10 @@
         return order;
     }
 
-    // Only the first frames load straight away. The rest follow once the visitor scrolls, or
-    // once the page has finished loading and settled.
+    // Nothing loads until the section is near. Then the first frames come first, and the rest
+    // follow coarse to fine.
     function pump() {
+        if (!near) return;
         const limit = eager ? 6 : 2;
         while (loading < limit && queue.length && (eager || requested < 8)) {
             const f = queue.shift();
@@ -160,7 +162,7 @@
 
     function loadAll() {
         if (eager) return;
-        eager = true;
+        near = eager = true;
         pump();
     }
 
@@ -391,20 +393,19 @@
     }
 
     function start() {
-        const before = section.offsetHeight;
+        // Keep the visitor's place if the page opened part-way down, at an anchor: the
+        // section grows, so whatever was at the top of the window is put back there
+        const ref = [...document.querySelectorAll("main > section")].find(el => el.getBoundingClientRect().bottom > 0);
+        const refTop = ref ? ref.getBoundingClientRect().top : 0;
         root.classList.add("flyin_on");
-        // Keep the visitor's place if the page opened part-way down, at an anchor
-        if (window.scrollY > 0) window.scrollBy(0, section.offsetHeight - before);
+        if (ref && window.scrollY > 0) window.scrollBy(0, ref.getBoundingClientRect().top - refTop);
 
         resize();
         pTarget = pCurrent = progress();
         fTarget = fCurrent = set.frames[nearestIndex(frameFor(pTarget))];
         keepNear();
 
-        window.addEventListener("scroll", () => {
-            loadAll();
-            request();
-        }, { passive: true });
+        window.addEventListener("scroll", request, { passive: true });
         window.addEventListener("resize", () => {
             if (resize()) render();
             request();
@@ -413,9 +414,18 @@
             measure();
             render();
         });
-        const later = () => setTimeout(loadAll, 1500);
-        if (document.readyState === "complete") later();
-        else window.addEventListener("load", later, { once: true });
+        // Start loading frames when the section is a screen and a half away
+        if ("IntersectionObserver" in window) {
+            const watch = new IntersectionObserver(entries => {
+                if (entries.some(entry => entry.isIntersecting)) {
+                    watch.disconnect();
+                    loadAll();
+                }
+            }, { rootMargin: "150% 0px" });
+            watch.observe(section);
+        } else {
+            loadAll();
+        }
 
         // For previews: await window.flyinPreview(0.5) draws that point of the flight, and
         // flyinPreview(0.5, true) draws it between whole frames, as the page does mid-glide

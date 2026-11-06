@@ -14,7 +14,7 @@
         <meta property="og:image" content="https://inugsc.org/img/og_inugsc_2027.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="preload" href="/font/LibreBaskerville-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="stylesheet" href="/site.css?v=55a7529e" />
+        <link rel="stylesheet" href="/site.css?v=be21a5c8" />
     </head>
     <body>
         <a class="skip_link" href="#main">Skip to content</a>
@@ -30,8 +30,8 @@
             </button>
             <nav class="site_nav" id="site_nav" aria-label="Main">
                 <ul>
-                    <li><a href="#venue">Date and venue</a></li>
                     <li><a href="#about">About</a></li>
+                    <li><a href="#venue">Date and venue</a></li>
                     <li><a href="#speakers">Speakers and workshops</a></li>
                     <li><a href="#abstract_competition">Abstract competition</a></li>
                     <li><a href="/committee/">Committee</a></li>
@@ -41,21 +41,56 @@
         </header>
 
         <main id="main">
-            <!-- First view. flyin.js turns the media layer into a scroll-driven flight from space down to UCL East,
-                 drawn from Google Earth Studio frames; the poster is its first frame (its last, with reduced motion).
-                 Google's attribution is part of every frame and has to stay on screen. -->
+            <!-- First view: what INUGSC is, when and where, over a lecture at the conference -->
             <section class="first_view" id="top" aria-label="INUGSC 2027">
-                <div class="first_view_stage">
-                    <div class="first_view_media">
+                <div class="first_view_media">
+                    <img src="/img/wp_background.jpg" alt="" width="1600" height="1066" fetchpriority="high" />
+                </div>
+                <div class="first_view_content">
+                    <h1 class="first_view_title"><span class="first_view_eyebrow">The 16th International Undergraduate Surgical Conference</span> <span class="first_view_date">30–31 January 2027</span></h1>
+                    <p class="first_view_venue">Two days of talks from leading surgeons, hands-on workshops and research, for medical students from around the world, at UCL East in London.</p>
+                    <div class="first_view_actions">
+                        <a class="button button_on_dark show_when_tickets_available" href="#" hidden>Buy tickets</a>
+                        <a class="button button_on_dark remove_when_tickets_available" href="https://www.instagram.com/inugsc.ucl/" target="_blank" rel="noopener">Follow for ticket updates</a>
+                        <a class="text_link" href="#partner">Partner with us</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="split band_navy" id="about" aria-labelledby="about_heading">
+                <div class="split_panel">
+                    <div class="split_text reveal">
+                        <h2 class="panel_heading" id="about_heading">About INUGSC</h2>
+                        <p>INUGSC is a conference for medical students who are interested in surgery. Over two days, delegates hear from leading surgeons, practise surgical skills with their own hands and present their research.</p>
+                        <dl class="details_list">
+                            <dt>Talks</dt>
+                            <dd>Keynote lectures from leading surgeons</dd>
+                            <dt>Workshops</dt>
+                            <dd>Hands-on sessions in surgical skills, from suturing to laparoscopy; there were 19 in 2026</dd>
+                            <dt>Research</dt>
+                            <dd>An abstract competition, with the strongest work presented to a panel of academic surgeons</dd>
+                            <dt>Who it’s for</dt>
+                            <dd>Medical students from the UK and around the world, with a programme of its own for sixth formers</dd>
+                        </dl>
+                        <p>UCL Surgical Society founded INUGSC in 2011 as the first conference of its kind. It is endorsed by the Royal College of Surgeons of England, the Royal College of Surgeons of Edinburgh, the GMC and the BMA, and in 2023 its recognition as the largest student-led surgical conference in the UK earned the society the Opportunities Award.</p>
+                    </div>
+                </div>
+                <div class="split_photo">
+                    <img src="/img/470f54_6638184e4d7340e8a6ec4b6400122c6b~mv2.jpg" alt="A delegate using a surgical drill on a bone model during a workshop" width="931" height="920" loading="lazy" />
+                </div>
+            </section>
+
+            <!-- The venue. flyin.js turns the media layer into a scroll-driven flight from space down to UCL East,
+                 drawn from Google Earth Studio frames; the poster is the flight's last frame.
+                 Google's attribution is part of every frame and has to stay on screen. -->
+            <section class="flyin" id="where" aria-labelledby="where_heading">
+                <div class="flyin_stage">
+                    <div class="flyin_media">
                         <picture>
-                            <source media="(prefers-reduced-motion: reduce) and (max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.avif" type="image/avif" />
-                            <source media="(prefers-reduced-motion: reduce) and (max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.jpg" />
-                            <source media="(prefers-reduced-motion: reduce)" srcset="/img/flyin/d_end.avif" type="image/avif" />
-                            <source media="(prefers-reduced-motion: reduce)" srcset="/img/flyin/d_end.jpg" />
-                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_start.avif" type="image/avif" />
-                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_start.jpg" />
-                            <source srcset="/img/flyin/d_start.avif" type="image/avif" />
-                            <img class="flyin_poster" src="/img/flyin/d_start.jpg" alt="" width="1920" height="1080" fetchpriority="high" />
+                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.avif" type="image/avif" />
+                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.jpg" />
+                            <source srcset="/img/flyin/d_end.avif" type="image/avif" />
+                            <img class="flyin_poster" src="/img/flyin/d_end.jpg" alt="Marshgate and One Pool Street at UCL East, seen from above the Olympic Park" width="1920" height="1080" loading="lazy" />
                         </picture>
                         <canvas class="flyin_canvas" aria-hidden="true"></canvas>
                     </div>
@@ -63,17 +98,10 @@
                         <p class="flyin_label" data-label="marshgate"><span class="flyin_label_name">Marshgate</span><span class="flyin_label_use">Main conference</span></p>
                         <p class="flyin_label flyin_label_end" data-label="pool_street"><span class="flyin_label_name">One Pool Street</span><span class="flyin_label_use">Widening participation</span></p>
                     </div>
-                    <div class="first_view_content">
-                        <div class="first_view_heading">
-                            <p class="first_view_eyebrow">16th Anniversary</p>
-                            <h1 class="first_view_date">30–31 January 2027</h1>
-                            <p class="first_view_venue">Marshgate and One Pool Street, UCL East, London</p>
-                        </div>
-                        <div class="first_view_actions">
-                            <a class="button button_on_dark show_when_tickets_available" href="#" hidden>Buy tickets</a>
-                            <a class="button button_on_dark remove_when_tickets_available" href="https://www.instagram.com/inugsc.ucl/" target="_blank" rel="noopener">Follow for ticket updates</a>
-                            <a class="text_link" href="#partner">Partner with us</a>
-                        </div>
+                    <div class="flyin_content">
+                        <p class="first_view_eyebrow">The venue</p>
+                        <h2 class="flyin_heading" id="where_heading">UCL East, London</h2>
+                        <p class="first_view_venue">Marshgate and One Pool Street, in Queen Elizabeth Olympic Park</p>
                     </div>
                 </div>
             </section>
@@ -191,8 +219,8 @@
                             <figcaption>Laparoscopic skills, INUGSC 2025</figcaption>
                         </figure>
                         <figure class="story_panel story_panel_photo">
-                            <img src="/img/story/2026_drilling.avif" alt="Two delegates practising with a surgical drill and forceps at a workshop table at INUGSC 2026" width="1392" height="1856" loading="lazy" style="object-position: 50% 56%" />
-                            <figcaption>Workshop, INUGSC 2026</figcaption>
+                            <img src="/img/story/2026_stage.avif" alt="A lecture theatre at INUGSC 2026, with the conference's title on the screen and people gathered at the lectern" width="1392" height="1856" loading="lazy" style="object-position: 50% 38%" />
+                            <figcaption>Main stage, INUGSC 2026</figcaption>
                         </figure>
                         <figure class="story_panel story_panel_mosaic">
                             <div class="story_mosaic">
@@ -225,18 +253,7 @@
                 </div>
             </section>
 
-            <section class="split band_navy" id="about" aria-labelledby="about_heading">
-                <div class="split_panel">
-                    <div class="split_text reveal">
-                        <h2 class="panel_heading" id="about_heading">About INUGSC</h2>
-                        <p>Founded by the UCL Surgical Society, the International Undergraduate Surgical Conference (INUGSC) was established in 2011 as the first conference of its kind. Created to provide medical students from around the world with access to high-quality surgical education beyond the traditional school curricula, INUGSC’s emphasis remains on encouraging innovation and cross-cultural exchange, pushing practical training, and pursuing academic excellence.</p>
-                        <p>Our conference has been widely recognised for its standards and impact and has received endorsements from the Royal College of Surgeons of England (RCS), the Royal College of Surgeons of Edinburgh (RCSEd), the General Medical Council (GMC), and the British Medical Association (BMA). In 2023, its growing influence was further acknowledged when UCL Surgical Society received the Opportunities Award, following INUGSC’s recognition as the largest student-led surgical conference in the UK.</p>
-                    </div>
-                </div>
-                <div class="split_photo">
-                    <img src="/img/470f54_6638184e4d7340e8a6ec4b6400122c6b~mv2.jpg" alt="A delegate using a surgical drill on a bone model during a workshop" width="931" height="920" loading="lazy" />
-                </div>
-            </section>
+
 
             <section class="text_band band_light" id="widening_participation" aria-labelledby="wp_heading">
                 <div class="text_band_head reveal">
@@ -435,6 +452,6 @@
         <script src="/story.js?v=6665402f"></script>
         <script src="/check_for_tickets.js?v=1309b276"></script>
         <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
-        <script src="/flyin.js?v=147d6292" defer></script>
+        <script src="/flyin.js?v=8f5c27dd" defer></script>
     </body>
 </html>
