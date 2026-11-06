@@ -1614,8 +1614,7 @@ g.dotmap_country.is_active path.dotmap_hl {
     color: var(--white);
 }
 
-.story_rail,
-.story_photos {
+.story_rail {
     display: none;
 }
 
@@ -1707,21 +1706,108 @@ g.dotmap_country.is_active path.dotmap_hl {
     color: var(--white);
 }
 
-.story_on .story_photos {
+/* The right half: one panel per edition, each wiping up over the last as you scroll */
+.story_on .story_panels {
     position: relative;
     display: block;
     overflow: hidden;
-    background: var(--navy);
+    background: var(--deep-navy);
 }
 
-.story_on .story_photo {
+.story_on .story_panel {
     position: absolute;
     inset: 0;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(100% 0 0 0);
+    will-change: clip-path;
+}
+
+.story_on .story_panel:first-child {
+    clip-path: none;
+}
+
+/* A photograph from that year's conference, drifting up within its frame */
+.story_panel_photo img {
+    position: absolute;
+    top: -6%;
+    left: 0;
+    width: 100%;
+    height: 112%;
+    object-fit: cover;
+    will-change: transform;
+}
+
+.story_panel figcaption {
+    position: absolute;
+    left: 1.4rem;
+    bottom: 1.4rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--white);
+    background: var(--deep-navy);
+}
+
+/* Years without photographs in the archive: the theme and that year's seal */
+.story_panel_card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem clamp(2rem, 5vw, 5.5rem);
+    color: var(--navy);
+    background: var(--band);
+}
+
+.story_card_title {
+    max-width: 13ch;
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 5vw, 5.2rem);
+    line-height: 1.08;
+}
+
+.story_card_line {
+    margin: 1.3rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    color: var(--blue-text);
+}
+
+.story_card_seal {
+    width: 8rem;
+    height: auto;
+    margin-top: 2.8rem;
+    clip-path: circle(48.5%);
+}
+
+/* 2027: the committee who are organising it */
+.story_mosaic {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2px;
+}
+
+.story_mosaic img {
     width: 100%;
     height: 100%;
+    min-height: 0;
     object-fit: cover;
-    opacity: 0;
-    will-change: opacity, transform;
+}
+
+.story_mosaic .story_mosaic_seal {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    padding: 14%;
+    object-fit: contain;
+    background: var(--deep-navy);
+}
+
+.story_panels {
+    display: none;
 }
 
 @media (max-width: 1000px) {
@@ -1739,8 +1825,32 @@ g.dotmap_country.is_active path.dotmap_hl {
         display: none;
     }
 
-    .story_on .story_photos {
+    .story_on .story_panels {
         grid-row: 1;
+    }
+
+    .story_on .story_panel_card {
+        padding: 1.4rem var(--gutter);
+    }
+
+    .story_on .story_card_title {
+        max-width: none;
+        font-size: clamp(1.6rem, 7vw, 2.4rem);
+    }
+
+    .story_on .story_card_line {
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .story_on .story_card_seal {
+        display: none;
+    }
+
+    .story_panel figcaption {
+        left: 0.75rem;
+        bottom: 0.75rem;
+        font-size: 0.78rem;
     }
 
     .story_on .story_text {
