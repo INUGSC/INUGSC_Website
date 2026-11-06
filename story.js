@@ -34,8 +34,8 @@
     }
 
     // Where in its stretch of scrolling the next panel starts to wipe up, and finishes
-    const WIPE_FROM = 0.62;
-    const WIPE_TO = 1;
+    const WIPE_FROM = 0.76;
+    const WIPE_TO = 1.2;
 
     let lastActive = -1;
     let frame = 0;
