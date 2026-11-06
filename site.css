@@ -445,6 +445,259 @@ main {
     gap: 1rem 2rem;
 }
 
+/* ---------- Fly-in from space to UCL East (home page first view; see flyin.js) ---------- */
+
+/* The media is Google Earth Studio footage. Google's attribution is part of every frame and
+   must stay on screen, so the posters crop towards it and flyin.js never draws it away.
+   Without the fly-in (no script, Save-Data, no AVIF), the stage is an ordinary first view
+   showing the first frame; with reduced motion it shows the last. */
+.first_view_stage {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.first_view_stage .first_view_media {
+    background: #000;
+}
+
+/* A soft shade behind the opening text, where it may cross the edge of the globe on less wide
+   screens. It fades with the text (flyin.js sets --flyin-shown) and never reaches the
+   attribution in the bottom right. */
+.first_view_stage .first_view_media::after {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0) min(36rem, 52%));
+    opacity: var(--flyin-shown, 1);
+}
+
+.first_view_stage .first_view_media picture {
+    display: contents;
+}
+
+.first_view_stage .first_view_media img {
+    object-position: 80% 85%;           /* flyin.js aligns its frames the same way */
+}
+
+/* From 4:3 the frame can sit further right, clear of the text, and still show the attribution */
+@media (min-aspect-ratio: 4/3) {
+    .first_view_stage .first_view_media img {
+        object-position: 55% 85%;
+    }
+}
+
+/* On wide screens the opening text is a column left of the globe */
+.first_view_stage .first_view_content {
+    align-self: center;
+    width: calc(var(--gutter) + 22vw);
+    min-width: calc(var(--gutter) + 17rem);
+    padding: 0 0 0 var(--gutter);
+}
+
+.first_view_stage .first_view_date {
+    font-size: clamp(2.6rem, 4.4vw, 4.6rem);
+}
+
+/* The venue is the heading's last paragraph, so the gap the venue usually leaves is set here */
+.first_view_stage .first_view_heading {
+    margin-bottom: 2.4rem;
+}
+
+.first_view_stage .first_view_actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+}
+
+/* On tall screens the date sits above the globe and the actions below Google's attribution */
+@media (max-aspect-ratio: 9/10) {
+    .first_view_stage .first_view_media::after {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0) 46%);
+    }
+
+    /* The still stops short of the actions, so its attribution stays clear of them; below it
+       is black, like the space in the first frame (flyin.js does the same by moving its frames) */
+    .first_view_stage .first_view_media img {
+        height: calc(100% - 5.5rem);
+        object-position: 50% 75%;
+    }
+
+    .first_view_stage .first_view_content {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        min-width: 0;
+        padding: 1.5rem var(--gutter);
+    }
+
+    .first_view_stage .first_view_date {
+        font-size: clamp(2.2rem, 9vw, 3.4rem);
+    }
+
+    .first_view_stage .first_view_heading {
+        margin-bottom: 0;
+    }
+
+    .first_view_stage .first_view_actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.8rem 1.4rem;
+    }
+}
+
+/* Short phones: a smaller opening, so the globe has room between the date and the actions */
+@media (max-aspect-ratio: 9/10) and (max-height: 760px) {
+    .first_view_stage .first_view_content {
+        padding-top: 1rem;
+    }
+
+    .first_view_stage .first_view_eyebrow {
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+    }
+
+    .first_view_stage .first_view_date {
+        font-size: min(2.2rem, 8.6vw);
+    }
+
+    .first_view_stage .first_view_venue {
+        margin-top: 0.6rem;
+        font-size: 1rem;
+    }
+}
+
+/* Reduced motion shows UCL East itself, so the type needs a deeper shade, in the scrim's
+   colour. It stops short of the attribution, which has to stay legible. */
+@media (prefers-reduced-motion: reduce) {
+    .first_view_stage .first_view_media::after {
+        background: linear-gradient(90deg, rgba(10, 12, 48, 0.86), rgba(10, 12, 48, 0.62) 30%, rgba(10, 12, 48, 0) 62%);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-aspect-ratio: 9/10) {
+    .first_view_stage .first_view_media::after {
+        background: linear-gradient(180deg, rgba(10, 12, 48, 0.86), rgba(10, 12, 48, 0.6) 26%, rgba(10, 12, 48, 0) 50%);
+    }
+}
+
+.flyin_canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+.flyin_labels {
+    display: none;
+}
+
+/* With the fly-in: the section grows by 170svh of scrolling, and the stage stays pinned
+   under the condensed header while the camera comes down. It then stays pinned for one more
+   screen while the next section slides up over it, so the stage never scrolls away. */
+.flyin_on .first_view:has(.first_view_stage) {
+    display: block;
+    height: calc(2 * (100svh - var(--header-compact)) + 170svh);
+    min-height: 0;
+    overflow: clip;
+}
+
+/* Everything after the first view passes over the pinned stage */
+.flyin_on .first_view:has(.first_view_stage) ~ section {
+    position: relative;
+    z-index: 1;
+}
+
+.flyin_on .first_view:has(.first_view_stage) + section {
+    margin-top: calc(var(--header-compact) - 100svh);
+}
+
+.flyin_on .first_view_stage {
+    position: sticky;
+    top: var(--header-compact);
+    height: calc(100svh - var(--header-compact));
+    min-height: 30rem;
+    overflow: hidden;
+}
+
+.flyin_on .first_view_stage .first_view_media img,
+.flyin_on .first_view_stage .first_view_content {
+    animation: none;
+}
+
+.flyin_on .first_view_stage .first_view_content {
+    will-change: opacity, transform;
+}
+
+/* Until the stage is pinned it starts lower down, under the full header */
+@media (max-aspect-ratio: 9/10) {
+    .flyin_on .first_view_stage .first_view_content {
+        padding-bottom: calc(1.5rem + var(--header-full) - var(--header-compact));
+    }
+}
+
+.flyin_drawn .flyin_canvas {
+    visibility: visible;
+}
+
+.flyin_drawn .flyin_poster {
+    visibility: hidden;                 /* the canvas has taken over */
+}
+
+.flyin_on .flyin_labels {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.flyin_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    opacity: 0;
+    white-space: nowrap;
+    color: var(--white);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.55), 0 1px 14px rgba(0, 0, 0, 0.6);
+    translate: -50% calc(-100% - 0.5rem);
+}
+
+/* A label near the right edge reads leftwards from its line */
+.flyin_label_end {
+    align-items: flex-end;
+    text-align: right;
+    translate: calc(-100% + 0.5px) calc(-100% - 0.5rem);
+}
+
+/* A hairline from the name down to the roof it names */
+.flyin_label::after {
+    content: "";
+    width: 1px;
+    height: 2.75rem;
+    margin-top: 0.6rem;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.45);
+}
+
+.flyin_label_name {
+    font-family: var(--display);
+    font-size: 1.25rem;
+}
+
+.flyin_label_use {
+    margin-top: 0.3rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 @keyframes first-view-drift {
     from {
         transform: translateY(0) scale(1.06);

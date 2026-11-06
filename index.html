@@ -14,7 +14,7 @@
         <meta property="og:image" content="https://inugsc.org/img/og_inugsc_2027.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="preload" href="/font/LibreBaskerville-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="stylesheet" href="/site.css?v=e38d7cd2" />
+        <link rel="stylesheet" href="/site.css?v=d45c67f6" />
     </head>
     <body>
         <a class="skip_link" href="#main">Skip to content</a>
@@ -41,19 +41,39 @@
         </header>
 
         <main id="main">
-            <!-- First view. The media layer is where the scroll-driven fly-in of UCL East will go. -->
+            <!-- First view. flyin.js turns the media layer into a scroll-driven flight from space down to UCL East,
+                 drawn from Google Earth Studio frames; the poster is its first frame (its last, with reduced motion).
+                 Google's attribution is part of every frame and has to stay on screen. -->
             <section class="first_view" id="top" aria-label="INUGSC 2027">
-                <div class="first_view_media">
-                    <img src="/img/wp_background.jpg" alt="" width="1600" height="1066" fetchpriority="high" />
-                </div>
-                <div class="first_view_content">
-                    <p class="first_view_eyebrow">16th Anniversary</p>
-                    <h1 class="first_view_date">30–31 January 2027</h1>
-                    <p class="first_view_venue">Marshgate and One Pool Street, UCL East, London</p>
-                    <div class="first_view_actions">
-                        <a class="button button_on_dark show_when_tickets_available" href="#" hidden>Buy tickets</a>
-                        <a class="button button_on_dark remove_when_tickets_available" href="https://www.instagram.com/inugsc.ucl/" target="_blank" rel="noopener">Follow for ticket updates</a>
-                        <a class="text_link" href="#partner">Partner with us</a>
+                <div class="first_view_stage">
+                    <div class="first_view_media">
+                        <picture>
+                            <source media="(prefers-reduced-motion: reduce) and (max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.avif" type="image/avif" />
+                            <source media="(prefers-reduced-motion: reduce) and (max-aspect-ratio: 9/10)" srcset="/img/flyin/m_end.jpg" />
+                            <source media="(prefers-reduced-motion: reduce)" srcset="/img/flyin/d_end.avif" type="image/avif" />
+                            <source media="(prefers-reduced-motion: reduce)" srcset="/img/flyin/d_end.jpg" />
+                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_start.avif" type="image/avif" />
+                            <source media="(max-aspect-ratio: 9/10)" srcset="/img/flyin/m_start.jpg" />
+                            <source srcset="/img/flyin/d_start.avif" type="image/avif" />
+                            <img class="flyin_poster" src="/img/flyin/d_start.jpg" alt="" width="1920" height="1080" fetchpriority="high" />
+                        </picture>
+                        <canvas class="flyin_canvas" aria-hidden="true"></canvas>
+                    </div>
+                    <div class="flyin_labels" aria-hidden="true">
+                        <p class="flyin_label" data-label="marshgate"><span class="flyin_label_name">Marshgate</span><span class="flyin_label_use">Main conference</span></p>
+                        <p class="flyin_label flyin_label_end" data-label="pool_street"><span class="flyin_label_name">One Pool Street</span><span class="flyin_label_use">Widening participation</span></p>
+                    </div>
+                    <div class="first_view_content">
+                        <div class="first_view_heading">
+                            <p class="first_view_eyebrow">16th Anniversary</p>
+                            <h1 class="first_view_date">30–31 January 2027</h1>
+                            <p class="first_view_venue">Marshgate and One Pool Street, UCL East, London</p>
+                        </div>
+                        <div class="first_view_actions">
+                            <a class="button button_on_dark show_when_tickets_available" href="#" hidden>Buy tickets</a>
+                            <a class="button button_on_dark remove_when_tickets_available" href="https://www.instagram.com/inugsc.ucl/" target="_blank" rel="noopener">Follow for ticket updates</a>
+                            <a class="text_link" href="#partner">Partner with us</a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -308,5 +328,6 @@
         <script src="/generate_sponsors.js?v=80ce63c3"></script>
         <script src="/check_for_tickets.js?v=1309b276"></script>
         <script src="https://flackr.github.io/scroll-timeline/dist/scroll-timeline.js"></script>
+        <script src="/flyin.js?v=147d6292" defer></script>
     </body>
 </html>

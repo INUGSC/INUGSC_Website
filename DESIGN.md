@@ -489,8 +489,8 @@ Every page hangs from two kinds of line.
 **First view**
 
 - It fills the screen (`100svh` minus the header). The date is the largest thing on the page, then the venue, then at most two actions: one solid button and one text link.
-- The content sits at the bottom left, on the gutter.
-- The background layer (`.hero_full_media`) is reserved for the scroll-driven fly-in of UCL East. Until that exists it holds a single photograph under the scrim.
+- The content sits at the bottom left, on the gutter. On the home page it is a column to the left of the globe on wide screens; on tall screens the date sits above the globe and the actions at the bottom.
+- On the home page the background layer holds the scroll-driven fly-in from space to UCL East (see Motion). Inner pages hold a single photograph under the scrim.
 
 **Home page order**
 
@@ -537,7 +537,7 @@ Navy, fixed, with the seal and lockup on the left and up to five links on the ri
 
 **First view** (`hero`, `hero-eyebrow`, `hero-venue`, `hero-scrim`)
 
-The stack is the eyebrow ("16th Anniversary" in `eyebrow-italic`), then the date in `display-date` ("30–31 January 2027"), then the venue in `lead` ("Marshgate and One Pool Street, UCL East, London"), then the actions. The photograph or fly-in sits underneath, covered by `hero-scrim`. As the visitor scrolls away, the content lifts and fades (see Motion).
+The stack is the eyebrow ("16th Anniversary" in `eyebrow-italic`), then the date in `display-date` ("30–31 January 2027"), then the venue in `lead` ("Marshgate and One Pool Street, UCL East, London"), then the actions. The photograph sits underneath, covered by `hero-scrim`. The home page's fly-in has no full scrim, because its opening text sits on black space beside the globe; a soft black shade behind the text (from the left on wide screens, from the top on tall ones) fades out with it. With reduced motion the still of UCL East gets a deeper shade in the scrim's colour, which stops short of Google's attribution. As the visitor scrolls away, the content lifts and fades (see Motion).
 
 **Bands** (`band-deep`, `band-navy`, `band-light`, `band-white`, `band-page`)
 
@@ -688,7 +688,8 @@ Everything that moves on its own is tied to scrolling, using CSS scroll-driven a
 - Tie motion to the section it belongs to, never to the length of the whole page.
 - Browsers without scroll timelines must show everything in its final state. A zero-length animation with `both` fill does this, so test in such a browser.
 - With `prefers-reduced-motion: reduce`, every animation is switched off and elements sit in their final state.
-- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.- **UCL East fly-in (planned):** the frames are scrubbed by scroll from an image sequence or a seekable video, never autoplayed. It needs a still poster frame for reduced motion and slow connections. If it is rendered in Google Earth Studio, keep Google's required attribution visible on the frames.
+- The header condense and the first view's motion sit inside `@supports (animation-timeline: ...)`, because their end states (a small header, invisible hero text) would be wrong in a browser that can't run them. There the header stays full size and the first view stays still.
+- **Fly-in from space (Google Earth Studio):** the home page's first view is a flight from space down to Marshgate, drawn from Google Earth Studio frames by `flyin.js`. The footage comes from two Earth Studio projects on the INUGSC Google account, "INUGSC 2027 fly-in" (1920 by 1080) and "INUGSC 2027 fly-in portrait v2" (1080 by 1920), rendered as cloud videos and cut into AVIF stills by `src/flyin/encode.py`: `img/flyin/d/` for wide screens (146 frames at 1600 by 900) and `img/flyin/m/` for tall ones (89 frames at 810 by 1440), with more frames where the camera moves fast. The section is 170svh plus one screen taller than the screen and its stage is pinned under the condensed header (for the last screen the next section slides up over it). Scrolling plays the descent quickly, passes over the still moment above Marshgate, and gives the swing down and the slow drift most of the room. The opening text lifts away in the first tenth (on tall screens the actions go first), and two labels name Marshgate and One Pool Street during the drift. The playhead eases towards the scroll position and always comes to rest on a whole frame; between frames the later one fades in. Only the first frames load straight away (the rest once the visitor scrolls or the page has settled), and only frames near the playhead are kept decoded. Google's attribution is part of every frame and must stay legible while the footage shows: the posters crop towards it, and the script never draws it off the stage or under the opening actions. With reduced motion the first view is a still of the last frame under that deeper shade; with Save-Data, no AVIF or before the script runs, it is a still of the first frame (`img/flyin/d_start`, `m_start`, `d_end`, `m_end`).
 
 ## Imagery
 
