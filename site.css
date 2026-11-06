@@ -574,11 +574,11 @@ main {
 
 /* With the fly-in, the stage is pinned under the condensed header from the moment it comes
    into view, and the page moves past it: About slides up off it, the camera comes down over
-   170svh of scrolling, and Date and venue slides up over it. The section starts a screen
+   195svh of scrolling, and Date and venue slides up over it. The section starts a screen
    early, under About, so the stage never moves, and neither do Google's attribution or the
    heading, which therefore never cross each other. */
 .flyin_on .flyin {
-    height: calc(3 * (100svh - var(--header-compact)) + 170svh);
+    height: calc(3 * (100svh - var(--header-compact)) + 195svh);
     min-height: 0;
     margin-top: calc(var(--header-compact) - 100svh);
     overflow: clip;

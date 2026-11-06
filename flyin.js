@@ -67,9 +67,11 @@
         },
     };
 
-    // Scroll progress to frame. The descent from space is quick, the almost still moment above
-    // Marshgate around frame 100 is passed over, and the swing down and the drift get the room.
-    const MAP = [[0, 0], [0.03, 0], [0.36, 96], [0.42, 122], [0.77, 190], [1, LAST]];
+    // Scroll progress to frame. The globe holds still for the first 30svh, so the heading can be
+    // read once About has gone (on phones it is uncovered last). Then the descent from space is
+    // quick, the almost still moment above Marshgate around frame 100 is passed over, and the
+    // swing down and the drift get the room.
+    const MAP = [[0, 0], [0.154, 0], [0.433, 96], [0.484, 122], [0.78, 190], [1, LAST]];
     function frameFor(p) {
         for (let k = 1; k < MAP.length; k++) {
             if (p <= MAP[k][0]) {
@@ -290,7 +292,7 @@
 
         // The opening text lifts away as the descent begins. On tall screens the actions go
         // first, and only then does the frame let Google's attribution down past where they were.
-        const away = clamp((pCurrent - 0.015) / 0.095, 0, 1);
+        const away = clamp((pCurrent - 0.128) / 0.082, 0, 1);
         const shown = 1 - away;
         const tall = kind === "tall";
         const actionsShown = tall ? 1 - smooth(0, 0.5, away) : 1;
