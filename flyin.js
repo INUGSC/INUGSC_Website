@@ -98,7 +98,7 @@
     let eager = false;
     let near = false;
     let drawn = false;
-    let cw = 0, ch = 0, W = 0, H = 0, ratio = 1, rem = 16, actionsOffset = 0, alignX = 0.8;
+    let cw = 0, ch = 0, W = 0, H = 0, ratio = 1, rem = 16, actionsOffset = 0, alignX = 0.8, reveal = 0;
     let pTarget = 0, pCurrent = 0, fTarget = 0, fCurrent = 0;
     let raf = 0;
 
@@ -315,12 +315,13 @@
 
     function progress() {
         const rect = section.getBoundingClientRect();
-        // The section holds the flight plus one more screen, during which the next section
-        // slides up over the still-pinned stage (see site.css)
-        const travel = section.offsetHeight - 2 * stage.offsetHeight;
+        // The section holds the screen in which About slides up off the pinned stage, then
+        // the flight, then one more screen in which the next section slides up over it
+        // (see site.css)
+        const travel = section.offsetHeight - 2 * stage.offsetHeight - reveal;
         if (travel <= 0) return 0;
         const top = parseFloat(getComputedStyle(stage).top) || 0;
-        return clamp((top - rect.top) / travel, 0, 1);
+        return clamp((top - rect.top - reveal) / travel, 0, 1);
     }
 
     function tick() {
@@ -360,10 +361,12 @@
         pump();
     }
 
-    // Where the actions sit in the stage, before any lift (offsets ignore transforms)
+    // Where the actions sit in the stage, before any lift (offsets ignore transforms), and how
+    // far the section reaches up under About
     function measure() {
         rem = parseFloat(getComputedStyle(root).fontSize) || 16;
         actionsOffset = actions ? content.offsetTop + actions.offsetTop : 0;
+        reveal = Math.max(0, -parseFloat(getComputedStyle(section).marginTop) || 0);
     }
 
     // From 4:3 the wide frames sit further right, clear of the text, as the poster does
