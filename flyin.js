@@ -3,7 +3,8 @@
    The video comes from two Google Earth Studio projects on the INUGSC Google account, "INUGSC
    2027 fly-in" (1920 by 1080) and "INUGSC 2027 fly-in portrait v2" (1080 by 1920), encoded by
    src/flyin/encode.py. Once About has slid up off the pinned stage, the flight plays by itself,
-   at its own pace, while the page carries on scrolling freely. Google requires its
+   at its own pace, and the page is held until it has finished, so that it is not skipped by
+   accident; scrolling on three times skips it, and scrolling up lets go. Google requires its
    attribution, which is part of every frame, to stay legible while the footage shows, so the
    video is placed so that it never leaves the stage.
 
@@ -30,10 +31,19 @@
     const FPS = 30;
     const LAST = 250;
 
-    // The flight starts once most of the stage and all of the heading are uncovered (on phones
-    // the heading is at the top, so it is uncovered last), after a moment to read the heading
-    const START_AT = 0.6;
+    // The flight starts once About has gone and the whole stage is on view, after a moment to
+    // read the heading. Coming back up from Date and venue, the last frame is shown once this
+    // much of the stage is uncovered.
     const PAUSE = 900;
+    const START_AT = 0.6;
+
+    // While it plays, the page is held: a flick on a phone, or a few turns of a wheel, would
+    // otherwise carry a visitor straight past it. The page is let go when the flight ends, at
+    // once on scrolling back up, or after this many separate attempts to scroll on.
+    const SKIP_AFTER = 3;
+    // Scroll events closer together than this belong to one attempt: a turn of the wheel, or a
+    // flick on a trackpad and its glide
+    const BURST = 350;
 
     // Two videos: wide for most screens, tall for phones. "align" matches the poster's
     // object-position in site.css. "attribution" is the box Google's credit sits in (left, top,
@@ -67,7 +77,6 @@
 
     const root = document.documentElement;
     const labels = [...stage.querySelectorAll(".flyin_label")];
-    const content = stage.querySelector(".flyin_content");
     const before = section.previousElementSibling;
     const after = section.nextElementSibling;
 
@@ -82,6 +91,10 @@
     let timer = 0;
     let raf = 0;
     let lastY = window.scrollY;
+    let reveal = 0;              // how far the section reaches up under About
+    let holding = false, holdAt = 0, holdTimer = 0, attempts = 0, burstEnd = 0;
+    let touchY = null, touchCounted = false;
+    let navUntil = 0;            // following a link to further down the page: no hold
 
     // ---------- Placing the video ----------
 
@@ -185,6 +198,7 @@
     // The browser would not play it: fall back to the still of the last frame, as without the script
     function still() {
         state = "still";
+        letGo();
         clearTimeout(timer);
         stage.classList.remove("flyin_drawn", "flyin_playing");
         for (const el of labels) el.style.opacity = "0";
@@ -203,6 +217,7 @@
     }
 
     function reset() {
+        letGo();
         clearTimeout(timer);
         timer = 0;
         state = "idle";
@@ -220,28 +235,151 @@
         return {
             shown: Math.max(0, bottom - top) / r.height,
             fromBelow: after && after.getBoundingClientRect().top < r.bottom - 1,
-            ready: top <= content.getBoundingClientRect().top + 1,
         };
     }
 
+    // The scroll position at which About has gone and the whole stage is on view, and how far
+    // the stage then stays before Date and venue starts to slide over it
+    function holdRange() {
+        const pinnedAt = parseFloat(getComputedStyle(stage).top) || 0;
+        const start = section.getBoundingClientRect().top + window.scrollY - pinnedAt + reveal;
+        const stretch = Math.max(0, section.offsetHeight - 2 * stage.offsetHeight - reveal);
+        return { start, stretch };
+    }
+
     function check() {
-        if (state === "still") return;
-        const { shown, fromBelow, ready } = uncovered();
-        const up = window.scrollY < lastY;
-        lastY = window.scrollY;
-        if (state === "idle" && shown >= START_AT && (ready || fromBelow)) {
-            if (fromBelow || up) showEnd();
-            else {
+        if (state === "still" || holding) return;
+        const y = window.scrollY;
+        const down = y > lastY;
+        lastY = y;
+        const { shown, fromBelow } = uncovered();
+        const { start, stretch } = holdRange();
+        if (state === "idle") {
+            if (fromBelow && !down && shown >= START_AT) {
+                showEnd();
+            } else if (down && y >= start - 1 && y < start + stretch + 0.8 * stage.offsetHeight && performance.now() > navUntil) {
+                // Hold the page here, bringing it back if a fling has carried it on, give the
+                // heading a moment, then fly
                 state = "waiting";
+                hold(clamp(y, start, start + stretch / 2));
                 timer = setTimeout(play, PAUSE);
             }
-        } else if (state === "waiting" && (shown < START_AT || !ready)) {
+        } else if (state === "waiting" && y < start - 1) {
             clearTimeout(timer);
             timer = 0;
             state = "idle";
-        } else if ((state === "playing" || state === "done") && shown === 0 && !fromBelow) {
-            // About is back over the whole stage: ready to fly again next time
+        } else if ((state === "playing" || state === "done") && shown < 0.25 && !fromBelow) {
+            // About is back over most of the stage: ready to fly again next time
             reset();
+        }
+    }
+
+    // ---------- Holding the page while it plays ----------
+
+    const hint = document.createElement("p");
+    hint.className = "flyin_hint";
+    hint.textContent = "Keep scrolling to skip";
+    hint.setAttribute("aria-hidden", "true");
+    stage.appendChild(hint);
+
+    const DOWN_KEYS = new Set([" ", "PageDown", "ArrowDown", "End"]);
+    const UP_KEYS = new Set(["PageUp", "ArrowUp", "Home"]);
+
+    function hold(at) {
+        holding = true;
+        holdAt = at;
+        attempts = 0;
+        burstEnd = performance.now();    // the scroll that brought them here is not an attempt
+        touchCounted = true;             // nor is a swipe still under way
+        if (Math.abs(window.scrollY - at) > 1) window.scrollTo({ top: at, behavior: "instant" });
+        lastY = at;
+        root.classList.add("flyin_hold");
+        window.addEventListener("wheel", onWheel, { passive: false });
+        window.addEventListener("touchstart", onTouchStart, { passive: true });
+        window.addEventListener("touchmove", onTouchMove, { passive: false });
+        window.addEventListener("keydown", onKey);
+        document.addEventListener("focusin", onFocus);
+        // Should the video not have started within a few seconds (a slow connection), let go
+        clearTimeout(holdTimer);
+        holdTimer = setTimeout(letGo, PAUSE + 3000);
+    }
+
+    function letGo() {
+        if (!holding) return;
+        holding = false;
+        clearTimeout(holdTimer);
+        root.classList.remove("flyin_hold");
+        stage.classList.remove("flyin_hinted");
+        window.removeEventListener("wheel", onWheel, { passive: false });
+        window.removeEventListener("touchstart", onTouchStart, { passive: true });
+        window.removeEventListener("touchmove", onTouchMove, { passive: false });
+        window.removeEventListener("keydown", onKey);
+        document.removeEventListener("focusin", onFocus);
+        lastY = window.scrollY;
+    }
+
+    // An attempt to scroll on: the first brings up the hint, and enough of them skip the rest
+    function attempt() {
+        attempts++;
+        stage.classList.add("flyin_hinted");
+        if (attempts >= SKIP_AFTER) letGo();
+    }
+
+    // Scrolling that is part of one attempt does not count again
+    function burst(now) {
+        if (now - burstEnd > BURST) attempt();
+        burstEnd = now;
+    }
+
+    function onWheel(e) {
+        if (e.ctrlKey || !e.deltaY) return;      // pinching to zoom, or sideways
+        if (e.deltaY < 0) return letGo();        // back up
+        e.preventDefault();
+        burst(e.timeStamp);
+    }
+
+    function onTouchStart(e) {
+        // The swipe that skips must move the page itself, so let go before it begins: a page
+        // cannot start scrolling part-way through a swipe
+        if (attempts >= SKIP_AFTER - 1) return letGo();
+        touchY = e.touches.length === 1 ? e.touches[0].clientY : null;
+        touchCounted = false;
+    }
+
+    function onTouchMove(e) {
+        if (touchY === null || e.touches.length !== 1) return;   // pinching to zoom
+        const dy = e.touches[0].clientY - touchY;
+        if (dy > 12) return letGo();             // pulling the page down, back up
+        e.preventDefault();
+        if (!touchCounted && dy < -12) {
+            touchCounted = true;
+            attempt();
+        }
+    }
+
+    function onKey(e) {
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+        const t = e.target;
+        if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+        if (UP_KEYS.has(e.key) || (e.key === " " && e.shiftKey)) return letGo();
+        if (!DOWN_KEYS.has(e.key)) return;
+        e.preventDefault();
+        if (!e.repeat) attempt();
+    }
+
+    // Moving the keyboard focus out of the venue lets go
+    function onFocus(e) {
+        if (!stage.contains(e.target)) letGo();
+    }
+
+    // Anything else that moves the page while it is held (the scroll bar, or a fling already
+    // under way on a phone) is put back, and counts as an attempt; moving it up lets go
+    function holdStill() {
+        const y = window.scrollY;
+        if (y < holdAt - 2) letGo();
+        else if (y > holdAt + 2) {
+            window.scrollTo({ top: holdAt, behavior: "instant" });
+            burst(performance.now());
         }
     }
 
@@ -251,6 +389,7 @@
 
     function measure() {
         rem = parseFloat(getComputedStyle(root).fontSize) || 16;
+        reveal = Math.max(0, -parseFloat(getComputedStyle(section).marginTop) || 0);
     }
 
     function resize() {
@@ -282,15 +421,34 @@
         video.addEventListener("playing", () => {
             stage.classList.add("flyin_playing");
             if (!raf) raf = requestAnimationFrame(follow);
+            // Let go when it ends, and at the latest a little after
+            if (holding) {
+                clearTimeout(holdTimer);
+                holdTimer = setTimeout(letGo, ((video.duration || LAST / FPS) - video.currentTime) * 1000 + 1500);
+            }
         });
         video.addEventListener("ended", () => {
             state = "done";
             placeLabels(LAST);
+            // A moment on the finished view, with the buildings named, then the page moves on
+            if (holding) {
+                clearTimeout(holdTimer);
+                holdTimer = setTimeout(letGo, 500);
+            }
         });
         video.addEventListener("error", still);
 
+        // Following a link on the page scrolls past the venue without stopping, and lets go
+        document.addEventListener("click", e => {
+            const link = e.target.closest && e.target.closest("a[href]");
+            if (!link) return;
+            letGo();
+            if (link.hash && link.pathname === location.pathname) navUntil = performance.now() + 2500;
+        }, true);
+
         let pending = 0;
         window.addEventListener("scroll", () => {
+            if (holding) return holdStill();
             if (!pending) pending = requestAnimationFrame(() => {
                 pending = 0;
                 check();
@@ -315,7 +473,7 @@
 
         // For previews: with window.flyinManual set, the flight does not play by itself, and
         // await window.flyinPreview(seconds) shows that moment of it
-        window.flyinState = () => state;
+        window.flyinState = () => (holding ? `${state}, held` : state);
         window.flyinDuration = () => video.duration || LAST / FPS;
         window.flyinPreview = async seconds => {
             if (!wanted) load();
