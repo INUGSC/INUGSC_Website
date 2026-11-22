@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: INUGSC
-description: The design system for inugsc.org, the International Undergraduate Surgical Conference. A photography-led site built from full-width bands in the manner of Apple's product pages, set in a classical serif. Bands alternate deep navy, navy, light blue-grey and white, and the change of colour is the only divider. Libre Baskerville carries every heading and Assistant carries everything you read. One light-blue accent, square corners, no shadows, no gradients, and motion only on scroll.
+description: The design system for inugsc.org, the International Undergraduate Surgical Conference. A photography-led site built from full-width bands in the manner of Apple's product pages, set in a classical serif. Bands alternate deep navy, navy, light blue-grey and white, and the change of colour is the only divider. Libre Baskerville carries every heading and Assistant carries everything you read. One light-blue accent, softly rounded buttons and panels, square photographs, no shadows, no gradients, and motion only on scroll.
 
 colors:
   primary: "#1d1d5f"
@@ -136,6 +136,8 @@ typography:
 rounded:
   none: 0px
   sm: 2px
+  button: 10px
+  panel: 12px
   seal: 9999px
 
 spacing:
@@ -213,7 +215,7 @@ components:
     backgroundColor: "{colors.surface-white}"
     textColor: "{colors.ink}"
     typography: "{typography.button}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.button}"
     padding: 0.95rem 1.6rem
   button-on-dark-hover:
     backgroundColor: "{colors.surface-band}"
@@ -222,7 +224,7 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-dark}"
     typography: "{typography.button}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.button}"
     padding: 0.95rem 1.6rem
   button-on-light-hover:
     backgroundColor: "{colors.primary-deep}"
@@ -362,7 +364,7 @@ The look draws on three sources.
 - Libre Baskerville at weight 400 for every heading and never bold, with italic kept for short accents. Assistant 300 for reading and 600 for labels.
 - One accent, the light blue of the phoenix, for at most one phrase per section and only on navy.
 - One solid button per view. Every other action is an underlined text link.
-- Square corners: 2px on buttons and fields, none anywhere else. No shadows, gradients, glows or frosted glass.
+- Corners: 10px on buttons, 12px on the few detail panels, 2px on fields and labels, none on bands, photographs and portraits. No shadows, gradients, glows or frosted glass.
 - Real INUGSC photographs only, one per band, drifting gently as you scroll.
 - Every movement is driven by scrolling and has a still version for visitors who reduce motion.
 
@@ -524,8 +526,10 @@ The system is flat. Depth comes from four things only: a change of surface colou
 
 ## Shapes
 
-- `rounded.sm` (2px) is for buttons and form fields.
-- `rounded.none` is for everything else: bands, photographs, portraits, the map, lists and panels.
+- `rounded.button` (10px) is for buttons. Never a pill.
+- `rounded.panel` (12px) is for a small detail panel inside a band, such as the abstract competition's details. A faint white wash on navy, no border or shadow.
+- `rounded.sm` (2px) is for form fields, the map label and the skip link.
+- `rounded.none` is for everything else: bands, photographs, portraits, the map and lists.
 - `rounded.seal` is a circular clip used only for the year seals, because the seals are circular artwork. Never use it on buttons, portraits, tags or images of people.
 - Lines are 1px hairlines. Link underlines are a 1px border in the text colour, 2px below the text.
 - There are no icon sets. The only glyphs are the menu icon and the Instagram glyph.

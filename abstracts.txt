@@ -1,0 +1,7 @@
+Abstract competition. The site reads this file.
+Change line 4 to "Submissions open: NO" to close submissions early. They also close by themselves at the time on line 6.
+
+Submissions open: YES
+Form link: https://docs.google.com/forms/d/e/1FAIpQLSeR3g3wTrh_WebG4IEJVgpGfl6aDxAAc-2zAAxSelYF5_hAfQ/viewform
+Closes (UK time): 2026-12-08 23:59
+Closed message: Submissions have closed. Results will be announced soon.
