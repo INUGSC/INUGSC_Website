@@ -192,7 +192,7 @@ a {
 .button {
     display: inline-block;
     padding: 0.95rem 1.6rem;
-    border-radius: 2px;
+    border-radius: 10px;
     font-family: var(--text);
     font-size: 1rem;
     font-weight: 600;
@@ -449,6 +449,12 @@ main {
     max-width: 40rem;
     margin-bottom: 0;
     line-height: 1.45;
+}
+
+.first_view_notice {
+    margin: -1.2rem 0 2rem;
+    font-size: 1.05rem;
+    color: var(--accent);
 }
 
 .first_view_actions {
@@ -802,6 +808,51 @@ main {
 
 .panel_link {
     margin-top: 2rem;
+}
+
+/* ---------- Abstract competition: the details under the submit button ---------- */
+
+.abstract_details {
+    margin: 2.2rem 0 0;
+    padding: 0.4rem 1.4rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.abstract_details > div {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0 1.2rem;
+    padding: 1rem 0;
+}
+
+.abstract_details > div + div {
+    border-top: 1px solid var(--hairline-dark);
+}
+
+.abstract_details dt {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--on-dark-muted);
+}
+
+.abstract_details dd {
+    margin: 0;
+    font-size: 0.975rem;
+    line-height: 1.5;
+}
+
+.abstract_details .text_link {
+    display: inline-block;
+    margin-top: 0.35rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .abstract_details > div {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+    }
 }
 
 /* ---------- Date and venue ---------- */
