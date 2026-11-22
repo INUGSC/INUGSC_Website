@@ -42,8 +42,10 @@
     // once on scrolling back up, or after this many separate attempts to scroll on.
     const SKIP_AFTER = 3;
     // Scroll events closer together than this belong to one attempt: a turn of the wheel, or a
-    // flick on a trackpad and its glide
+    // flick on a trackpad and its glide. Spinning the wheel without a pause also counts as
+    // another attempt for every this many pixels it would have scrolled.
     const BURST = 350;
+    const PUSH = 700;
 
     // Two videos: wide for most screens, tall for phones. "align" matches the poster's
     // object-position in site.css. "attribution" is the box Google's credit sits in (left, top,
@@ -92,7 +94,7 @@
     let raf = 0;
     let lastY = window.scrollY;
     let reveal = 0;              // how far the section reaches up under About
-    let holding = false, holdAt = 0, holdTimer = 0, attempts = 0, burstEnd = 0;
+    let holding = false, holdAt = 0, holdTimer = 0, attempts = 0, burstEnd = 0, pushed = 0, arriving = false;
     let touchY = null, touchCounted = false;
     let navUntil = 0;            // following a link to further down the page: no hold
 
@@ -289,7 +291,9 @@
         holding = true;
         holdAt = at;
         attempts = 0;
-        burstEnd = performance.now();    // the scroll that brought them here is not an attempt
+        burstEnd = performance.now();    // the scroll that brought them here is not an attempt,
+        arriving = true;                 // however long the wheel keeps spinning
+        pushed = 0;
         touchCounted = true;             // nor is a swipe still under way
         if (Math.abs(window.scrollY - at) > 1) window.scrollTo({ top: at, behavior: "instant" });
         lastY = at;
@@ -326,16 +330,25 @@
     }
 
     // Scrolling that is part of one attempt does not count again
-    function burst(now) {
-        if (now - burstEnd > BURST) attempt();
+    function burst(now, delta = 0) {
+        const fresh = now - burstEnd > BURST;
         burstEnd = now;
+        // Until the scroll that brought them here pauses, nothing counts
+        if (arriving && !fresh) return;
+        arriving = false;
+        pushed += delta;
+        if (fresh || pushed >= PUSH) {
+            pushed = 0;
+            attempt();
+        }
     }
 
     function onWheel(e) {
         if (e.ctrlKey || !e.deltaY) return;      // pinching to zoom, or sideways
         if (e.deltaY < 0) return letGo();        // back up
         e.preventDefault();
-        burst(e.timeStamp);
+        // deltaMode 1 counts lines and 2 pages, rather than pixels
+        burst(e.timeStamp, e.deltaY * (e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? window.innerHeight : 1));
     }
 
     function onTouchStart(e) {
