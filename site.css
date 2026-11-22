@@ -632,6 +632,32 @@ main {
     transition: opacity 0.6s ease;
 }
 
+/* While the flight holds the page, a fling on a touch screen is stopped (see flyin.js) */
+@media (pointer: coarse) {
+    .flyin_hold {
+        overflow: hidden;
+    }
+}
+
+/* Shown if a visitor tries to scroll on while the flight holds the page */
+.flyin_hint {
+    position: absolute;
+    top: 1.4rem;
+    left: var(--gutter);
+    z-index: 2;
+    margin: 0;
+    color: #fff;
+    font-size: 0.9rem;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.55), 0 1px 14px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.flyin_hinted .flyin_hint {
+    opacity: 0.85;
+}
+
 .flyin_on .flyin_labels {
     display: block;
     position: absolute;
